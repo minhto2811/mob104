@@ -6,31 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".Activities.SplashActivity">
     <ImageView
-        android:src="@drawable/bg_splash"
+        android:id="@+id/bg_splash"
         android:scaleType="centerCrop"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:contentDescription="@string/todo" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="bottom | center_horizontal"
         android:orientation="vertical"
-        android:gravity="center">
+        android:paddingBottom="20dp"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
-            android:id="@+id/imv_loading_splash"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_centerHorizontal="true"
-            android:scaleType="centerCrop" />
+            android:id="@+id/imv_splash"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/todo" />
 
         <TextView
-            android:textSize="23dp"
-            android:textAlignment="center"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_loading"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="   Đang tải dữ liệu..."
-            android:textColor="@color/white" />
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/dongle_light"
+            android:text="@string/ang_t_i_d_li_u"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
