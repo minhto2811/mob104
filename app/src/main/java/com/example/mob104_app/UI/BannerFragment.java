@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +36,7 @@ public class BannerFragment extends Fragment {
         Banner banner = (Banner) bundle.get("banner");
         Glide.with(this).load(TOOLS.doMainDevice + banner.getImage()).error(R.drawable.watting).placeholder(R.drawable.watting).into(imageView);
         imageView.setOnClickListener(v -> {
+            Toast.makeText(getActivity(), "Thông tin:"+banner.toString(), Toast.LENGTH_SHORT).show();
 //            Intent intent = new Intent(getContext(), BannerActivity.class);
 //            intent.putExtra("banner", banner);
 //            requireContext().startActivity(intent);

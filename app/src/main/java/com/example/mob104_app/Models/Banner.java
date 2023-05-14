@@ -19,4 +19,11 @@ public class Banner implements Serializable {
         return event;
     }
 
+    @Override
+    public String toString() {
+        return "Banner{" +
+                "image='" + image + '\'' +
+                ", event='" + event + '\'' +
+                '}';
+    }
 }
