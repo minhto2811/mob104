@@ -40,14 +40,6 @@ public class TOOLS {
     }
 
 
-    public static int getWidthColumn(Context context, int countColumn) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int screenWidth = size.x;
-        return screenWidth / countColumn;
-    }
 
     public static boolean isValidPhoneNumber(String phoneNumber) {
         String regex = "\\d{10}";

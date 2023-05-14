@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -55,6 +56,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                     .placeholder(R.drawable.watting)
                     .into(holder.imv_category);
             holder.item_category.setOnClickListener(v -> {
+                Toast.makeText(context, "info:"+category.toString(), Toast.LENGTH_SHORT).show();
 //                Intent intent = new Intent(context, ListProductActivity.class);
 //                intent.putExtra("category", category);
 //                context.startActivity(intent);

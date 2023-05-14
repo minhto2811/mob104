@@ -22,4 +22,12 @@ public class Category implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "image='" + image + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
