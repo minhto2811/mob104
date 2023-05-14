@@ -1,0 +1,58 @@
+package com.example.mob104_app.Api;
+
+import com.example.mob104_app.Models.Banner;
+import com.example.mob104_app.Models.Category;
+import com.example.mob104_app.Models.Product;
+import com.example.mob104_app.Models.User;
+import com.example.mob104_app.Tools.TOOLS;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.List;
+
+import okhttp3.RequestBody;
+
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
+
+public interface ApiService {
+
+    String url  = TOOLS.doMainDevice + "/api/";
+    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+
+    ApiService apiService = new Retrofit.Builder()
+            .baseUrl(url)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+            .create(ApiService.class);
+    @GET("product/home")
+    Call<List<Product>> getAllProduct();
+
+    @GET("product/category/{category}")
+    Call<List<Product>> getListProductByCategory(@Path("category") String category);
+
+    @GET("product/banner/{banner_code}")
+    Call<List<Product>> getListProductByBanner(@Path("banner_code") String banner_code);
+
+    @GET("banner/home")
+    Call<List<Banner>> getAllBanner();
+
+    @GET("category/home")
+    Call<List<Category>> getAllCategory();
+
+    @POST("user/add")
+    Call<User> createUser(@Body User user);
+
+    @POST("user/login")
+    Call<String> loginUser(@Body RequestBody requestBody);
+
+    @POST("user/info")
+    Call<User> getInfoUser(@Body RequestBody requestBody);
+
+
+}
