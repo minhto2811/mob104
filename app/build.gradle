@@ -39,4 +39,20 @@ dependencies {
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.15.1'
+
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.0.0'
+    //Gson
+    implementation 'com.google.code.gson:gson:2.9.0'
+
+    //circleindicator
+    implementation 'me.relex:circleindicator:2.1.6'
+
+    //bottom
+    implementation 'com.etebarian:meow-bottom-navigation:1.2.0'
+
+    //circle Imageview
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
 }

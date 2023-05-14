@@ -2,4 +2,10 @@
     <string name="app_name">mob104_app</string>
     <string name="todo">todo</string>
     <string name="ang_t_i_d_li_u">   Đang tải dữ liệu...</string>
+    <string name="title_home">Trang chủ</string>
+    <string name="danh_m_c">Danh mục</string>
+    <string name="danh_m_c1">Danh mục(mở rộng)</string>
+    <string name="showInfo">Chi tiết</string>
+    <string name="title_notify">Thông báo</string>
+    <string name="title_search">Tìm kiếm sản phẩm</string>
 </resources>
