@@ -6,6 +6,11 @@
     <string name="danh_m_c">Danh mục</string>
     <string name="danh_m_c1">Danh mục(mở rộng)</string>
     <string name="showInfo">Chi tiết</string>
+    <string name="title_settings">Thiết lập</string>
+    <string name="title_mess">Liên hệ</string>
     <string name="title_notify">Thông báo</string>
+    <string name="title_event">Ngày hội mua sắm</string>
+    <string name="title_cart">Giỏ hàng</string>
+    <string name="title_bill">Thông tin đơn</string>
     <string name="title_search">Tìm kiếm sản phẩm</string>
 </resources>
