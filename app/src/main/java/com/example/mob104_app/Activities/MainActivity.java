@@ -17,7 +17,11 @@ import android.widget.Toast;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.mob104_app.R;
+import com.example.mob104_app.UI.BillFragment;
+import com.example.mob104_app.UI.CartFragment;
 import com.example.mob104_app.UI.HomeFragment;
+import com.example.mob104_app.UI.MessageFragment;
+import com.example.mob104_app.UI.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private int INDEX = 0;
@@ -42,30 +46,30 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.add(new MeowBottomNavigation.Model(4, R.drawable.ic_baseline_message_24));
         bottomNavigationView.add(new MeowBottomNavigation.Model(5, R.drawable.settings_suggest_24px));
         bottomNavigationView.setOnClickMenuListener(model -> {
-//            switch (model.getId()) {
-//                case 1:
-//                    replaceFragment(new CartFragment(), CartFragment.TAG, CART);
-//                    break;
-//
-//                case 2:
-//                    replaceFragment(new BillFragment(), BillFragment.TAG, BILL);
-//                    break;
-//
-//                case 3:
-//                    replaceFragment(new HomeFragment(), HomeFragment.TAG, HOME);
-//
-//                    break;
-//
-//                case 4:
-//                    replaceFragment(new MessageFragment(), MessageFragment.TAG, MESSAGE);
-//                    break;
-//
-//                case 5:
-//                    replaceFragment(new SettingsFragment(), SettingsFragment.TAG, SETTINGS);
-//                    break;
-//                default:
-//                    break;
-//            }
+            switch (model.getId()) {
+                case 1:
+                    replaceFragment(new CartFragment(), CartFragment.TAG, CART);
+                    break;
+
+                case 2:
+                    replaceFragment(new BillFragment(), BillFragment.TAG, BILL);
+                    break;
+
+                case 3:
+                    replaceFragment(new HomeFragment(), HomeFragment.TAG, HOME);
+
+                    break;
+
+                case 4:
+                    replaceFragment(new MessageFragment(), MessageFragment.TAG, MESSAGE);
+                    break;
+
+                case 5:
+                    replaceFragment(new SettingsFragment(), SettingsFragment.TAG, SETTINGS);
+                    break;
+                default:
+                    break;
+            }
             return null;
         });
 
@@ -114,9 +118,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.toolbar_notify) {
-//            Intent intent = new Intent(MainActivity.this, NotifyActivity.class);
-//            startActivity(intent);
-//            overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+            Intent intent = new Intent(MainActivity.this, NotifyActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
         }
         return super.onOptionsItemSelected(item);
     }
