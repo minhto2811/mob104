@@ -8,13 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.mob104_app.Activities.CategoryActivity;
 import com.example.mob104_app.Models.Category;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.TOOLS;
@@ -56,11 +56,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                     .placeholder(R.drawable.watting)
                     .into(holder.imv_category);
             holder.item_category.setOnClickListener(v -> {
-                Toast.makeText(context, "info:"+category.toString(), Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(context, ListProductActivity.class);
-//                intent.putExtra("category", category);
-//                context.startActivity(intent);
-//                ((Activity) context).overridePendingTransition(R.anim.next_enter,R.anim.next_exit);
+                Intent intent = new Intent(context, CategoryActivity.class);
+                intent.putExtra("category", category);
+                context.startActivity(intent);
+                ((Activity) context).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
             });
         }
     }
