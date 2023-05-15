@@ -17,17 +17,21 @@
         tools:targetApi="31">
         <activity
             android:name=".Activities.SplashActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_login"
-            android:theme="@style/Theme.Clothing_store.NoActionBar" />
-        <activity
-            android:name=".Activities.LoginActivity"
-            android:exported="true">
+            android:theme="@style/Theme.Clothing_store.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name=".Activities.LoginActivity"
+            android:exported="false">
+
         </activity>
         <activity
             android:name=".Activities.MainActivity"
@@ -35,6 +39,10 @@
 
         <activity
             android:name=".Activities.NotifyActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".Activities.BannerActivity"
             android:exported="false" />
     </application>
 
