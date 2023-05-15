@@ -30,5 +30,12 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.5</item>
     </style>
+    <style name="Theme.Clothing_store.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.Clothing_store.AppBarOverlay"
+        parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Clothing_store.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
