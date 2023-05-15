@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.mob104_app.Activities.BannerActivity;
 import com.example.mob104_app.Models.Banner;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.TOOLS;
@@ -36,11 +37,10 @@ public class BannerFragment extends Fragment {
         Banner banner = (Banner) bundle.get("banner");
         Glide.with(this).load(TOOLS.doMainDevice + banner.getImage()).error(R.drawable.watting).placeholder(R.drawable.watting).into(imageView);
         imageView.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Thông tin:"+banner.toString(), Toast.LENGTH_SHORT).show();
-//            Intent intent = new Intent(getContext(), BannerActivity.class);
-//            intent.putExtra("banner", banner);
-//            requireContext().startActivity(intent);
-//            requireActivity().overridePendingTransition(R.anim.next_enter,R.anim.next_exit);
+            Intent intent = new Intent(getContext(), BannerActivity.class);
+            intent.putExtra("banner", banner);
+            requireContext().startActivity(intent);
+            requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
         });
     }
 }
