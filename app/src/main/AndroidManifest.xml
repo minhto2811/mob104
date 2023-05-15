@@ -44,6 +44,10 @@
         <activity
             android:name=".Activities.BannerActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".Activities.CategoryActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
