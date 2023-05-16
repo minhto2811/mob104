@@ -48,6 +48,12 @@
         <activity
             android:name=".Activities.CategoryActivity"
             android:exported="false" />
+        <activity
+            android:name=".Activities.SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.ForgetPasswordActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
