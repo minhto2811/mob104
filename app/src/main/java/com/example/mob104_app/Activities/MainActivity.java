@@ -40,11 +40,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         MeowBottomNavigation bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.show(3, true);
-        bottomNavigationView.add(new MeowBottomNavigation.Model(1, R.drawable.shopping_cart_24px));
-        bottomNavigationView.add(new MeowBottomNavigation.Model(2, R.drawable.receipt_long_24px));
-        bottomNavigationView.add(new MeowBottomNavigation.Model(3, R.drawable.window_24px));
-        bottomNavigationView.add(new MeowBottomNavigation.Model(4, R.drawable.ic_baseline_message_24));
-        bottomNavigationView.add(new MeowBottomNavigation.Model(5, R.drawable.settings_suggest_24px));
+        bottomNavigationView.add(new MeowBottomNavigation.Model(1, R.drawable.shopping_cart));
+        bottomNavigationView.add(new MeowBottomNavigation.Model(2, R.drawable.local_shipping));
+        bottomNavigationView.add(new MeowBottomNavigation.Model(3, R.drawable.widgets));
+        bottomNavigationView.add(new MeowBottomNavigation.Model(4, R.drawable.chat));
+        bottomNavigationView.add(new MeowBottomNavigation.Model(5, R.drawable.settings));
         bottomNavigationView.setOnClickMenuListener(model -> {
             switch (model.getId()) {
                 case 1:

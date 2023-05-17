@@ -3,7 +3,6 @@ package com.example.mob104_app.Activities;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.SpannableString;
@@ -12,7 +11,6 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
-import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,7 +35,8 @@ public class RegisterActivity extends AppCompatActivity {
     private TextView tv_signin, tv_err_fullname, tv_err_username, tv_err_password;
     private EditText edt_fullname, edt_username, edt_password;
     private Button btn_signup;
-    private boolean name, user, pass, isShow = true;
+    private boolean name, user, pass, isShow = true, hasUppercase = false,hasLowercase = false, hasDigit = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +65,40 @@ public class RegisterActivity extends AppCompatActivity {
                     edt_password.requestFocus();
                     pass = false;
                 } else {
+                    if (edt_password.getText().toString().length()<8) {
+                        tv_err_password.setText("Mật khẩu phải từ 8 đến 20 kí tự bao gồm kí tự in hoa,kí tự thường và số!");
+                        edt_password.requestFocus();
+                        pass = false;
+                        return;
+                    }
+                    for (char c : edt_password.getText().toString().toCharArray()) {
+                        if (Character.isUpperCase(c)) {
+                            hasUppercase = true;
+                        } else if (Character.isDigit(c)) {
+                            hasDigit = true;
+                        }else {
+                            hasLowercase = true;
+                        }
+                    }
+
+                    if (!hasLowercase) {
+                        tv_err_password.setText("Mật khẩu phải chứa ít nhất 1 kí tự thường!");
+                        edt_password.requestFocus();
+                        pass = false;
+                        return;
+                    }
+                    if (!hasUppercase) {
+                        tv_err_password.setText("Mật khẩu phải chứa ít nhất 1 kí tự in hoa!");
+                        edt_password.requestFocus();
+                        pass = false;
+                        return;
+                    }
+                    if (!hasDigit) {
+                        tv_err_password.setText("Mật khẩu phải chứa ít nhất 1 kí tự chữ số!");
+                        edt_password.requestFocus();
+                        pass = false;
+                        return;
+                    }
                     edt_password.clearFocus();
                     tv_err_password.setText(null);
                     pass = true;
@@ -100,6 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+
     private void register(String fullname, String username, String password) {
         Dialog dialog = new Dialog(RegisterActivity.this);
         View view = getLayoutInflater().inflate(R.layout.layout_watting, null);
@@ -112,7 +146,6 @@ public class RegisterActivity extends AppCompatActivity {
         user.setFullname(fullname);
         user.setUsername(username);
         user.setPassword(password);
-        Toast.makeText(this, user.toString(), Toast.LENGTH_SHORT).show();
         ApiService.apiService.createUser(user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -161,8 +194,7 @@ public class RegisterActivity extends AppCompatActivity {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View view) {
-                finish();
-                overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
+                onBackPressed();
             }
 
             @Override
