@@ -168,6 +168,7 @@ public class LoginActivity extends AppCompatActivity {
                     imv_password.setImageResource(R.drawable.visibility);
                     edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                 }
+                edt_password.setSelection(edt_password.getText().length());
             }
         });
     }
