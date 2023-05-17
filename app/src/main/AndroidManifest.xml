@@ -18,7 +18,6 @@
         <activity
             android:name=".Activities.SplashActivity"
             android:exported="true"
-            android:label="@string/title_activity_login"
             android:theme="@style/Theme.Clothing_store.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
