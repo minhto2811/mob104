@@ -8,12 +8,14 @@
     <color name="statusbar">#ef6534</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="white1">#A6FFFFFF</color>
     <color name="colormain">#209de0</color>
-    <color name="category">#E8D2D2</color>
-    <color name="button">#e5e6e8</color>
+    <color name="category">#0078D7</color>
+    <color name="product">#808080</color>
     <color name="red">#FB0D0D</color>
     <color name="sale">#AB000000</color>
     <color name="yellow">#ffe21e</color>
-    <color name="grey">#d7d8dc</color>
+    <color name="gray">#bfbfbf</color>
+    <color name="grey">#FB0D0D</color>
     <color name="lavender">#8692f7</color>
 </resources>
