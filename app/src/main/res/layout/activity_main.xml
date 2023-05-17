@@ -51,6 +51,6 @@
         app:mbn_defaultIconColor="@color/white"
         app:mbn_rippleColor="@color/black"
         app:mbn_selectedIconColor="@color/white"
-        app:mbn_shadowColor="@color/black"/>
+        app:mbn_shadowColor="@color/black" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

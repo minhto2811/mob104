@@ -46,6 +46,11 @@ public class TOOLS {
         return phoneNumber.matches(regex);
     }
 
+    public static boolean isValidEmail(String email){
+        String emailPattern="^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+        return !email.isEmpty() && email.matches(emailPattern);
+    }
+
 }
 
 

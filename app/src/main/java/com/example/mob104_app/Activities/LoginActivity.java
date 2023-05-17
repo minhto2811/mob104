@@ -3,7 +3,6 @@ package com.example.mob104_app.Activities;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.SpannableString;
@@ -12,7 +11,6 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
-import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,10 +39,10 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_NEXT = 555;
     private ImageView imv_back, imv_password;
-    private TextView tv_signup, tv_err_username, tv_err_password, tv_rules;
+    private TextView tv_signup, tv_err_username, tv_err_password, tv_forgot_password;
     private EditText edt_username, edt_password;
     private Button btn_login;
-    private boolean isShow = true, checkUser, checkPass;
+    private boolean isShow = false, checkUser, checkPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +53,23 @@ public class LoginActivity extends AppCompatActivity {
         changeRegistrationPage();
         login();
         showHidePassword();
+        forgotPassword();
+    }
+
+    private void forgotPassword() {
+        tv_forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.next_enter,R.anim.next_exit);
+            }
+        });
     }
 
     private void mapping() {
         imv_back = findViewById(R.id.imv_back);
+        tv_forgot_password = findViewById(R.id.tv_forgot_password);
         imv_password = findViewById(R.id.imv_password);
         edt_username = findViewById(R.id.edt_username);
         edt_password = findViewById(R.id.edt_password);
@@ -163,10 +174,10 @@ public class LoginActivity extends AppCompatActivity {
                 isShow = !isShow;
                 if (isShow) {
                     imv_password.setImageResource(R.drawable.visibility_off);
-                    edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                 } else {
                     imv_password.setImageResource(R.drawable.visibility);
-                    edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 }
                 edt_password.setSelection(edt_password.getText().length());
             }

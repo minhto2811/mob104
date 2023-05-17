@@ -49,9 +49,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="30dp"
-                android:text="Login"
-                android:textColor="#11599C"
-                android:textSize="25sp"
+                android:text="Đăng nhập"
+                android:textColor="@color/title"
+                android:textSize="35dp"
                 android:textStyle="bold" />
 
             <EditText
@@ -116,18 +116,19 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="#59B8EE"
-                android:text="Log in"
+                android:text="Tiếp tục"
+                android:textAllCaps="false"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:cornerRadius="30dp" />
 
             <TextView
-                android:id="@+id/forgot_password"
+                android:id="@+id/tv_forgot_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="6dp"
-                android:text="Forgot password?"
+                android:text="Quên mật khẩu?"
                 android:textColor="#1D7DB4"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -138,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="25dp"
-                android:text="-------------------OR-------------------"
+                android:text="-------------------Hoặc-------------------"
                 android:textColor="#1D7DB4"
                 android:textSize="18sp"
                 android:textStyle="bold"
