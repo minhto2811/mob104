@@ -49,7 +49,7 @@
             android:name=".Activities.CategoryActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.SignupActivity"
+            android:name=".Activities.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.ForgetPasswordActivity"

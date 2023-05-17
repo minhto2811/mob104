@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_product"
     android:layout_width="120dp"
-    android:layout_height="220dp"
+    android:layout_height="225dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="7dp"
-    app:cardBackgroundColor="@color/category"
+    app:cardBackgroundColor="@color/white"
     android:layout_marginVertical="10dp"
    android:layout_marginHorizontal="7dp">
 
@@ -27,8 +27,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
                 android:scaleType="centerCrop"
-                android:background="@color/button"
                 android:contentDescription="@string/todo" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray"/>
 
 
             <TextView
@@ -56,7 +59,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="7dp"
-                android:backgroundTint="@color/button"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/colormain"
                 android:paddingVertical="5dp"
                 android:text="@string/showInfo"
                 android:textSize="14sp"
@@ -70,8 +74,8 @@
 
 
         <LinearLayout
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:background="@color/sale"
             android:gravity="center"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -85,6 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:maxLength="4"
                 android:textAlignment="center"
                 android:textColor="@color/red"
                 android:textSize="13sp" />

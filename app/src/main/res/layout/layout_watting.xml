@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    >
+    <ImageView
+        android:background="@android:color/transparent"
+        android:id="@+id/imv_watting"
+        android:scaleType="centerCrop"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:contentDescription="@string/todo" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="13dp"
+        android:fontFamily="@font/dongle_light"
+        android:textColor="@color/white"
+        android:text="@string/ang_t_i_d_li_u"
+        android:layout_width="wrap_content"
+        android:textSize="31dp" />
+
+
+</LinearLayout>
