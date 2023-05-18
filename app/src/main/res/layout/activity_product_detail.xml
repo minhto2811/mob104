@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-
-android:orientation="vertical"
-tools:context=".Activities.ProductDetailActivity">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".Activities.ProductDetailActivity">
 
 <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
@@ -18,14 +18,14 @@ tools:context=".Activities.ProductDetailActivity">
         android:id="@+id/toolbar_notify"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colormain"
+        android:background="#D9D9D9"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
         app:titleCentered="true">
         <ImageButton
             android:layout_width="40sp"
             android:layout_height="40sp"
             android:src="@drawable/ic_baseline_shopping_cart_24"
-            app:backgroundTint="#FFF"
+            app:backgroundTint="#D9D9D9"
             android:layout_marginLeft="350dp"
             />
     </com.google.android.material.appbar.MaterialToolbar>
@@ -123,7 +123,7 @@ tools:context=".Activities.ProductDetailActivity">
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/ic_baseline_add_24"
-                    app:backgroundTint="#FFF"
+                    app:backgroundTint="#C1F3CC"
                     android:layout_marginLeft="15dp"/>
 
                 <TextView
@@ -139,7 +139,7 @@ tools:context=".Activities.ProductDetailActivity">
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/ic_baseline_tru"
-                    app:backgroundTint="#FFF"
+                    app:backgroundTint="#C1F3CC"
                     android:layout_marginRight="15dp"
 
                     />
@@ -177,10 +177,11 @@ tools:context=".Activities.ProductDetailActivity">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1.1"
-        android:gravity="center"
-        android:text="Chi tiết sản phẩm "
+        android:gravity="left"
+        android:text="Mô tả chi tiết sản phẩm "
         android:textSize="20sp"
-        android:textStyle="bold"
+        android:layout_marginLeft="19dp"
+
         android:textColor="#16D964"/>
 </LinearLayout>
 </LinearLayout>
