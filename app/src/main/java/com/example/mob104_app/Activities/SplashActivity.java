@@ -36,6 +36,7 @@ public class SplashActivity extends AppCompatActivity {
     private TextView tv_loading;
     private ImageView imv_splash;
     private boolean isLoadingData = true;
+    private AlertDialog alertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,6 +156,7 @@ public class SplashActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                alertDialog.dismiss();
                 Intent intent = new Intent(SplashActivity.this,SplashActivity.class);
                 startActivity(intent);
                 finishAffinity();
@@ -162,7 +164,7 @@ public class SplashActivity extends AppCompatActivity {
         });
         builder.setView(view);
         builder.setCancelable(false);
-        AlertDialog alertDialog = builder.create();
+        alertDialog = builder.create();
         alertDialog.show();
         alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
     }
