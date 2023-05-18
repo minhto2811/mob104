@@ -75,43 +75,34 @@ public class RegisterActivity extends AppCompatActivity {
                 edt_password.requestFocus();
                 pass = false;
             } else {
-                if (edt_password.getText().toString().length()<8) {
+                if (edt_password.getText().toString().length() < 8) {
                     tv_err_password.setText("Mật khẩu phải từ 8 đến 20 kí tự bao gồm kí tự in hoa,kí tự thường và số!");
                     edt_password.requestFocus();
                     pass = false;
-                    return;
-                }
-                for (char c : edt_password.getText().toString().toCharArray()) {
-                    if (Character.isUpperCase(c)) {
-                        hasUppercase = true;
-                    } else if (Character.isDigit(c)) {
-                        hasDigit = true;
+                } else {
+                    for (char c : edt_password.getText().toString().toCharArray()) {
+                        if (Character.isUpperCase(c)) {
+                            hasUppercase = true;
+                        } else if (Character.isDigit(c)) {
+                            hasDigit = true;
+                        } else {
+                            hasLowercase = true;
+                        }
+                    }
+                    if (!hasLowercase || !hasUppercase || !hasDigit) {
+                        tv_err_password.setText("Mật khẩu phải bao gồm kí tự in hoa,kí tự thường và số!");
+                        edt_password.requestFocus();
+                        pass = false;
                     }else {
-                        hasLowercase = true;
+                        edt_password.clearFocus();
+                        tv_err_password.setText(null);
+                        pass = true;
                     }
                 }
 
-                if (!hasLowercase) {
-                    tv_err_password.setText("Mật khẩu phải chứa ít nhất 1 kí tự thường!");
-                    edt_password.requestFocus();
-                    pass = false;
-                    return;
-                }
-                if (!hasUppercase) {
-                    tv_err_password.setText("Mật khẩu phải chứa ít nhất 1 kí tự in hoa!");
-                    edt_password.requestFocus();
-                    pass = false;
-                    return;
-                }
-                if (!hasDigit) {
-                    tv_err_password.setText("Mật khẩu phải chứa ít nhất 1 kí tự chữ số!");
-                    edt_password.requestFocus();
-                    pass = false;
-                    return;
-                }
-                edt_password.clearFocus();
-                tv_err_password.setText(null);
-                pass = true;
+
+
+
             }
 
             if (edt_username.getText().toString().isEmpty()) {
