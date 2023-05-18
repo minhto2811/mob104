@@ -181,6 +181,7 @@ tools:context=".Activities.ProductDetailActivity">
         android:text="Mô tả chi tiết sản phẩm "
         android:textSize="20sp"
         android:layout_marginLeft="19dp"
+
         android:textColor="#16D964"/>
 </LinearLayout>
 </LinearLayout>
