@@ -1,5 +1,6 @@
 package com.example.mob104_app.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -57,13 +58,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void forgotPassword() {
-        tv_forgot_password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.next_enter,R.anim.next_exit);
-            }
+        tv_forgot_password.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.next_enter,R.anim.next_exit);
         });
     }
 
@@ -79,55 +77,48 @@ public class LoginActivity extends AppCompatActivity {
         tv_err_password = findViewById(R.id.tv_err_password);
     }
 
+    @SuppressLint("SetTextI18n")
     private void login() {
 
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (edt_password.getText().toString().trim().isEmpty()) {
-                    tv_err_password.setText("Mật khẩu không được để trống!");
-                    edt_password.requestFocus();
-                    checkPass = false;
-                } else {
-                    tv_err_password.setText(null);
-                    edt_password.clearFocus();
-                    checkPass = true;
-                }
-
-
-                if (edt_username.getText().toString().trim().isEmpty()) {
-                    tv_err_username.setText("Tài khoản không được để trống!");
-                    edt_username.requestFocus();
-                    checkUser = false;
-                } else {
-                    tv_err_username.setText(null);
-                    edt_username.clearFocus();
-                    checkUser = true;
-                }
-
-
-                if (!checkUser || !checkPass) {
-                    return;
-                }
-
-                checkAccount(edt_username.getText().toString(), edt_password.getText().toString());
+        btn_login.setOnClickListener(v -> {
+            if (edt_password.getText().toString().trim().isEmpty()) {
+                tv_err_password.setText("Mật khẩu không được để trống!");
+                edt_password.requestFocus();
+                checkPass = false;
+            } else {
+                tv_err_password.setText(null);
+                edt_password.clearFocus();
+                checkPass = true;
             }
+
+
+            if (edt_username.getText().toString().trim().isEmpty()) {
+                tv_err_username.setText("Tài khoản không được để trống!");
+                edt_username.requestFocus();
+                checkUser = false;
+            } else {
+                tv_err_username.setText(null);
+                edt_username.clearFocus();
+                checkUser = true;
+            }
+
+
+            if (!checkUser || !checkPass) {
+                return;
+            }
+
+            checkAccount(edt_username.getText().toString(), edt_password.getText().toString());
         });
     }
 
     private void back() {
-        imv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        imv_back.setOnClickListener(v -> onBackPressed());
     }
 
 
     private void checkAccount(String user, String pass) {
         Dialog dialog = new Dialog(LoginActivity.this);
-        View view = getLayoutInflater().inflate(R.layout.layout_watting, null);
+        @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.layout_watting, null);
         Glide.with(LoginActivity.this).asGif().load(R.drawable.spin).into((ImageView) view.findViewById(R.id.imv_watting));
         dialog.setContentView(view);
         dialog.setCancelable(false);
@@ -145,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
 
         ApiService.apiService.loginUser(requestBody).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     String token = response.body();
                     if (token != null) {
@@ -156,31 +147,28 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác!", Toast.LENGTH_SHORT).show();
                     }
                 }
-                dialog.hide();
+                dialog.dismiss();
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Toast.makeText(LoginActivity.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
-                dialog.hide();
+                dialog.dismiss();
             }
         });
     }
 
     private void showHidePassword() {
-        imv_password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isShow = !isShow;
-                if (isShow) {
-                    imv_password.setImageResource(R.drawable.visibility_off);
-                    edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                } else {
-                    imv_password.setImageResource(R.drawable.visibility);
-                    edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                }
-                edt_password.setSelection(edt_password.getText().length());
+        imv_password.setOnClickListener(v -> {
+            isShow = !isShow;
+            if (isShow) {
+                imv_password.setImageResource(R.drawable.visibility_off);
+                edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            } else {
+                imv_password.setImageResource(R.drawable.visibility);
+                edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
+            edt_password.setSelection(edt_password.getText().length());
         });
     }
 
@@ -227,6 +215,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_NEXT && resultCode == RESULT_OK) {
+            assert data != null;
             edt_username.setText(data.getStringExtra("username"));
             edt_password.setText(data.getStringExtra("password"));
             tv_err_username.setText(null);
