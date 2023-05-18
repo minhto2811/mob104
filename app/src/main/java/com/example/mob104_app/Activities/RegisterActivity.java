@@ -38,6 +38,8 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btn_signup;
     private boolean name, user, pass, isShow = true, hasUppercase = false,hasLowercase = false, hasDigit = false;
 
+    private  Dialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     private void register(String fullname, String username, String password) {
-        Dialog dialog = new Dialog(RegisterActivity.this);
+        dialog = new Dialog(RegisterActivity.this);
         @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.layout_watting, null);
         Glide.with(RegisterActivity.this).asGif().load(R.drawable.spin).into((ImageView) view.findViewById(R.id.imv_watting));
         dialog.setContentView(view);
@@ -164,14 +166,14 @@ public class RegisterActivity extends AppCompatActivity {
                     intent.putExtra("password", response.body().getPassword());
                     setResult(RESULT_OK, intent);
                     finish();
-                    dialog.dismiss();
+                    dialog.hide();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                 Toast.makeText(RegisterActivity.this, "Tạo tài khoản thất bại!", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
+                dialog.hide();
             }
         });
     }
@@ -228,4 +230,11 @@ public class RegisterActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.prev_enter,R.anim.prev_exit);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(dialog !=null){
+            dialog.dismiss();
+        }
+    }
 }
