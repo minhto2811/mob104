@@ -48,6 +48,7 @@ tools:context=".Activities.ProductDetailActivity">
             android:layout_height="128dp"
             android:layout_gravity="center"
             android:src="@drawable/bg_splash"
+
             />
 
         <LinearLayout
@@ -59,10 +60,11 @@ tools:context=".Activities.ProductDetailActivity">
                 android:layout_height="wrap_content"
                 android:layout_weight="1.2"
                 android:text="Tên sản phẩm"
-                android:textSize="24sp"
-                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="12dp"
                 android:gravity="left"
                 android:textColor="#000000"
+
                 />
 
             <LinearLayout
@@ -79,7 +81,7 @@ tools:context=".Activities.ProductDetailActivity">
                     android:gravity="left"
                     android:text="Đánh giá"
                     android:textSize="17sp"
-                    android:textStyle="bold"
+
                     android:textColor="#000000"/>
 
                 <TextView
@@ -89,7 +91,7 @@ tools:context=".Activities.ProductDetailActivity">
                     android:gravity="left"
                     android:text="Đã bán"
                     android:textSize="17sp"
-                    android:textStyle="bold"
+
                     android:textColor="#000000"/>
             </LinearLayout>
 
@@ -99,38 +101,38 @@ tools:context=".Activities.ProductDetailActivity">
                 android:layout_weight="1"
                 android:gravity="left"
                 android:text="Giá sản phẩm"
-                android:textSize="24sp"
-                android:textStyle="bold"
+                android:textSize="20sp"
+
                 android:textColor="#000000"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
 
                 <TextView
-                    android:layout_width="199dp"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.1"
                     android:gravity="left"
                     android:text="Số lượng "
-                    android:textSize="24sp"
-                    android:textStyle="bold"
+                    android:textSize="15sp"
                     android:textColor="#000000"/>
 
                 <ImageButton
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/ic_baseline_add_24"
-                    app:backgroundTint="#FFF"/>
+                    app:backgroundTint="#FFF"
+                    android:layout_marginLeft="15dp"/>
 
                 <TextView
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+
                     android:gravity="center"
                     android:text="1 "
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#000000"/>
                 <ImageButton
@@ -138,6 +140,7 @@ tools:context=".Activities.ProductDetailActivity">
                     android:layout_height="30dp"
                     android:src="@drawable/ic_baseline_tru"
                     app:backgroundTint="#FFF"
+                    android:layout_marginRight="15dp"
 
                     />
             </LinearLayout>
