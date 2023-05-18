@@ -29,7 +29,6 @@ import retrofit2.Response;
 public class BannerActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProductAdapter productAdapter;
-    private List<Product> list = new ArrayList<>();
     private ImageView imv_back;
 
     @Override

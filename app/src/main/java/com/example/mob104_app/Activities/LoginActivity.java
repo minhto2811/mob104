@@ -45,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_login;
     private boolean isShow = false, checkUser, checkPass;
 
+    private Dialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +119,9 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void checkAccount(String user, String pass) {
-        Dialog dialog = new Dialog(LoginActivity.this);
+        if (dialog == null) {
+            dialog = new Dialog(LoginActivity.this);
+        }
         @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.layout_watting, null);
         Glide.with(LoginActivity.this).asGif().load(R.drawable.spin).into((ImageView) view.findViewById(R.id.imv_watting));
         dialog.setContentView(view);
@@ -147,13 +151,13 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác!", Toast.LENGTH_SHORT).show();
                     }
                 }
-                dialog.dismiss();
+                dialog.hide();
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Toast.makeText(LoginActivity.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
+                Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác!", Toast.LENGTH_SHORT).show();
+                dialog.hide();
             }
         });
     }
@@ -224,6 +228,14 @@ public class LoginActivity extends AppCompatActivity {
             tv_err_password.setText(null);
             edt_password.clearFocus();
             checkPass = true;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dialog != null) {
+            dialog.dismiss();
         }
     }
 }
