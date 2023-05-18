@@ -50,6 +50,10 @@
             android:name=".Activities.RegisterActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".Activities.ForgetPasswordActivity"
+            android:exported="false" />
+
 
     </application>
 
