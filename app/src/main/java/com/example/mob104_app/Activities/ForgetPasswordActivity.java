@@ -36,6 +36,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                     tv_err_email.setText("Email không hợp lệ!");
                     return;
                 }
+                tv_err_email.setText(null);
                 resetPassword();
             }
         });
