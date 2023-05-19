@@ -54,6 +54,15 @@
             android:name=".Activities.ForgetPasswordActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".Activities.Products.AddProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.Products.ViewProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.Products.UpdateProductActivity"
+            android:exported="false" />
 
     </application>
 
