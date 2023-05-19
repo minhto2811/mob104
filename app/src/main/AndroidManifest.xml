@@ -63,7 +63,8 @@
         <activity
             android:name=".Activities.Products.UpdateProductActivity"
             android:exported="false" />
-
+        <activity android:name=".Activities.ProductDetailActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>
