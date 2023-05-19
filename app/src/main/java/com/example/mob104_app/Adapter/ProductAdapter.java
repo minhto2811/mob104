@@ -20,6 +20,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.mob104_app.Activities.ProductDetailActivity;
 import com.example.mob104_app.Models.Product;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.TOOLS;
@@ -87,10 +88,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             });
 
             holder.btn_show_info.setOnClickListener(v -> {
-//                Intent intent = new Intent(context, ProductActivity.class);
-//                intent.putExtra("product", product);
-//                context.startActivity(intent);
-//                ((Activity) context).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+                Intent intent = new Intent(context, ProductDetailActivity.class);
+                intent.putExtra("product", product);
+                context.startActivity(intent);
+                ((Activity) context).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
             });
         }
     }
