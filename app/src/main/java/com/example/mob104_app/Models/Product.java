@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Product implements Serializable {
-    private final String id;
+    private final String _id;
     private String name;
     private final ArrayList<String> image;
     private final String description;
@@ -16,7 +16,7 @@ public class Product implements Serializable {
 
 
     public Product(String id, String name, ArrayList<String> image, String description, int price, String category, String status, int sold, int sale) {
-        this.id = id;
+        this._id = id;
         this.name = name;
         this.image = image;
         this.description = description;
@@ -28,7 +28,7 @@ public class Product implements Serializable {
     }
 
     public String getId() {
-        return id;
+        return _id;
     }
 
     public String getName() {
@@ -78,5 +78,20 @@ public class Product implements Serializable {
 
     public int getSold() {
         return sold;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id='" + _id + '\'' +
+                ", name='" + name + '\'' +
+                ", image=" + image +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", category='" + category + '\'' +
+                ", status='" + status + '\'' +
+                ", sold=" + sold +
+                ", sale=" + sale +
+                '}';
     }
 }
