@@ -80,22 +80,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="3dp"
-            android:scrollbars="none"
-            />
+            android:scrollbars="none" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/gray" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="15dp"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/dongle_light"
+            android:text="Sản phẩm"
+            android:textColor="@color/black"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            tools:ignore="RelativeOverlap" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_home"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:scrollbars="none"
-         />
+            android:scrollbars="none" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
