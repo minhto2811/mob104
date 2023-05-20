@@ -156,7 +156,6 @@ public class SplashActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog.dismiss();
                 Intent intent = new Intent(SplashActivity.this,SplashActivity.class);
                 startActivity(intent);
                 finishAffinity();
@@ -169,4 +168,11 @@ public class SplashActivity extends AppCompatActivity {
         alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(alertDialog != null){
+            alertDialog.dismiss();
+        }
+    }
 }
