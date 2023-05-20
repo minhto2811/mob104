@@ -86,6 +86,12 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if(response.isSuccessful()){
+                    for (int i = 0; i < response.body().size(); i++) {
+                        if(response.body().get(i).getId().equals(product.getId())){
+                            response.body().remove(i);
+                            break;
+                        }
+                    }
                     productAdapter.setData(response.body());
                 }
             }
