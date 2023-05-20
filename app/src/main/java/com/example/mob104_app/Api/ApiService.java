@@ -36,6 +36,9 @@ public interface ApiService {
     @GET("product/category/{category}")
     Call<List<Product>> getListProductByCategory(@Path("category") String category);
 
+    @GET("product/related/{category}")
+    Call<List<Product>> getListProductRelated(@Path("category") String category);
+
     @GET("product/banner/{banner_code}")
     Call<List<Product>> getListProductByBanner(@Path("banner_code") String banner_code);
 

@@ -18,10 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.example.mob104_app.Adapter.ImageAdapter;
+import com.example.mob104_app.Adapter.ProductAdapter;
+import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.Models.Product;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.TOOLS;
@@ -30,6 +34,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.List;
 
 import io.github.glailton.expandabletextview.ExpandableTextView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProductDetailActivity extends AppCompatActivity {
     private ViewPager viewPager_product;
@@ -56,6 +63,8 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ImageView imv_back, imv_icon_sale, imv_banner, imv_sale;
     private Product product;
 
+    private RecyclerView rcv_product_related;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +74,28 @@ public class ProductDetailActivity extends AppCompatActivity {
         back();
         showDetailProduct();
         sale();
+        related();
     }
 
+    private void related(){
+        ProductAdapter productAdapter = new ProductAdapter(this);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,3);
+        rcv_product_related.setLayoutManager(gridLayoutManager);
+        rcv_product_related.setAdapter(productAdapter);
+        ApiService.apiService.getListProductRelated(product.getCategory()).enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if(response.isSuccessful()){
+                    productAdapter.setData(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e( "ProductDetailActivity","onFailure");
+            }
+        });
+    }
     private void sale() {
         if (product.getSale() > 0) {
             tv_sale.setText("-" + product.getSale() + "%");
@@ -81,6 +110,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void mapping() {
         imv_sale = findViewById(R.id.imv_sale);
+        rcv_product_related = findViewById(R.id.rcv_product_related);
         imv_banner = findViewById(R.id.imv_banner);
         imv_icon_sale = findViewById(R.id.imv_icon_sale);
         viewPager_product = findViewById(R.id.vpg_product_detail);
