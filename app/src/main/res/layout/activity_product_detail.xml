@@ -56,6 +56,18 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="1.0" />
 
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginEnd="7dp"
+                    android:src="@drawable/shopping_cart"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -85,6 +97,7 @@
                     android:text="20%"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
+
                 <TextView
                     android:id="@+id/tv_name_detail"
                     android:layout_width="wrap_content"
@@ -92,9 +105,64 @@
                     android:paddingHorizontal="8dp"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="27sp"
-                    />
+                    android:textSize="27sp" />
             </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="27dp"
+                        android:layout_height="27dp"
+                        android:src="@drawable/free_shipping" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="Miễn phí giao hàng"
+                        android:textColor="@color/red"
+                        android:textSize="13dp"
+                        android:textStyle="italic" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="27dp"
+                        android:layout_height="27dp"
+                        android:layout_marginStart="17dp"
+                        android:src="@drawable/coupon" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="Áp dụng coupon giảm giá"
+                        android:textColor="@color/red"
+                        android:textSize="13dp"
+                        android:textStyle="italic" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -148,11 +216,11 @@
                         android:layout_height="wrap_content"
                         android:text="Chia sẻ "
                         android:textColor="@color/red"
-                        android:textSize="19sp" />
+                        android:textSize="23sp" />
 
                     <ImageView
                         android:layout_width="150dp"
-                        android:layout_height="43dp"
+                        android:layout_height="38dp"
                         android:src="@drawable/share" />
 
 
