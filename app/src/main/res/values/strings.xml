@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ChicBoutique</string>
+    <string name="app_name">StyleZone</string>
     <string name="todo">todo</string>
     <string name="ang_t_i_d_li_u">   Đang tải dữ liệu...</string>
     <string name="title_home">Trang chủ</string>
@@ -30,4 +30,8 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="x_c_nh_n_th_m">Xác nhận thêm</string>
+    <string name="addcart">Thêm vào giỏ</string>
+    <string name="b_n_c_th_t_y_ch_n_s_l_ng_tr_c_khi_th_m_sau_khi_th_m_th_ng_tin_v_s_n_ph_m_s_c_chuy_n_n_ph_n_gi_h_ng_c_a_b_n">Bạn có thể tùy chọn số lượng trước khi thêm. Sau khi thêm, thông tin về sản phẩm sẽ được chuyển đến phần giỏ hàng của bạn.</string>
+    <string name="mua_ngay">Mua ngay</string>
 </resources>

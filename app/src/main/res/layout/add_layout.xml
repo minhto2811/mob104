@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_layout_add"
+    android:orientation="vertical"
+    android:paddingHorizontal="15dp"
+    android:paddingTop="23dp"
+    >
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imv_product_add"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/todo" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingStart="15dp"
+            tools:ignore="RtlSymmetry">
+
+            <TextView
+                android:id="@+id/tv_name_add"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_price_add"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="@color/red"
+                android:textSize="23sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/imb_mines_add"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/minus"
+                    android:contentDescription="@string/todo" />
+
+                <TextView
+                    android:id="@+id/tv_quantity_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:textColor="@color/black"
+                    android:textSize="27sp" />
+
+                <ImageButton
+                    android:id="@+id/imb_pluss_add"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/plus"
+                    android:contentDescription="@string/todo" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="17dp"
+        android:textColor="@color/black"
+        android:text="@string/b_n_c_th_t_y_ch_n_s_l_ng_tr_c_khi_th_m_sau_khi_th_m_th_ng_tin_v_s_n_ph_m_s_c_chuy_n_n_ph_n_gi_h_ng_c_a_b_n" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_add_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="15dp"
+        android:background="@drawable/bg_button_add"
+        android:paddingVertical="8dp"
+        android:text="@string/x_c_nh_n_th_m"
+        android:textSize="25sp"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

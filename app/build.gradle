@@ -63,4 +63,7 @@ dependencies {
     //circle Imageview
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    //expandableTextview
+        implementation 'io.github.glailton.expandabletextview:expandabletextview:1.0.3'
+
 }
