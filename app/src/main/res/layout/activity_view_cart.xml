@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activities.Products.ViewProductActivity">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_notify"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#50A7E7"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+            app:titleCentered="true">
+
+            <ImageButton
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:layout_gravity="left"
+                android:src="@drawable/baseline_arrow_back_24"
+                app:backgroundTint="#50A7E7" />
+
+            <ImageButton
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:layout_gravity="right"
+                android:src="@drawable/baseline_home_24"
+                app:backgroundTint="#50A7E7" />
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_marginLeft="15px"
+        android:layout_marginTop="15px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chọn tất cả"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textColor="#000000"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="vertical">
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+          <CheckBox
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginLeft="15px"/>
+            <ImageView
+
+                android:id="@+id/imv_product"
+                android:layout_width="118dp"
+                android:layout_height="118dp"
+                android:layout_gravity="center"
+                android:src="@drawable/bg_splash"
+                android:layout_marginLeft="10px"
+                android:layout_marginRight="14px"
+                />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.2"
+                    android:text="Tên sản phẩm"
+                    android:textSize="24sp"
+                    android:layout_marginTop="12px"
+                    android:gravity="left"
+                    android:textColor="#000000"
+                    />
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="Đánh giá"
+                        android:textSize="17sp"
+
+                        android:textColor="#000000"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.1"
+                        android:gravity="left"
+                        android:text="Đã bán"
+                        android:textSize="17sp"
+
+                        android:textColor="#000000"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="Giá sản phẩm"
+                    android:textSize="24sp"
+
+                    android:textColor="#000000"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+             >
+
+                    <TextView
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="Số lượng "
+                        android:textSize="17sp"
+                        android:textColor="#000000"/>
+
+                    <ImageButton
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_baseline_add"
+                        app:backgroundTint="#C1F3CC"/>
+
+                    <TextView
+                        android:layout_width="30dp"
+                        android:layout_height="28dp"
+                        android:background="#D9D9D9"
+                        android:gravity="center"
+                        android:text="1 "
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        />
+                    <ImageButton
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_tru"
+                        app:backgroundTint="#C1F3CC"
+
+                        />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Xóa"
+                        android:textColor="#FF0101"
+                        android:backgroundTint="#fff"
+                        android:layout_marginLeft="5dp"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="28px">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/coupon1"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Shop voucher giảm giá đến 10%"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"/>
+        </LinearLayout>
+
+</LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Giỏ hàng của bạn trống"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:layout_marginTop="441px"/>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.504"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            tools:ignore="MissingConstraints">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="441px"
+                android:layout_weight="1"
+                android:text="Tổng tiền:"
+
+                android:textColor="#F60000"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="441px"
+                android:text="99.000.000 VND"
+                android:textColor="#F90909"
+                android:textSize="30sp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_gravity="end"
+            android:text="Đặt hàng"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
