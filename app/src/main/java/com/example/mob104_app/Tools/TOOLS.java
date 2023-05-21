@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
 
 public class TOOLS {
     //192.168.137.1
-    public static String doMainDevice = "http://10.0.2.2:3000";
+    public static String doMainDevice = "http://10.0.3.2:3000";
     public static String TOKEN = "TOKEN";
 
 
