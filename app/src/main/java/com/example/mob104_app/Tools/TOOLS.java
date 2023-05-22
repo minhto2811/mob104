@@ -11,10 +11,11 @@ import com.google.gson.JsonObject;
 import java.text.DecimalFormat;
 
 public class TOOLS {
+
     public static String doMainDevice = "http://10.0.2.2:3000";
-//    public static String doMainDevice = "http://192.168.137.1:3000";
     public static String  USER= "USER";
     private static  Gson gson = new Gson();
+
 
 
     public static String convertPrice(int price) {

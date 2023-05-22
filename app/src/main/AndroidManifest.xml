@@ -27,6 +27,12 @@
 
 
         <activity
+            android:name=".Activities.ExportBillActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.InfoCustomerActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -35,40 +41,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".Activities.LoginActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".Activities.MainActivity"
             android:exported="false" />
-
         <activity
             android:name=".Activities.NotifyActivity"
             android:exported="false" />
-
         <activity
             android:name=".Activities.BannerActivity"
             android:exported="false" />
-
         <activity
             android:name=".Activities.CategoryActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.RegisterActivity"
             android:exported="false" />
-
         <activity
             android:name=".Activities.ForgetPasswordActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.ProductDetailActivity"
             android:exported="false" />
-
-
         <activity
             android:name=".Activities.Products.AddProductActivity"
             android:exported="false" />
@@ -78,6 +74,8 @@
         <activity
             android:name=".Activities.Products.UpdateProductActivity"
             android:exported="false" />
+        <activity android:name=".Activities.ImportBillActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>
