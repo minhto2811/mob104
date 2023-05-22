@@ -2,22 +2,26 @@ package com.example.mob104_app.Api;
 
 import com.example.mob104_app.Models.Banner;
 import com.example.mob104_app.Models.Category;
+import com.example.mob104_app.Models.Favourite;
 import com.example.mob104_app.Models.Product;
 import com.example.mob104_app.Models.User;
 import com.example.mob104_app.Tools.TOOLS;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface ApiService {
@@ -52,10 +56,20 @@ public interface ApiService {
     Call<User> createUser(@Body User user);
 
     @POST("user/login")
-    Call<String> loginUser(@Body RequestBody requestBody);
+    Call<User> loginUser(@Body RequestBody requestBody);
 
     @POST("user/info")
-    Call<User> getInfoUser(@Body RequestBody requestBody);
+    Call<User> getInfoUser(@Body JsonObject jsonObject);
+
+    @Multipart
+    @POST("user/update/image/{username}")
+    Call<User> changeAvatar(@Part MultipartBody.Part image, @Path("username") String id);
+
+    @POST("favourites/add/{id_user}")
+    Call<Favourite> addToFavourite(@Path("id_user") String id_user,@Body RequestBody id_product);
+
+    @GET("favourites/{id_user}")
+    Call<List<String>> getListFavourite(@Path("id_user") String id_user);
 
 
 }

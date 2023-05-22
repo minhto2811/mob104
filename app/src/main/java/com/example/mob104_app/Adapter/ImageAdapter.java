@@ -45,8 +45,6 @@ public class ImageAdapter extends PagerAdapter {
         textView.setText((position+1)+"/"+getCount());
         Glide.with(container.getContext())
                 .load(TOOLS.doMainDevice + url)
-                .error(R.drawable.watting)
-                .placeholder(R.drawable.watting)
                 .into(imageView);
 
         container.addView(view);

@@ -41,8 +41,6 @@ public class BannerActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rcv_product_event);
         Glide.with(this)
                 .load(TOOLS.doMainDevice + banner.getImage())
-                .error(R.drawable.watting)
-                .placeholder(R.drawable.watting)
                 .into(imageView);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);

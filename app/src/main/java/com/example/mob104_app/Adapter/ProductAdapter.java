@@ -68,9 +68,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             Glide
                     .with(context)
                     .load(TOOLS.doMainDevice + product.getImage().get(0))
-                    .error(R.drawable.watting)
-                    .placeholder(R.drawable.watting)
                     .into(holder.imv_image);
+
+            if(!product.getStatus().equalsIgnoreCase("Còn hàng")){
+                holder.imv_image_1.setVisibility(View.VISIBLE);
+            }
 
             holder.layout_product.setOnLongClickListener(v -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -140,7 +142,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         private final TextView tv_name;
         private final TextView tv_price;
         private final TextView tv_sale;
-        private final ImageView imv_image;
+        private final ImageView imv_image,imv_image_1;
         private final CardView layout_product;
         private final Button btn_show_info;
 
@@ -150,6 +152,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             tv_sale = itemView.findViewById(R.id.tv_sale);
             tv_price = itemView.findViewById(R.id.tv_price);
             imv_image = itemView.findViewById(R.id.imv_image);
+            imv_image_1 = itemView.findViewById(R.id.imv_image_1);
             layout_product = itemView.findViewById(R.id.layout_product);
             btn_show_info = itemView.findViewById(R.id.btn_show_info);
         }

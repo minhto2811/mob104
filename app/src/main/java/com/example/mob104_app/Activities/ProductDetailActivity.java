@@ -26,14 +26,24 @@ import com.bumptech.glide.Glide;
 import com.example.mob104_app.Adapter.ImageAdapter;
 import com.example.mob104_app.Adapter.ProductAdapter;
 import com.example.mob104_app.Api.ApiService;
+import com.example.mob104_app.Models.Favourite;
 import com.example.mob104_app.Models.Product;
 import com.example.mob104_app.R;
+import com.example.mob104_app.Tools.ACCOUNT;
+import com.example.mob104_app.Tools.LIST;
 import com.example.mob104_app.Tools.TOOLS;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.github.glailton.expandabletextview.ExpandableTextView;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,7 +52,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ViewPager viewPager_product;
     private ImageAdapter imageAdapter;
     private TextView tv_text_price, tv_text_price_splashsale, tv_name, tv_category, tv_status, tv_price, tv_price_new_detail, tv_sold_detail, tv_sale;
-    private Button btn_add;
+    private Button btn_add, btn_sold_out;
     private int quan = 1;
     private List<String> listImage;
     private int price_new;
@@ -60,7 +70,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         }
     };
-    private ImageView imv_back, imv_icon_sale, imv_banner, imv_sale;
+    private ImageView imv_back, imv_icon_sale, imv_banner, imv_sale, imv_favourite;
     private Product product;
 
     private RecyclerView rcv_product_related;
@@ -75,23 +85,81 @@ public class ProductDetailActivity extends AppCompatActivity {
         showDetailProduct();
         sale();
         related();
+        favourite();
     }
 
-    private void related(){
+    private void favourite() {
+
+        if (checkFavourite(product.getId())) {
+            imv_favourite.setImageResource(R.drawable.mark);
+        }
+
+        imv_favourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!checkFavourite(product.getId())) {
+                    JSONObject postData = new JSONObject();
+                    try {
+                        postData.put("id_product", product.getId());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    String jsonString = postData.toString();
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
+                    ApiService.apiService.addToFavourite(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Favourite>() {
+                        @Override
+                        public void onResponse(Call<Favourite> call, Response<Favourite> response) {
+                            if (response.isSuccessful()) {
+                                LIST.listFavourite.add(product.getId());
+                               imv_favourite.setImageResource(R.drawable.mark);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Favourite> call, Throwable t) {
+                            Toast.makeText(ProductDetailActivity.this, "Thêm thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }else {
+                    Toast.makeText(ProductDetailActivity.this, "Sản phẩm đã được thêm vào mục yêu thích", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        });
+    }
+
+    private boolean checkFavourite(String id) {
+        boolean rs = false;
+        for (int i = 0; i < LIST.listFavourite.size(); i++) {
+            if (LIST.listFavourite.get(i).equals(id)) {
+                rs = true;
+                break;
+            }
+        }
+        return rs;
+    }
+
+    private void related() {
         ProductAdapter productAdapter = new ProductAdapter(this);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,3);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         rcv_product_related.setLayoutManager(gridLayoutManager);
         rcv_product_related.setAdapter(productAdapter);
         ApiService.apiService.getListProductRelated(product.getCategory()).enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     for (int i = 0; i < response.body().size(); i++) {
-                        if(response.body().get(i).getId().equals(product.getId())){
+                        if (response.body().get(i).getId().equals(product.getId())) {
                             response.body().remove(i);
                             break;
                         }
                     }
+                    Collections.sort(response.body(), new Comparator<Product>() {
+                        @Override
+                        public int compare(Product o1, Product o2) {
+                            return o1.getStatus().compareToIgnoreCase(o2.getStatus());
+                        }
+                    });
                     productAdapter.setData(response.body());
                 }
             }
@@ -105,16 +173,39 @@ public class ProductDetailActivity extends AppCompatActivity {
     private void sale() {
         if (product.getSale() > 0) {
             tv_sale.setText("-" + product.getSale() + "%");
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, 0);
+            if (!product.getStatus().equalsIgnoreCase("Còn hàng")) {
+                imv_icon_sale.setImageResource(R.drawable.fire);
+                tv_sale.setLayoutParams(layoutParams);
+                imv_banner.setImageResource(R.drawable.flash_sales_5);
+                imv_sale.setImageResource(R.drawable.sold_out);
+                btn_sold_out.setText(product.getStatus());
+            } else {
+                btn_sold_out.setLayoutParams(layoutParams);
+            }
         } else {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, 0);
-            imv_icon_sale.setImageResource(R.drawable.fire);
-            tv_sale.setLayoutParams(layoutParams);
-            imv_banner.setImageResource(R.drawable.flash_sales_5);
-            imv_sale.setImageResource(R.drawable.gift);
+            if (product.getStatus().equalsIgnoreCase("Còn hàng")) {
+                imv_icon_sale.setImageResource(R.drawable.hot);
+                tv_sale.setLayoutParams(layoutParams);
+                imv_banner.setImageResource(R.drawable.flash_sales_5);
+                imv_sale.setImageResource(R.drawable.gift);
+                btn_sold_out.setLayoutParams(layoutParams);
+            } else {
+                btn_sold_out.setText(product.getStatus());
+                imv_icon_sale.setImageResource(R.drawable.fire);
+                tv_sale.setLayoutParams(layoutParams);
+                imv_banner.setImageResource(R.drawable.flash_sales_5);
+                imv_sale.setImageResource(R.drawable.sold_out);
+            }
+
+
         }
     }
 
     private void mapping() {
+        imv_favourite = findViewById(R.id.imv_favourite);
+        btn_sold_out = findViewById(R.id.btn_sold_out);
         imv_sale = findViewById(R.id.imv_sale);
         rcv_product_related = findViewById(R.id.rcv_product_related);
         imv_banner = findViewById(R.id.imv_banner);
@@ -207,8 +298,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                 TextView tv_quantity_add = view1.findViewById(R.id.tv_quantity_add);
 
                 Glide.with(ProductDetailActivity.this).load(TOOLS.doMainDevice + product.getImage().get(0))
-                        .error(R.drawable.watting)
-                        .placeholder(R.drawable.watting)
                         .into(imv_product_add);
                 tv_name_add.setText(product.getName());
                 if (product.getSale() > 0) {
