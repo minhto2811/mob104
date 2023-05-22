@@ -35,7 +35,7 @@ public class BannerFragment extends Fragment {
         Bundle bundle = getArguments();
         assert bundle != null;
         Banner banner = (Banner) bundle.get("banner");
-        Glide.with(this).load(TOOLS.doMainDevice + banner.getImage()).error(R.drawable.watting).placeholder(R.drawable.watting).into(imageView);
+        Glide.with(this).load(TOOLS.doMainDevice + banner.getImage()).into(imageView);
         imageView.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), BannerActivity.class);
             intent.putExtra("banner", banner);

@@ -46,11 +46,11 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.15.1'
+    implementation 'com.github.bumptech.glide:glide:4.4.1'
 
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.0.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     //Gson
     implementation 'com.google.code.gson:gson:2.9.0'
 
@@ -66,4 +66,12 @@ dependencies {
     //expandableTextview
         implementation 'io.github.glailton.expandabletextview:expandabletextview:1.0.3'
 
+    //tedpermision
+    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
+
+    //tedbottompicker
+    implementation 'gun0912.ted:tedbottompicker:1.2.6'
+
+    //okhttp3
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 }

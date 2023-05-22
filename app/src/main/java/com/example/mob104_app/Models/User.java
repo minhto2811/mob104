@@ -1,6 +1,7 @@
 package com.example.mob104_app.Models;
 
 public class User {
+    private String _id;
     private String fullname;
     private String username;
     private String password;
@@ -19,7 +20,9 @@ public class User {
     public User() {
     }
 
-    public User(String fullname, String username, String password, String numberphone, boolean role, String email, String address, String image, String sex, String date) {
+
+    public User(String _id, String fullname, String username, String password, String numberphone, boolean role, String email, String address, String image, String sex, String date) {
+        this._id = _id;
         this.fullname = fullname;
         this.username = username;
         this.password = password;
@@ -30,6 +33,18 @@ public class User {
         this.image = image;
         this.sex = sex;
         this.date = date;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public boolean isRole() {
+        return role;
     }
 
     public String getFullname() {
@@ -64,7 +79,7 @@ public class User {
         this.numberphone = numberphone;
     }
 
-    public boolean isRole() {
+    public boolean getRole() {
         return role;
     }
 

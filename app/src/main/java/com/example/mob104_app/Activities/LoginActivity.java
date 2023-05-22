@@ -12,6 +12,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,11 +26,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.mob104_app.Api.ApiService;
+import com.example.mob104_app.Models.User;
 import com.example.mob104_app.R;
+import com.example.mob104_app.Tools.ACCOUNT;
 import com.example.mob104_app.Tools.TOOLS;
+import com.example.mob104_app.UI.SettingsFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.Serializable;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -45,7 +51,6 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_login;
     private boolean isShow = false, checkUser, checkPass;
 
-    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,13 +124,14 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void checkAccount(String user, String pass) {
-        if (dialog == null) {
-            dialog = new Dialog(LoginActivity.this);
-        }
+
+        Dialog dialog = new Dialog(LoginActivity.this);
+
         @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.layout_watting, null);
         Glide.with(LoginActivity.this).asGif().load(R.drawable.spin).into((ImageView) view.findViewById(R.id.imv_watting));
         dialog.setContentView(view);
         dialog.setCancelable(false);
+
         dialog.show();
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         JSONObject postData = new JSONObject();
@@ -138,26 +144,29 @@ public class LoginActivity extends AppCompatActivity {
         String jsonString = postData.toString();
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
 
-        ApiService.apiService.loginUser(requestBody).enqueue(new Callback<String>() {
+        ApiService.apiService.loginUser(requestBody).enqueue(new Callback<User>() {
             @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    String token = response.body();
-                    if (token != null) {
-                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công.", Toast.LENGTH_SHORT).show();
-                        TOOLS.saveToken(LoginActivity.this, token);
+                    User user1 = response.body();
+                    if (user1 != null) {
+                        TOOLS.saveUser(LoginActivity.this, user1);
+                        ACCOUNT.user = user1;
+                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                        setResult(SettingsFragment.REQUEST_LOGIN);
                         finish();
+                        overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
                     } else {
                         Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác!", Toast.LENGTH_SHORT).show();
                     }
                 }
-                dialog.hide();
+                dialog.cancel();
             }
 
             @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác!", Toast.LENGTH_SHORT).show();
-                dialog.hide();
+                dialog.cancel();
             }
         });
     }
@@ -231,11 +240,4 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (dialog != null) {
-            dialog.dismiss();
-        }
-    }
 }

@@ -3,16 +3,19 @@ package com.example.mob104_app.Tools;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Point;
-import android.view.Display;
-import android.view.WindowManager;
+
+import com.example.mob104_app.Models.User;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.text.DecimalFormat;
 
 public class TOOLS {
-    //192.168.137.1
-    public static String doMainDevice = "http://10.0.3.2:3000";
-    public static String TOKEN = "TOKEN";
+
+    public static String doMainDevice = "http://10.0.2.2:3000";
+    public static String  USER= "USER";
+    private static  Gson gson = new Gson();
+
 
 
     public static String convertPrice(int price) {
@@ -20,25 +23,27 @@ public class TOOLS {
         return formatter.format(price);
     }
 
-    public static void saveToken(Context context, String token) {
-        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(TOKEN, Context.MODE_PRIVATE);
+    public static void saveUser(Context context, User user) {
+        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(USER, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(TOKEN, token);
+        String json = gson.toJson(user);
+        editor.putString(USER, json);
         editor.apply();
     }
 
-    public static void clearToken(Context context) {
-        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(TOKEN, Context.MODE_PRIVATE);
+    public static void clearUser(Context context) {
+        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(USER, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
     }
 
-    public static String getToken(Context context) {
-        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(TOKEN, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(TOKEN,null);
+    public static User getUser(Context context) {
+        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(USER, Context.MODE_PRIVATE);
+        String string = sharedPreferences.getString(USER,null);
+        User user = gson.fromJson(string, User.class);
+        return user;
     }
-
 
 
     public static boolean isValidPhoneNumber(String phoneNumber) {
@@ -46,9 +51,16 @@ public class TOOLS {
         return phoneNumber.matches(regex);
     }
 
-    public static boolean isValidEmail(String email){
-        String emailPattern="^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+    public static boolean isValidEmail(String email) {
+        String emailPattern = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
         return !email.isEmpty() && email.matches(emailPattern);
+    }
+
+    public static JsonObject convertJson(String key, String value) {
+        String token = "{\"" + key + "\": \"" + value + "\"}";
+        Gson gson = new Gson();
+        JsonObject jsonObject = gson.fromJson(token, JsonObject.class);
+        return jsonObject;
     }
 
 }

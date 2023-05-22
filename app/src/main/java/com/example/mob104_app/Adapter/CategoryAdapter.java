@@ -52,8 +52,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         if(category!=null){
             Glide.with(context)
                     .load(TOOLS.doMainDevice + category.getImage())
-                    .error(R.drawable.watting)
-                    .placeholder(R.drawable.watting)
                     .into(holder.imv_category);
             holder.item_category.setOnClickListener(v -> {
                 Intent intent = new Intent(context, CategoryActivity.class);

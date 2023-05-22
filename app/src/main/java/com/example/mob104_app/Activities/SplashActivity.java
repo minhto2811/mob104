@@ -22,8 +22,12 @@ import com.example.mob104_app.Models.Banner;
 import com.example.mob104_app.Models.Category;
 import com.example.mob104_app.Models.Product;
 import com.example.mob104_app.R;
+import com.example.mob104_app.Tools.ACCOUNT;
 import com.example.mob104_app.Tools.LIST;
+import com.example.mob104_app.Tools.TOOLS;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -50,10 +54,44 @@ public class SplashActivity extends AppCompatActivity {
         getAllBanner();
         getAllCategory();
         getAllProduct();
+        getFavourite();
+        getUser();
+    }
+
+    private void getFavourite() {
+        Log.e("getFavourite: ", "");
+        if (TOOLS.getUser(this) != null) {
+            ApiService.apiService.getListFavourite(TOOLS.getUser(this).get_id()).enqueue(new Callback<List<String>>() {
+                @Override
+                public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                    if (response.isSuccessful()) {
+                        LIST.listFavourite = response.body();
+                        gotoMainActivity();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<String>> call, Throwable t) {
+                    if (!isLoadingData) {
+                        return;
+                    }
+                    index_error++;
+                    if (index_error < 6) {
+                        getAllCategory();
+                    } else {
+                        ErrorLoadingData();
+                    }
+                }
+            });
+        }
+    }
+
+    private void getUser() {
+        ACCOUNT.user = TOOLS.getUser(SplashActivity.this);
     }
 
     private void getAllCategory() {
-        Log.e("getAllCategory: ","");
+        Log.e("getAllCategory: ", "");
         ApiService.apiService.getAllCategory().enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(@NonNull Call<List<Category>> call, @NonNull Response<List<Category>> response) {
@@ -74,7 +112,6 @@ public class SplashActivity extends AppCompatActivity {
                 } else {
                     ErrorLoadingData();
                 }
-
             }
         });
     }
@@ -84,6 +121,12 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<List<Product>> call, @NonNull Response<List<Product>> response) {
                 if (response.isSuccessful()) {
+                    Collections.sort(response.body(), new Comparator<Product>() {
+                        @Override
+                        public int compare(Product o1, Product o2) {
+                            return o1.getStatus().compareToIgnoreCase(o2.getStatus());
+                        }
+                    });
                     LIST.listProduct = response.body();
                     gotoMainActivity();
                 }
@@ -168,11 +211,5 @@ public class SplashActivity extends AppCompatActivity {
         alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(alertDialog != null){
-            alertDialog.dismiss();
-        }
-    }
+
 }
