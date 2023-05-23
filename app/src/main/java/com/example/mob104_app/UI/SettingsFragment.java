@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.mob104_app.Activities.FavouriteActivity;
 import com.example.mob104_app.Activities.LoginActivity;
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.Models.User;
@@ -61,7 +61,7 @@ public class SettingsFragment extends Fragment {
     }
 
 
-    private Button btn_logout;
+    private Button btn_logout, btn_favourite;
     private CircleImageView civ_avatar;
     private TextView tv_fullname;
     private ImageView imv_bg_settings, imv_change_avatar;
@@ -71,25 +71,35 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mapping(view);
         if (ACCOUNT.user == null) {
             gotoLogin();
-        } else {
-            logout();
-            setAvatar();
-            changeAvatar();
+            return;
         }
-
+        mapping(view);
+        logout();
+        setAvatar();
+        changeAvatar();
+        favourite();
     }
 
 
     private void mapping(View view) {
+        btn_favourite = view.findViewById(R.id.btn_favourite);
         btn_logout = view.findViewById(R.id.btn_logout);
         civ_avatar = view.findViewById(R.id.civ_avatar);
         tv_fullname = view.findViewById(R.id.tv_fullname);
         imv_bg_settings = view.findViewById(R.id.imv_bg_settings);
         imv_change_avatar = view.findViewById(R.id.imv_change_avatar);
         Glide.with(requireContext()).asGif().load(R.drawable.settings_bg).into(imv_bg_settings);
+    }
+
+    private void favourite() {
+        btn_favourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoActivity(FavouriteActivity.class);
+            }
+        });
     }
 
     private void changeAvatar() {
@@ -182,10 +192,15 @@ public class SettingsFragment extends Fragment {
         tv_fullname.setText("Hi, " + ACCOUNT.user.getFullname());
     }
 
+    private void gotoActivity(Class aClass) {
+        Intent intent = new Intent(getContext(), aClass);
+        startActivity(intent);
+        requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+    }
+
     private void gotoLogin() {
         Intent intent = new Intent(getContext(), LoginActivity.class);
         startActivityForResult(intent, REQUEST_LOGIN);
-        requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
     }
 
     private void logout() {

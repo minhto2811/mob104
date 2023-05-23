@@ -65,6 +65,7 @@ public class HomeFragment extends Fragment {
     private ImageView imv_arrow;
 
     private boolean arrow = true;
+    public static SearchView searchView;
 
 
 
@@ -148,7 +149,7 @@ public class HomeFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.toolbar_menu, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.toolbar_search).getActionView();
+         searchView = (SearchView) menu.findItem(R.id.toolbar_search).getActionView();
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -185,5 +186,6 @@ public class HomeFragment extends Fragment {
             ShowHideCategory();
         }
     }
+
 
 }

@@ -17,4 +17,6 @@ public class LIST {
     public static List<Product> listProductByCategory = new ArrayList<>();
 
     public static List<String> listFavourite = new ArrayList<>();
+
+    public static List<Product> getListProductByFavourite = new ArrayList<>();
 }

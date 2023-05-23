@@ -31,20 +31,17 @@ public class NotifyActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            goBack();
+            onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    private void goBack(){
-        finish();
-        overridePendingTransition(R.anim.prev_enter,R.anim.prev_exit);
-    }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        goBack();
+        finish();
+        overridePendingTransition(R.anim.prev_enter,R.anim.prev_exit);
     }
 }

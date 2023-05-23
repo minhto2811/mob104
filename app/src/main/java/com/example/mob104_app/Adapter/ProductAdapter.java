@@ -117,7 +117,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
                 } else {
                     List<Product> list1 = new ArrayList<>();
                     for (Product student : listNew) {
-                        if (covertToString(student.getName().toLowerCase()).contains(covertToString(strSearch.toLowerCase().trim()))) {
+                        if (TOOLS.covertToString(student.getName().toLowerCase()).contains(TOOLS.covertToString(strSearch.toLowerCase().trim()))) {
                             list1.add(student);
                         }
                     }
@@ -159,14 +159,5 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
     }
 
-    public String covertToString(String value) {
-        try {
-            String temp = Normalizer.normalize(value, Normalizer.Form.NFD);
-            Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-            return pattern.matcher(temp).replaceAll("");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
+
 }

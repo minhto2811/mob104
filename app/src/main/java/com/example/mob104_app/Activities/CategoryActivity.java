@@ -19,6 +19,8 @@ import com.example.mob104_app.Models.Product;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.LIST;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,6 +32,7 @@ import retrofit2.Response;
 public class CategoryActivity extends AppCompatActivity {
     private ProductAdapter productAdapter;
     private Category category;
+    private SearchView searchView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +64,12 @@ public class CategoryActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<List<Product>> call, @NonNull Response<List<Product>> response) {
                     if (response.isSuccessful()) {
+                        Collections.sort(response.body(), new Comparator<Product>() {
+                            @Override
+                            public int compare(Product o1, Product o2) {
+                                return o1.getStatus().compareToIgnoreCase(o2.getStatus());
+                            }
+                        });
                         LIST.listProductByCategory = response.body();
                         productAdapter.setData(LIST.listProductByCategory);
                     }
@@ -80,7 +89,7 @@ public class CategoryActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.toolbar_search).getActionView();
+         searchView = (SearchView) menu.findItem(R.id.toolbar_search).getActionView();
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -114,6 +123,10 @@ public class CategoryActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if(!searchView.isIconified()){
+            searchView.setIconified(true);
+            return;
+        }
         super.onBackPressed();
         finish();
         overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);

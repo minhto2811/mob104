@@ -111,7 +111,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                         public void onResponse(Call<Favourite> call, Response<Favourite> response) {
                             if (response.isSuccessful()) {
                                 LIST.listFavourite.add(product.getId());
-                               imv_favourite.setImageResource(R.drawable.mark);
+                                LIST.getListProductByFavourite.add(product);
+                                imv_favourite.setImageResource(R.drawable.mark);
+
                             }
                         }
 
