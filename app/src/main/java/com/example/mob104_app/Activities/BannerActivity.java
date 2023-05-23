@@ -19,6 +19,8 @@ import com.example.mob104_app.Tools.LIST;
 import com.example.mob104_app.Tools.TOOLS;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -57,6 +59,12 @@ public class BannerActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                     if (response.isSuccessful()) {
+                        Collections.sort(response.body(), new Comparator<Product>() {
+                            @Override
+                            public int compare(Product o1, Product o2) {
+                                return o1.getStatus().compareToIgnoreCase(o2.getStatus());
+                            }
+                        });
                         LIST.listProductByBanner = response.body();
                         productAdapter.setData(LIST.listProductByBanner);
                     }

@@ -71,5 +71,12 @@ public interface ApiService {
     @GET("favourites/{id_user}")
     Call<List<String>> getListFavourite(@Path("id_user") String id_user);
 
+    @GET("favourites/product/{id_user}")
+    Call<List<Product>> getListProductByFavourite(@Path("id_user") String id_user);
+
+    @POST("favourites/update/{id_user}")
+    Call<Favourite> delToFavourite(@Path("id_user") String id_user,@Body RequestBody id_product);
+
+
 
 }

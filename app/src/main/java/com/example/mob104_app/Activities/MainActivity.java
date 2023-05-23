@@ -1,12 +1,5 @@
 package com.example.mob104_app.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +7,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.mob104_app.R;
@@ -100,6 +100,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if(!HomeFragment.searchView.isIconified()){
+            HomeFragment.searchView.setIconified(true);
+            return;
+        }
         EXIT++;
         if (EXIT < 2) {
             Toast.makeText(this, "Nhấn 1 lần nữa để thoát.", Toast.LENGTH_SHORT).show();
