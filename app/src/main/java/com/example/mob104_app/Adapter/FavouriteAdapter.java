@@ -2,7 +2,9 @@ package com.example.mob104_app.Adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,30 +84,46 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
             holder.imv_bin_favourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    JSONObject postData = new JSONObject();
-                    try {
-                        postData.put("id_product", product.getId());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    String jsonString = postData.toString();
-                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
-                    ApiService.apiService.delToFavourite(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Favourite>() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Xóa sản phẩm \"" + product.getName() + "\" khỏi mục yêu thích?");
+                    builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onResponse(Call<Favourite> call, Response<Favourite> response) {
-                            if (response.isSuccessful()) {
-                                LIST.listFavourite = response.body().getList_id_product();
-                                list.remove(product);
-                                notifyDataSetChanged();
+                        public void onClick(DialogInterface dialog, int which) {
+                            JSONObject postData = new JSONObject();
+                            try {
+                                postData.put("id_product", product.getId());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        }
+                            String jsonString = postData.toString();
+                            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
+                            ApiService.apiService.delToFavourite(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Favourite>() {
+                                @Override
+                                public void onResponse(Call<Favourite> call, Response<Favourite> response) {
+                                    if (response.isSuccessful()) {
+                                        LIST.listFavourite = response.body().getList_id_product();
+                                        list.remove(product);
+                                        notifyDataSetChanged();
+                                    }
+                                }
 
 
-                        @Override
-                        public void onFailure(Call<Favourite> call, Throwable t) {
-                            Toast.makeText(context, "Xóa thất bại!", Toast.LENGTH_SHORT).show();
+                                @Override
+                                public void onFailure(Call<Favourite> call, Throwable t) {
+                                    Toast.makeText(context, "Xóa thất bại!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     });
+                    builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
                 }
             });
         }

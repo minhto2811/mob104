@@ -64,7 +64,8 @@ public interface ApiService {
     @Multipart
     @POST("user/update/image/{username}")
     Call<User> changeAvatar(@Part MultipartBody.Part image, @Path("username") String id);
-
+    @POST("user/password")
+    Call<User> changePassword(@Body RequestBody requestBody);
     @POST("favourites/add/{id_user}")
     Call<Favourite> addToFavourite(@Path("id_user") String id_user,@Body RequestBody id_product);
 

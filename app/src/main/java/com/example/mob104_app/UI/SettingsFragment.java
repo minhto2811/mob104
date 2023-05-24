@@ -24,10 +24,12 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.mob104_app.Activities.FavouriteActivity;
 import com.example.mob104_app.Activities.LoginActivity;
+import com.example.mob104_app.Activities.PasswordActivity;
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.Models.User;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.ACCOUNT;
+import com.example.mob104_app.Tools.LIST;
 import com.example.mob104_app.Tools.TOOLS;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
@@ -61,29 +63,30 @@ public class SettingsFragment extends Fragment {
     }
 
 
-    private Button btn_logout, btn_favourite;
+    private Button btn_logout, btn_favourite, btn_password;
     private CircleImageView civ_avatar;
     private TextView tv_fullname;
     private ImageView imv_bg_settings, imv_change_avatar;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-    public static final int REQUEST_LOGIN = 2;
+    private static final int REQUEST_IMAGE_CAPTURE = 111;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (ACCOUNT.user == null) {
-            gotoLogin();
-            return;
-        }
         mapping(view);
         logout();
-        setAvatar();
         changeAvatar();
         favourite();
+        password();
+        if (ACCOUNT.user == null) {
+            gotoActivity(LoginActivity.class);
+            return;
+        }
+        setAvatar();
     }
 
 
     private void mapping(View view) {
+        btn_password = view.findViewById(R.id.btn_password);
         btn_favourite = view.findViewById(R.id.btn_favourite);
         btn_logout = view.findViewById(R.id.btn_logout);
         civ_avatar = view.findViewById(R.id.civ_avatar);
@@ -91,6 +94,15 @@ public class SettingsFragment extends Fragment {
         imv_bg_settings = view.findViewById(R.id.imv_bg_settings);
         imv_change_avatar = view.findViewById(R.id.imv_change_avatar);
         Glide.with(requireContext()).asGif().load(R.drawable.settings_bg).into(imv_bg_settings);
+    }
+
+    private void password() {
+        btn_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoActivity(PasswordActivity.class);
+            }
+        });
     }
 
     private void favourite() {
@@ -153,7 +165,6 @@ public class SettingsFragment extends Fragment {
                     Toast.makeText(requireContext(), "Tải ảnh thất bại!", Toast.LENGTH_SHORT).show();
                 }
             });
-
         };
 
         TedBottomPicker tedBottomPicker = new TedBottomPicker.Builder(requireContext())
@@ -166,9 +177,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_LOGIN) {
-            setAvatar();
-        }
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == Activity.RESULT_OK) {
                 Uri uri = data.getData();
@@ -179,7 +187,6 @@ public class SettingsFragment extends Fragment {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-//                setPic();
             }
 
         }
@@ -188,28 +195,35 @@ public class SettingsFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void setAvatar() {
-        Glide.with(requireContext()).load(TOOLS.doMainDevice + ACCOUNT.user.getImage()).into(civ_avatar);
+        Glide.with((Activity) getContext()).load(TOOLS.doMainDevice + ACCOUNT.user.getImage()).into(civ_avatar);
         tv_fullname.setText("Hi, " + ACCOUNT.user.getFullname());
     }
 
     private void gotoActivity(Class aClass) {
         Intent intent = new Intent(getContext(), aClass);
         startActivity(intent);
-        requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+        if (aClass != LoginActivity.class) {
+            requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+        }
     }
 
-    private void gotoLogin() {
-        Intent intent = new Intent(getContext(), LoginActivity.class);
-        startActivityForResult(intent, REQUEST_LOGIN);
-    }
 
     private void logout() {
 
         btn_logout.setOnClickListener(v -> {
             TOOLS.clearUser(getContext());
+            LIST.listFavourite.clear();
+            LIST.getListProductByFavourite.clear();
             ACCOUNT.user = null;
-            gotoLogin();
+            gotoActivity(LoginActivity.class);
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (ACCOUNT.user != null) {
+            setAvatar();
+        }
+    }
 }
