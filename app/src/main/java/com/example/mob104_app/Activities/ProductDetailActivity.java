@@ -1,5 +1,8 @@
 package com.example.mob104_app.Activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,7 +55,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ViewPager viewPager_product;
     private ImageAdapter imageAdapter;
     private TextView tv_text_price, tv_text_price_splashsale, tv_name, tv_category, tv_status, tv_price, tv_price_new_detail, tv_sold_detail, tv_sale;
-    private Button btn_add, btn_sold_out;
+    private Button btn_add, btn_sold_out,btn_buy_now;
     private int quan = 1;
     private List<String> listImage;
     private int price_new;
@@ -86,10 +89,110 @@ public class ProductDetailActivity extends AppCompatActivity {
         sale();
         related();
         favourite();
+        buyNow();
+        addToCart();
+    }
+
+
+    private void addToCart(){
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ACCOUNT.user == null) {
+                    showDialogLogin();
+                    return;
+                }
+                final BottomSheetDialog dialog = new BottomSheetDialog(ProductDetailActivity.this, R.style.AppBottomSheetDialogTheme);
+                View view1 = LayoutInflater.from(v.getContext()).inflate(R.layout.add_layout, null);
+                ImageView imv_product_add = view1.findViewById(R.id.imv_product_add);
+                ImageButton imb_mines_add = view1.findViewById(R.id.imb_mines_add);
+                ImageButton imb_pluss_add = view1.findViewById(R.id.imb_pluss_add);
+                Button btn_add_add = view1.findViewById(R.id.btn_add_add);
+                TextView tv_name_add = view1.findViewById(R.id.tv_name_add);
+                TextView tv_price_add = view1.findViewById(R.id.tv_price_add);
+                TextView tv_quantity_add = view1.findViewById(R.id.tv_quantity_add);
+
+                Glide.with(ProductDetailActivity.this).load(TOOLS.doMainDevice + product.getImage().get(0))
+                        .into(imv_product_add);
+                tv_name_add.setText(product.getName());
+                if (product.getSale() > 0) {
+                    tv_price_add.setText(TOOLS.convertPrice(price_new * quan) + "VND");
+                } else {
+                    tv_price_add.setText(TOOLS.convertPrice(product.getPrice() * quan) + "VND");
+                }
+                tv_quantity_add.setText(String.valueOf(quan));
+                imb_mines_add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (quan <= 1) {
+                            Toast.makeText(ProductDetailActivity.this, "Số lượng không được nhỏ hơn 1", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        quan--;
+                        refreshPrice(product.getPrice() - product.getPrice() * product.getSale() / 100, tv_price_add, tv_quantity_add);
+                    }
+                });
+                imb_pluss_add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (quan > 1000) {
+                            Toast.makeText(ProductDetailActivity.this, "Số lượng không được lớn hơn 1000", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        quan++;
+                        refreshPrice(product.getPrice() - product.getPrice() * product.getSale() / 100, tv_price_add, tv_quantity_add);
+                    }
+                });
+
+                btn_add_add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.hide();
+                    }
+                });
+
+
+                dialog.setContentView(view1);
+                dialog.show();
+
+            }
+        });
+    }
+    private void buyNow(){
+     btn_buy_now.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+             if(ACCOUNT.user == null){
+                 showDialogLogin();
+                 return;
+             }
+             Toast.makeText(ProductDetailActivity.this, "Chưa code chức năng này!", Toast.LENGTH_SHORT).show();
+         }
+     });
+    }
+
+    private void showDialogLogin() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProductDetailActivity.this);
+        builder.setTitle("Đăng nhập để tiếp tục");
+        builder.setPositiveButton("Đăng nhập", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(ProductDetailActivity.this, LoginActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+            }
+        });
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void favourite() {
-
         if (checkFavourite(product.getId())) {
             imv_favourite.setImageResource(R.drawable.mark);
         }
@@ -97,33 +200,37 @@ public class ProductDetailActivity extends AppCompatActivity {
         imv_favourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!checkFavourite(product.getId())) {
-                    JSONObject postData = new JSONObject();
-                    try {
-                        postData.put("id_product", product.getId());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    String jsonString = postData.toString();
-                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
-                    ApiService.apiService.addToFavourite(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Favourite>() {
-                        @Override
-                        public void onResponse(Call<Favourite> call, Response<Favourite> response) {
-                            if (response.isSuccessful()) {
-                                LIST.listFavourite.add(product.getId());
-                                LIST.getListProductByFavourite.add(product);
-                                imv_favourite.setImageResource(R.drawable.mark);
+                if (ACCOUNT.user == null) {
+                    showDialogLogin();
+                } else {
+                    if (!checkFavourite(product.getId())) {
+                        JSONObject postData = new JSONObject();
+                        try {
+                            postData.put("id_product", product.getId());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        String jsonString = postData.toString();
+                        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
+                        ApiService.apiService.addToFavourite(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Favourite>() {
+                            @Override
+                            public void onResponse(Call<Favourite> call, Response<Favourite> response) {
+                                if (response.isSuccessful()) {
+                                    LIST.listFavourite.add(product.getId());
+                                    LIST.getListProductByFavourite.add(product);
+                                    imv_favourite.setImageResource(R.drawable.mark);
 
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<Favourite> call, Throwable t) {
-                            Toast.makeText(ProductDetailActivity.this, "Thêm thất bại", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }else {
-                    Toast.makeText(ProductDetailActivity.this, "Sản phẩm đã được thêm vào mục yêu thích", Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onFailure(Call<Favourite> call, Throwable t) {
+                                Toast.makeText(ProductDetailActivity.this, "Thêm thất bại", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(ProductDetailActivity.this, "Sản phẩm đã được thêm vào mục yêu thích", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
@@ -206,6 +313,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void mapping() {
+        btn_buy_now = findViewById(R.id.btn_buy_now);
         imv_favourite = findViewById(R.id.imv_favourite);
         btn_sold_out = findViewById(R.id.btn_sold_out);
         imv_sale = findViewById(R.id.imv_sale);
@@ -286,64 +394,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
-        btn_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final BottomSheetDialog dialog = new BottomSheetDialog(ProductDetailActivity.this, R.style.AppBottomSheetDialogTheme);
-                View view1 = LayoutInflater.from(v.getContext()).inflate(R.layout.add_layout, null);
-                ImageView imv_product_add = view1.findViewById(R.id.imv_product_add);
-                ImageButton imb_mines_add = view1.findViewById(R.id.imb_mines_add);
-                ImageButton imb_pluss_add = view1.findViewById(R.id.imb_pluss_add);
-                Button btn_add_add = view1.findViewById(R.id.btn_add_add);
-                TextView tv_name_add = view1.findViewById(R.id.tv_name_add);
-                TextView tv_price_add = view1.findViewById(R.id.tv_price_add);
-                TextView tv_quantity_add = view1.findViewById(R.id.tv_quantity_add);
 
-                Glide.with(ProductDetailActivity.this).load(TOOLS.doMainDevice + product.getImage().get(0))
-                        .into(imv_product_add);
-                tv_name_add.setText(product.getName());
-                if (product.getSale() > 0) {
-                    tv_price_add.setText(TOOLS.convertPrice(price_new * quan) + "VND");
-                } else {
-                    tv_price_add.setText(TOOLS.convertPrice(product.getPrice() * quan) + "VND");
-                }
-                tv_quantity_add.setText(String.valueOf(quan));
-                imb_mines_add.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (quan <= 1) {
-                            Toast.makeText(ProductDetailActivity.this, "Số lượng không được nhỏ hơn 1", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        quan--;
-                        refreshPrice(product.getPrice() - product.getPrice() * product.getSale() / 100, tv_price_add, tv_quantity_add);
-                    }
-                });
-                imb_pluss_add.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (quan > 1000) {
-                            Toast.makeText(ProductDetailActivity.this, "Số lượng không được lớn hơn 1000", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        quan++;
-                        refreshPrice(product.getPrice() - product.getPrice() * product.getSale() / 100, tv_price_add, tv_quantity_add);
-                    }
-                });
-
-                btn_add_add.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.hide();
-                    }
-                });
-
-
-                dialog.setContentView(view1);
-                dialog.show();
-
-            }
-        });
     }
 
 

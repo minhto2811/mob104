@@ -3,9 +3,9 @@ package com.example.mob104_app.Activities;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -26,19 +26,22 @@ import com.bumptech.glide.Glide;
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.Models.User;
 import com.example.mob104_app.R;
+import com.google.android.material.textfield.TextInputLayout;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
-    private ImageView imv_back, imv_password;
-    private TextView tv_signin, tv_err_fullname, tv_err_username, tv_err_password;
+    private ImageView imv_back;
+    private TextView tv_signin;
+
+    private TextInputLayout til_fullname, til_username, til_password;
     private EditText edt_fullname, edt_username, edt_password;
     private Button btn_signup;
-    private boolean name, user, pass, isShow = true, hasUppercase = false,hasLowercase = false, hasDigit = false;
+    private boolean name, user, pass, isShow = true, hasUppercase = false, hasLowercase = false, hasDigit = false;
 
-    private  Dialog dialog;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,18 +51,16 @@ public class RegisterActivity extends AppCompatActivity {
         back();
         changeLoginPage();
         checkInputFiel();
-        showHidePassword();
     }
 
     private void mapping() {
         edt_fullname = findViewById(R.id.edt_fullname);
         edt_username = findViewById(R.id.edt_username);
         edt_password = findViewById(R.id.edt_password);
-        tv_err_fullname = findViewById(R.id.tv_err_fullname);
-        tv_err_username = findViewById(R.id.tv_err_username);
-        tv_err_password = findViewById(R.id.tv_err_password);
+        til_fullname = findViewById(R.id.til_fullname);
+        til_username = findViewById(R.id.til_username);
+        til_password = findViewById(R.id.til_password);
         btn_signup = findViewById(R.id.btn_signup);
-        imv_password = findViewById(R.id.imv_password);
         imv_back = findViewById(R.id.imv_back);
         tv_signin = findViewById(R.id.tv_signin);
     }
@@ -69,68 +70,39 @@ public class RegisterActivity extends AppCompatActivity {
     private void checkInputFiel() {
 
         btn_signup.setOnClickListener(v -> {
-
-            if (edt_password.getText().toString().isEmpty()) {
-                tv_err_password.setText("Vui lòng nhập mật khẩu!");
-                edt_password.requestFocus();
-                pass = false;
-            } else {
-                if (edt_password.getText().toString().length() < 8) {
-                    tv_err_password.setText("Mật khẩu phải từ 8 đến 20 kí tự bao gồm kí tự in hoa,kí tự thường và số!");
-                    edt_password.requestFocus();
-                    pass = false;
-                } else {
-                    for (char c : edt_password.getText().toString().toCharArray()) {
-                        if (Character.isUpperCase(c)) {
-                            hasUppercase = true;
-                        } else if (Character.isDigit(c)) {
-                            hasDigit = true;
-                        } else {
-                            hasLowercase = true;
-                        }
-                    }
-                    if (!hasLowercase || !hasUppercase || !hasDigit) {
-                        tv_err_password.setText("Mật khẩu phải bao gồm kí tự in hoa,kí tự thường và số!");
-                        edt_password.requestFocus();
-                        pass = false;
-                    }else {
-                        edt_password.clearFocus();
-                        tv_err_password.setText(null);
-                        pass = true;
-                    }
-                }
-
-
-
-
+            if (!checkFielEmty(edt_fullname, til_fullname) || !checkFielEmty(edt_username, til_username) || !checkFielEmty(edt_password, til_password)) {
+                return;
             }
-
-            if (edt_username.getText().toString().isEmpty()) {
-                tv_err_username.setText("Vui lòng nhập tài khoản!");
-                edt_username.requestFocus();
-                user = false;
-            } else {
-                edt_username.clearFocus();
-                tv_err_username.setText(null);
-                user = true;
-            }
-
-            if (edt_fullname.getText().toString().isEmpty()) {
-                tv_err_fullname.setText("Vui lòng nhập tên người dùng!");
-                edt_fullname.requestFocus();
-                name = false;
-            } else {
-                edt_fullname.clearFocus();
-                tv_err_fullname.setText(null);
-                name = true;
-            }
-
-            if (!name || !user || !pass) {
+            if(!PasswordActivity.validatePass(edt_password,til_password,RegisterActivity.this)){
                 return;
             }
 
             register(edt_fullname.getText().toString(), edt_username.getText().toString(), edt_password.getText().toString());
         });
+    }
+
+    private boolean checkFielEmty(EditText editText, TextInputLayout textInputLayout) {
+        if (editText.getText().toString().length() == 0) {
+            textInputLayout.setHintTextColor(ColorStateList.valueOf(getResources().getColor(R.color.red)));
+            editText.requestFocus();
+            if (editText == edt_username) {
+                textInputLayout.setHint("Tài khoản không được để trống!");
+            } else if (editText == edt_password) {
+                textInputLayout.setHint("Mật khẩu không được để trống!");
+            } else {
+                textInputLayout.setHint("Tên người dùng không được để trống!");
+            }
+            return false;
+        }
+        if (editText == edt_username) {
+            textInputLayout.setHint("Nhập tài khoản. . .");
+        } else if (editText == edt_password) {
+            textInputLayout.setHint("Nhập mật khẩu. . .");
+        } else {
+            textInputLayout.setHint("Nhập tên người dùng. . .");
+        }
+        editText.clearFocus();
+        return true;
     }
 
 
@@ -169,20 +141,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void showHidePassword() {
 
-        imv_password.setOnClickListener(v -> {
-            isShow = !isShow;
-            if (isShow) {
-                imv_password.setImageResource(R.drawable.visibility);
-                edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            } else {
-                imv_password.setImageResource(R.drawable.visibility_off);
-                edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-            }
-            edt_password.setSelection(edt_password.getText().length());
-        });
-    }
 
 
     private void changeLoginPage() {
