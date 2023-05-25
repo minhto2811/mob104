@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.mob104_app.Activities.AddressActivity;
 import com.example.mob104_app.Activities.FavouriteActivity;
 import com.example.mob104_app.Activities.LoginActivity;
 import com.example.mob104_app.Activities.PasswordActivity;
@@ -29,6 +30,7 @@ import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.Models.User;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.ACCOUNT;
+import com.example.mob104_app.Tools.ADDRESS;
 import com.example.mob104_app.Tools.LIST;
 import com.example.mob104_app.Tools.TOOLS;
 import com.gun0912.tedpermission.PermissionListener;
@@ -63,7 +65,7 @@ public class SettingsFragment extends Fragment {
     }
 
 
-    private Button btn_logout, btn_favourite, btn_password;
+    private Button btn_logout, btn_favourite, btn_password, btn_address;
     private CircleImageView civ_avatar;
     private TextView tv_fullname;
     private ImageView imv_bg_settings, imv_change_avatar;
@@ -77,6 +79,7 @@ public class SettingsFragment extends Fragment {
         changeAvatar();
         favourite();
         password();
+        address();
         if (ACCOUNT.user == null) {
             gotoActivity(LoginActivity.class);
             return;
@@ -86,6 +89,7 @@ public class SettingsFragment extends Fragment {
 
 
     private void mapping(View view) {
+        btn_address = view.findViewById(R.id.btn_address);
         btn_password = view.findViewById(R.id.btn_password);
         btn_favourite = view.findViewById(R.id.btn_favourite);
         btn_logout = view.findViewById(R.id.btn_logout);
@@ -94,6 +98,15 @@ public class SettingsFragment extends Fragment {
         imv_bg_settings = view.findViewById(R.id.imv_bg_settings);
         imv_change_avatar = view.findViewById(R.id.imv_change_avatar);
         Glide.with(requireContext()).asGif().load(R.drawable.settings_bg).into(imv_bg_settings);
+    }
+
+    private void address() {
+        btn_address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoActivity(AddressActivity.class);
+            }
+        });
     }
 
     private void password() {
@@ -212,9 +225,15 @@ public class SettingsFragment extends Fragment {
 
         btn_logout.setOnClickListener(v -> {
             TOOLS.clearUser(getContext());
+            TOOLS.clearDefaulAddress(getContext());
             LIST.listFavourite.clear();
             LIST.getListProductByFavourite.clear();
             ACCOUNT.user = null;
+            ADDRESS.province = null;
+            ADDRESS.district = null;
+            ADDRESS.ward = null;
+            LIST.listFavourite = null;
+            LIST.listAddress = null;
             gotoActivity(LoginActivity.class);
         });
     }

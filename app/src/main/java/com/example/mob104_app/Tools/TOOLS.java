@@ -16,6 +16,8 @@ public class TOOLS {
 
     public static String doMainDevice = "http://10.0.2.2:3000";
     public static String  USER= "USER";
+    public static String  DEFAULT_ADDRESS= "DEFAULT_ADDRESS";
+
     private static  Gson gson = new Gson();
 
 
@@ -46,6 +48,27 @@ public class TOOLS {
         User user = gson.fromJson(string, User.class);
         return user;
     }
+
+    public static void saveDefaulAddress(Context context,String id_address){
+        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(DEFAULT_ADDRESS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(DEFAULT_ADDRESS, id_address);
+        editor.apply();
+    }
+
+    public static void clearDefaulAddress(Context context) {
+        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(DEFAULT_ADDRESS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+    }
+
+    public static String getDefaulAddress(Context context) {
+        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(DEFAULT_ADDRESS, Context.MODE_PRIVATE);
+        String string = sharedPreferences.getString(DEFAULT_ADDRESS,null);
+        return string;
+    }
+
 
 
     public static boolean isValidPhoneNumber(String phoneNumber) {

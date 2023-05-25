@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.mob104_app.Api.ApiService;
+import com.example.mob104_app.Models.Address;
 import com.example.mob104_app.Models.User;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.ACCOUNT;
@@ -50,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout til_username, til_password;
     private EditText edt_username, edt_password;
     private Button btn_login;
+    private int check = 0;
 
 
     @Override
@@ -153,15 +155,27 @@ public class LoginActivity extends AppCompatActivity {
                                 if (response.isSuccessful()) {
                                     LIST.listFavourite = response.body();
                                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                    overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
+                                    gotoSettings();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<List<String>> call, Throwable t) {
-                                finish();
-                                overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
+                                gotoSettings();
+                            }
+                        });
+                        ApiService.apiService.getAddress(user1.get_id()).enqueue(new Callback<List<Address>>() {
+                            @Override
+                            public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
+                                if (response.isSuccessful()) {
+                                    LIST.listAddress = response.body();
+                                    gotoSettings();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<Address>> call, Throwable t) {
+                                gotoSettings();
                             }
                         });
                     } else {
@@ -177,6 +191,15 @@ public class LoginActivity extends AppCompatActivity {
                 dialog.cancel();
             }
         });
+    }
+
+    private void gotoSettings() {
+        check++;
+        if (check < 2) {
+            return;
+        }
+        finish();
+        overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
     }
 
 
