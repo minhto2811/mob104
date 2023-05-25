@@ -1,5 +1,7 @@
 package com.example.mob104_app.Models;
 
+import java.util.List;
+
 public class User {
     private String _id;
     private String fullname;
@@ -11,7 +13,7 @@ public class User {
     //role định nghĩa phân quyền: true - admin, false - user
     private boolean role;
     private String email;
-    private String address;
+    private List<String> address;
     private String image;
     private String sex;
     private String date;
@@ -21,7 +23,7 @@ public class User {
     }
 
 
-    public User(String _id, String fullname, String username, String password, String numberphone, boolean role, String email, String address, String image, String sex, String date) {
+    public User(String _id, String fullname, String username, String password, String numberphone, boolean role, String email, List<String> address, String image, String sex, String date) {
         this._id = _id;
         this.fullname = fullname;
         this.username = username;
@@ -95,11 +97,11 @@ public class User {
         this.email = email;
     }
 
-    public String getAddress() {
+    public List<String> getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(List<String> address) {
         this.address = address;
     }
 

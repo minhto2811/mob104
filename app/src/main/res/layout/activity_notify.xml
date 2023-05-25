@@ -20,14 +20,8 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
-        android:contentDescription="@string/todo"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none">
-        <!--mọi người code giao diện tại đây-->
 
 
-    </ScrollView>
+
 
 </LinearLayout>

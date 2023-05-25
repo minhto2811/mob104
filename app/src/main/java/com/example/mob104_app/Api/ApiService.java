@@ -1,10 +1,14 @@
 package com.example.mob104_app.Api;
 
+import com.example.mob104_app.Models.Address;
 import com.example.mob104_app.Models.Banner;
 import com.example.mob104_app.Models.Category;
+import com.example.mob104_app.Models.District;
 import com.example.mob104_app.Models.Favourite;
 import com.example.mob104_app.Models.Product;
+import com.example.mob104_app.Models.Province;
 import com.example.mob104_app.Models.User;
+import com.example.mob104_app.Models.Ward;
 import com.example.mob104_app.Tools.TOOLS;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -76,8 +80,26 @@ public interface ApiService {
     Call<List<Product>> getListProductByFavourite(@Path("id_user") String id_user);
 
     @POST("favourites/update/{id_user}")
-    Call<Favourite> delToFavourite(@Path("id_user") String id_user,@Body RequestBody id_product);
+    Call<Favourite> delToFavourite(@Path("id_user") String id_user, @Body RequestBody id_product);
 
+    @GET("address/provinces")
+    Call<List<Province>> getProvinces();
 
+    @GET("address/districts/{parent_code}")
+    Call<List<District>> getDistricts(@Path("parent_code") String parent_code);
 
+    @GET("address/wards/{parent_code}")
+    Call<List<Ward>> getWards(@Path("parent_code") String parent_code);
+
+    @POST("address/addNew/{id_user}")
+    Call<Address> saveNewAddress(@Path("id_user") String id_user, @Body Address address);
+
+    @GET("address/all/{id_user}")
+    Call<List<Address>> getAddress(@Path("id_user") String id_user);
+
+    @POST("address/update")
+    Call<Address> updateAddress(@Body Address Address);
+
+    @POST("address/delete/{id_user}")
+    Call<User> deleteAdsress(@Path("id_user") String id_user, @Body RequestBody id_address);
 }
