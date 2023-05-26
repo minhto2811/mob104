@@ -1,7 +1,6 @@
 package com.example.mob104_app.Activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -19,7 +18,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.mob104_app.Api.ApiService;
-import com.example.mob104_app.Models.User;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.ACCOUNT;
 import com.example.mob104_app.Tools.TOOLS;
@@ -100,20 +98,22 @@ public class PasswordActivity extends AppCompatActivity {
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
 
 
-                ApiService.apiService.changePassword(requestBody).enqueue(new Callback<String>() {
+                ApiService.apiService.changePassword(requestBody).enqueue(new Callback<Integer>() {
                     @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        if (response.isSuccessful()) {
-                            ACCOUNT.user.setPassword(response.body());
-                            TOOLS.saveUser(PasswordActivity.this,  ACCOUNT.user);
-                            Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu thành công ",Toast.LENGTH_SHORT).show();
-                            onBackPressed();
+                    public void onResponse(Call<Integer> call, Response<Integer> response) {
+                        if (response.isSuccessful()&&response.body()==1) {
+                                ACCOUNT.user.setPassword(edt_pass_new_1.getText().toString().trim());
+                                TOOLS.saveUser(PasswordActivity.this, ACCOUNT.user);
+                                Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu thành công ", Toast.LENGTH_SHORT).show();
+                                onBackPressed();
+                        }else {
+                            Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
                         }
                         dialog.cancel();
                     }
 
                     @Override
-                    public void onFailure(Call<String> call, Throwable t) {
+                    public void onFailure(Call<Integer> call, Throwable t) {
                         dialog.cancel();
                         Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
                     }

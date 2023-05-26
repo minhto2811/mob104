@@ -68,9 +68,9 @@ public class UserActivity extends AppCompatActivity {
                                 edt_select_date_user.setText(dateFormat.format(calendar.getTime()));
                             }
                         },
-                        (ACCOUNT.user != null) ? Integer.valueOf(ACCOUNT.user.getDate().substring(6, 10)) : calendar.get(Calendar.YEAR),
-                        (ACCOUNT.user != null) ? Integer.valueOf(ACCOUNT.user.getDate().substring(3, 5)) : calendar.get(Calendar.MONTH),
-                        (ACCOUNT.user != null) ? Integer.valueOf(ACCOUNT.user.getDate().substring(0, 2)) : calendar.get(Calendar.DAY_OF_MONTH));
+                        (ACCOUNT.user.getDate() != null) ? Integer.valueOf(ACCOUNT.user.getDate().substring(6, 10)) : calendar.get(Calendar.YEAR),
+                        (ACCOUNT.user.getDate() != null) ? Integer.valueOf(ACCOUNT.user.getDate().substring(3, 5)) : calendar.get(Calendar.MONTH),
+                        (ACCOUNT.user.getDate() != null) ? Integer.valueOf(ACCOUNT.user.getDate().substring(0, 2)) : calendar.get(Calendar.DAY_OF_MONTH));
 
                 datePickerDialog.show();
             }
@@ -97,19 +97,23 @@ public class UserActivity extends AppCompatActivity {
                 user.setEmail(edt_email_user.getText().toString().trim());
                 user.setSex(rbtn_male.isChecked() ? true : false);
                 user.setDate(edt_select_date_user.getText().toString().trim());
-                ApiService.apiService.updateInfo(ACCOUNT.user.get_id(), user).enqueue(new Callback<User>() {
+                ApiService.apiService.updateInfo(user).enqueue(new Callback<Integer>() {
                     @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-                        if (response.isSuccessful()) {
-                            ACCOUNT.user = response.body();
-                            TOOLS.saveUser(UserActivity.this, response.body());
+                    public void onResponse(Call<Integer> call, Response<Integer> response) {
+                        if (response.isSuccessful() && response.body() == 1) {
+                            ACCOUNT.user = user;
+                            TOOLS.saveUser(UserActivity.this, user);
                             Toast.makeText(UserActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                             onBackPressed();
+                        }else if(response.isSuccessful() && response.body() == -1){
+                            Toast.makeText(UserActivity.this, "Không có sự thay đổi thông tin", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(UserActivity.this, "Email hoặc số điện thoại đã được sử dụng!", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<User> call, Throwable t) {
+                    public void onFailure(Call<Integer> call, Throwable t) {
                         Toast.makeText(UserActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
                     }
                 });
