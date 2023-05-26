@@ -136,7 +136,6 @@ public class AddAddressActivity extends AppCompatActivity {
                     return;
                 }
                 if (address1 != null) {
-                    Toast.makeText(AddAddressActivity.this, address1.get_id(), Toast.LENGTH_SHORT).show();
                     address1.setFullname(edt_fullname_adr.getText().toString().trim());
                     address1.setNumberphone(edt_numberphone_adr.getText().toString().trim());
                     if (ADDRESS.province != null) {
@@ -153,7 +152,6 @@ public class AddAddressActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<Address> call, Response<Address> response) {
                             if (response.isSuccessful()) {
-                                Toast.makeText(AddAddressActivity.this, "DDD" + response.body().get_id(), Toast.LENGTH_SHORT).show();
                                 for (int i = 0; i < LIST.listAddress.size(); i++) {
                                     if (LIST.listAddress.get(i).get_id().equals(response.body().get_id())) {
                                         LIST.listAddress.set(i, response.body());
@@ -281,7 +279,6 @@ public class AddAddressActivity extends AppCompatActivity {
         if (requestCode == REQUSET_CODE_ADDRESS && resultCode == RESULT_OK) {
             if (data != null) {
                 String s = data.getStringExtra("data");
-                Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
                 edt_select_address_adr.setText(s);
             }
         }

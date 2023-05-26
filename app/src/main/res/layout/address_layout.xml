@@ -15,20 +15,21 @@
         android:orientation="horizontal">
 
         <TextView
+            android:textColor="@color/black"
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tô Minh"
-            android:textSize="19sp"
-            android:textStyle="bold" />
+            android:textSize="19sp" />
 
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="8dp"
-            android:background="@color/product" />
+            android:background="@color/black" />
 
         <TextView
+            android:textColor="@color/black"
             android:id="@+id/tv_numberphone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

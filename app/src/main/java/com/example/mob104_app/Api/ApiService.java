@@ -12,7 +12,6 @@ import com.example.mob104_app.Models.Ward;
 import com.example.mob104_app.Tools.TOOLS;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
 import java.util.List;
 
@@ -62,16 +61,18 @@ public interface ApiService {
     @POST("user/login")
     Call<User> loginUser(@Body RequestBody requestBody);
 
-    @POST("user/info")
-    Call<User> getInfoUser(@Body JsonObject jsonObject);
+    @POST("user/updateinfo/{id_user}")
+    Call<User> updateInfo(@Path("id_user") String id_user, @Body User user);
 
     @Multipart
     @POST("user/update/image/{username}")
     Call<User> changeAvatar(@Part MultipartBody.Part image, @Path("username") String id);
+
     @POST("user/password")
-    Call<User> changePassword(@Body RequestBody requestBody);
+    Call<String> changePassword(@Body RequestBody requestBody);
+
     @POST("favourites/add/{id_user}")
-    Call<Favourite> addToFavourite(@Path("id_user") String id_user,@Body RequestBody id_product);
+    Call<Favourite> addToFavourite(@Path("id_user") String id_user, @Body RequestBody id_product);
 
     @GET("favourites/{id_user}")
     Call<List<String>> getListFavourite(@Path("id_user") String id_user);

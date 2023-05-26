@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray"
     android:orientation="vertical"
-    tools:context="com.example.mob104_app.Activities.AddressActivity">
+    tools:context="com.example.mob104_app.Activities.UserActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_add_address"
+            android:id="@+id/toolbar_user"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colormain"
@@ -27,19 +27,20 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:paddingVertical="7dp"
-        android:text="Liên hệ (*)"
+        android:text="Tên người dùng"
         android:textColor="@color/red"
         android:textSize="18sp" />
 
     <EditText
-        android:id="@+id/edt_fullname_adr"
+        android:id="@+id/edt_fullname_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:hint="Họ và tên"
         android:imeOptions="actionNext"
-        android:inputType="text"
+        android:inputType="textPersonName"
         android:lines="1"
+        android:maxLength="40"
         android:maxLines="1"
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
@@ -51,19 +52,28 @@
         android:background="@color/product" />
 
     <TextView
-        android:id="@+id/tv_err_fullname_adr"
+        android:id="@+id/tv_err_fullname_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/pink"
         android:paddingHorizontal="10dp"
         android:paddingVertical="3dp"
-        android:text="Vui lòng nhập Họ và tên"
+        android:text="Vui lòng nhập Tên người dùng"
         android:textColor="@color/grey"
         android:textSize="15dp"
         android:visibility="gone" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:paddingVertical="7dp"
+        android:text="Số điện thoại"
+        android:textColor="@color/red"
+        android:textSize="18sp" />
+
     <EditText
-        android:id="@+id/edt_numberphone_adr"
+        android:id="@+id/edt_numberphone_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -83,7 +93,7 @@
         android:background="@color/product" />
 
     <TextView
-        android:id="@+id/tv_err_numberphone_adr"
+        android:id="@+id/tv_err_numberphone_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/pink"
@@ -99,19 +109,98 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:paddingVertical="7dp"
-        android:text="Địa chỉ  (*)"
+        android:text="Địa chỉ email"
         android:textColor="@color/red"
         android:textSize="18sp" />
 
     <EditText
-        android:focusable="false"
-        android:id="@+id/edt_select_address_adr"
+        android:id="@+id/edt_email_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:hint="Địa chỉ email"
+        android:imeOptions="actionDone"
+        android:inputType="textEmailAddress"
+        android:lines="1"
+        android:maxLength="50"
+        android:maxLines="1"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
+        android:textSize="17sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/product" />
+
+    <TextView
+        android:id="@+id/tv_err_email_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pink"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="3dp"
+        android:text="Vui lòng nhập Địa chỉ email"
+        android:textColor="@color/grey"
+        android:textSize="15dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:paddingVertical="7dp"
+        android:text="Giới tính"
+        android:textColor="@color/red"
+        android:textSize="18sp" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:checkedButton="@id/rbtn_male"
+        android:orientation="horizontal"
+        android:paddingStart="10dp">
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/rbtn_male"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/male_24px"
+            android:drawablePadding="5dp"
+            android:text="Nam"
+            android:textSize="17sp" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/rbtn_female"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:drawableEnd="@drawable/female_24px"
+            android:drawablePadding="5dp"
+            android:text="Nữ"
+            android:textSize="17sp" />
+    </RadioGroup>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:paddingVertical="7dp"
+        android:text="Ngày sinh"
+        android:textColor="@color/red"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/edt_select_date_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:clickable="true"
         android:drawableEnd="@drawable/baseline_arrow_forward_ios_24"
-        android:hint="Tỉnh/Thành phố, Quận/Huyện, Phường xã"
+        android:focusable="false"
+        android:hint="Ngày/Tháng/Năm"
         android:imeOptions="actionNext"
         android:inputType="textMultiLine"
         android:paddingVertical="10dp"
@@ -124,105 +213,35 @@
         android:background="@color/product" />
 
     <TextView
-        android:id="@+id/tv_err_select_address_adr"
+        android:id="@+id/tv_err_select_date_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/pink"
         android:paddingHorizontal="10dp"
         android:paddingVertical="3dp"
-        android:text="Vui lòng chọn Tỉnh/Thành phố, Quận/Huyện, Phường xã"
+        android:text="Vui lòng chọn Ngày sinh"
         android:textColor="@color/grey"
         android:textSize="15dp"
         android:visibility="gone" />
 
-    <EditText
-        android:id="@+id/edt_name_address_adr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:hint="Tên đường, tòa nhà, số nhà"
-        android:imeOptions="actionDone"
-        android:inputType="text"
-        android:lines="1"
-        android:maxLines="1"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="10dp"
-        android:textSize="17sp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/product" />
-
-    <TextView
-        android:id="@+id/tv_err_name_address_adr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/pink"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="3dp"
-        android:text="Vui lòng nhập Tên đường, tòa nhà, số nhà"
-        android:textColor="@color/grey"
-        android:textSize="15dp"
-        android:visibility="gone" />
-
-    <TextView
+    <CheckBox
+        android:id="@+id/cbox_confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:paddingVertical="7dp"
-        android:text="Cài đặt"
-        android:textColor="@color/red"
-        android:textSize="18sp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="10dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/white"
-            android:inputType="text"
-            android:paddingVertical="10dp"
-            android:text="Đặt làm địa chỉ mặc định"
-            android:textColor="@color/black"
-            android:textSize="17sp" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/sw_select_adr"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/product" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:text="Xác nhận thay đổi thông tin tài khoản"
+        android:textSize="17sp" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_add_new_address_adr"
+        android:id="@+id/btn_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="35dp"
         android:background="@color/colormain"
-        android:text="Xác nhận"
+        android:text="Thay đổi"
         android:textColor="@color/white"
-        android:textSize="22sp" />
+        android:textSize="17sp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_del_address_adr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:background="@color/red"
-        android:text="Xóa địa chỉ"
-        android:textColor="@color/white"
-        android:textSize="22sp"
-        android:visibility="gone" />
+
 </LinearLayout>
