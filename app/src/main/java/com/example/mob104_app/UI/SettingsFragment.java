@@ -26,6 +26,7 @@ import com.example.mob104_app.Activities.AddressActivity;
 import com.example.mob104_app.Activities.FavouriteActivity;
 import com.example.mob104_app.Activities.LoginActivity;
 import com.example.mob104_app.Activities.PasswordActivity;
+import com.example.mob104_app.Activities.UserActivity;
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.Models.User;
 import com.example.mob104_app.R;
@@ -65,7 +66,7 @@ public class SettingsFragment extends Fragment {
     }
 
 
-    private Button btn_logout, btn_favourite, btn_password, btn_address;
+    private Button btn_logout, btn_favourite, btn_password, btn_address, btn_user;
     private CircleImageView civ_avatar;
     private TextView tv_fullname;
     private ImageView imv_bg_settings, imv_change_avatar;
@@ -80,6 +81,7 @@ public class SettingsFragment extends Fragment {
         favourite();
         password();
         address();
+        user();
         if (ACCOUNT.user == null) {
             gotoActivity(LoginActivity.class);
             return;
@@ -89,6 +91,7 @@ public class SettingsFragment extends Fragment {
 
 
     private void mapping(View view) {
+        btn_user = view.findViewById(R.id.btn_user);
         btn_address = view.findViewById(R.id.btn_address);
         btn_password = view.findViewById(R.id.btn_password);
         btn_favourite = view.findViewById(R.id.btn_favourite);
@@ -98,6 +101,15 @@ public class SettingsFragment extends Fragment {
         imv_bg_settings = view.findViewById(R.id.imv_bg_settings);
         imv_change_avatar = view.findViewById(R.id.imv_change_avatar);
         Glide.with(requireContext()).asGif().load(R.drawable.settings_bg).into(imv_bg_settings);
+    }
+
+    private void user() {
+        btn_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoActivity(UserActivity.class);
+            }
+        });
     }
 
     private void address() {

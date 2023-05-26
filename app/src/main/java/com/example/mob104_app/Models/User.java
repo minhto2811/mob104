@@ -15,7 +15,7 @@ public class User {
     private String email;
     private List<String> address;
     private String image;
-    private String sex;
+    private boolean sex;
     private String date;
 
 
@@ -23,7 +23,7 @@ public class User {
     }
 
 
-    public User(String _id, String fullname, String username, String password, String numberphone, boolean role, String email, List<String> address, String image, String sex, String date) {
+    public User(String _id, String fullname, String username, String password, String numberphone, boolean role, String email, List<String> address, String image, boolean sex, String date) {
         this._id = _id;
         this.fullname = fullname;
         this.username = username;
@@ -113,11 +113,11 @@ public class User {
         this.image = image;
     }
 
-    public String getSex() {
+    public boolean getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(boolean sex) {
         this.sex = sex;
     }
 

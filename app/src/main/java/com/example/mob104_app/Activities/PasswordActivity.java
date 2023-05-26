@@ -100,21 +100,20 @@ public class PasswordActivity extends AppCompatActivity {
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
 
 
-                ApiService.apiService.changePassword(requestBody).enqueue(new Callback<User>() {
+                ApiService.apiService.changePassword(requestBody).enqueue(new Callback<String>() {
                     @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
+                    public void onResponse(Call<String> call, Response<String> response) {
                         if (response.isSuccessful()) {
-                            ACCOUNT.user.setPassword(response.body().getPassword());
-                            TOOLS.saveUser(PasswordActivity.this, response.body());
-                            Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu thành công " + response.body().getPassword(), Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu 123 ", Toast.LENGTH_SHORT).show();
+                            ACCOUNT.user.setPassword(response.body());
+                            TOOLS.saveUser(PasswordActivity.this,  ACCOUNT.user);
+                            Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu thành công ",Toast.LENGTH_SHORT).show();
+                            onBackPressed();
                         }
                         dialog.cancel();
                     }
 
                     @Override
-                    public void onFailure(Call<User> call, Throwable t) {
+                    public void onFailure(Call<String> call, Throwable t) {
                         dialog.cancel();
                         Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
                     }
