@@ -244,8 +244,8 @@ public class SettingsFragment extends Fragment {
             ADDRESS.province = null;
             ADDRESS.district = null;
             ADDRESS.ward = null;
-            LIST.listFavourite = null;
-            LIST.listAddress = null;
+            LIST.listFavourite.clear();
+            LIST.listAddress.clear();
             gotoActivity(LoginActivity.class);
         });
     }
