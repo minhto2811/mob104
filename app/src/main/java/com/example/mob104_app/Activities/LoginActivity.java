@@ -53,6 +53,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_login;
     private int check = 0;
 
+    private static final int REQUEST_CODE_FORGET = 555;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +70,8 @@ public class LoginActivity extends AppCompatActivity {
     private void forgotPassword() {
         tv_forgot_password.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.next_enter,R.anim.next_exit);
+            startActivityForResult(intent, REQUEST_CODE_FORGET);
+            overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
         });
     }
 
@@ -244,7 +246,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_NEXT && resultCode == RESULT_OK) {
+        if ((requestCode == REQUEST_CODE_NEXT || requestCode == REQUEST_CODE_FORGET) && resultCode == RESULT_OK) {
             assert data != null;
             edt_username.setText(data.getStringExtra("username"));
             edt_password.setText(data.getStringExtra("password"));

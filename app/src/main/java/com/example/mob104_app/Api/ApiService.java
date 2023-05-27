@@ -71,6 +71,12 @@ public interface ApiService {
     @POST("user/password")
     Call<Integer> changePassword(@Body RequestBody requestBody);
 
+    @GET("user/forgetpassword/{username}")
+    Call<Integer> getCodeConfirmPassword(@Path("username") String username);
+
+    @POST("user/reset-password/{resetToken}")
+    Call<Integer> changePasswordNew(@Path("resetToken") String resetToken,@Body RequestBody password);
+
     @POST("favourites/add/{id_user}")
     Call<Favourite> addToFavourite(@Path("id_user") String id_user, @Body RequestBody id_product);
 

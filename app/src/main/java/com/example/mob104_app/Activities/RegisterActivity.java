@@ -82,15 +82,15 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean checkFielEmty(EditText editText, TextInputLayout textInputLayout) {
-        if (editText.getText().toString().length() == 0) {
+        if (editText.getText().toString().length() < 8) {
             textInputLayout.setHintTextColor(ColorStateList.valueOf(getResources().getColor(R.color.red)));
             editText.requestFocus();
             if (editText == edt_username) {
-                textInputLayout.setHint("Tài khoản không được để trống!");
+                textInputLayout.setHint("Tài khoản phải nhiều hơn 7 kí tự!");
             } else if (editText == edt_password) {
-                textInputLayout.setHint("Mật khẩu không được để trống!");
-            } else {
-                textInputLayout.setHint("Tên người dùng không được để trống!");
+                textInputLayout.setHint("Mật khẩu phải nhiều hơn 7 kí tự!");
+            } else{
+                textInputLayout.setHint("Tên người dùng không hợp lệ");
             }
             return false;
         }
