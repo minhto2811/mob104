@@ -1,6 +1,7 @@
 package com.example.mob104_app.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -66,7 +67,7 @@ public class PasswordActivity extends AppCompatActivity {
         btn_change_password_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!checkInputFiel(edt_pass_old, til_pass_old) || !checkInputFiel(edt_pass_new_1, til_pass_new_1) || !checkInputFiel(edt_pass_new_2, til_pass_new_2)) {
+                if (!checkInputFiel(edt_pass_old, til_pass_old,PasswordActivity.this) || !checkInputFiel(edt_pass_new_1, til_pass_new_1,PasswordActivity.this) || !checkInputFiel(edt_pass_new_2, til_pass_new_2,PasswordActivity.this)) {
                     return;
                 }
                 if (!checkPasswordNew(edt_pass_new_1, edt_pass_new_2, til_pass_new_2)) {
@@ -122,11 +123,11 @@ public class PasswordActivity extends AppCompatActivity {
         });
     }
 
-    private boolean checkInputFiel(EditText editText, TextInputLayout textInputLayout) {
+    public static boolean checkInputFiel(EditText editText, TextInputLayout textInputLayout,Context context) {
         String hint = "Nhập mật khẩu mới";
         if (editText.getText().toString().length() < 8) {
             editText.requestFocus();
-            textInputLayout.setHintTextColor(ColorStateList.valueOf(getResources().getColor(R.color.red)));
+            textInputLayout.setHintTextColor(ColorStateList.valueOf(context.getResources().getColor(R.color.red)));
             textInputLayout.setHint("Mật khẩu phải nhiều hơn 7 kí tự");
             return false;
         }
