@@ -13,7 +13,6 @@ public class User {
     //role định nghĩa phân quyền: true - admin, false - user
     private boolean role;
     private String email;
-    private List<String> address;
     private String image;
     private boolean sex;
     private String date;
@@ -23,7 +22,7 @@ public class User {
     }
 
 
-    public User(String _id, String fullname, String username, String password, String numberphone, boolean role, String email, List<String> address, String image, boolean sex, String date) {
+    public User(String _id, String fullname, String username, String password, String numberphone, boolean role, String email,String image, boolean sex, String date) {
         this._id = _id;
         this.fullname = fullname;
         this.username = username;
@@ -31,7 +30,6 @@ public class User {
         this.numberphone = numberphone;
         this.role = role;
         this.email = email;
-        this.address = address;
         this.image = image;
         this.sex = sex;
         this.date = date;
@@ -97,13 +95,6 @@ public class User {
         this.email = email;
     }
 
-    public List<String> getAddress() {
-        return address;
-    }
-
-    public void setAddress(List<String> address) {
-        this.address = address;
-    }
 
     public String getImage() {
         return image;
@@ -138,7 +129,6 @@ public class User {
                 ", numberphone='" + numberphone + '\'' +
                 ", role=" + role +
                 ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
                 ", image='" + image + '\'' +
                 ", sex='" + sex + '\'' +
                 ", date='" + date + '\'' +

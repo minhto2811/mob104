@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class Address implements Serializable {
     private String _id;
+
+    private String id_user;
     private String fullname;
     private String numberphone;
     private String province;
@@ -14,14 +16,23 @@ public class Address implements Serializable {
     public Address() {
     }
 
-    public Address(String _id, String fullname, String numberphone, String province, String district, String wards, String address) {
+    public Address(String _id, String id_user, String fullname, String numberphone, String province, String district, String wards, String address) {
         this._id = _id;
+        this.id_user = id_user;
         this.fullname = fullname;
         this.numberphone = numberphone;
         this.province = province;
         this.district = district;
         this.wards = wards;
         this.address = address;
+    }
+
+    public String getId_user() {
+        return id_user;
+    }
+
+    public void setId_user(String id_user) {
+        this.id_user = id_user;
     }
 
     public String get_id() {

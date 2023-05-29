@@ -2,6 +2,7 @@ package com.example.mob104_app.Api;
 
 import com.example.mob104_app.Models.Address;
 import com.example.mob104_app.Models.Banner;
+import com.example.mob104_app.Models.Cart;
 import com.example.mob104_app.Models.Category;
 import com.example.mob104_app.Models.District;
 import com.example.mob104_app.Models.Favourite;
@@ -107,6 +108,14 @@ public interface ApiService {
     @POST("address/update")
     Call<Address> updateAddress(@Body Address Address);
 
-    @POST("address/delete/{id_user}")
-    Call<User> deleteAdsress(@Path("id_user") String id_user, @Body RequestBody id_address);
+    @POST("address/delete/{id_address}")
+    Call<Integer> deleteAdsress(@Path("id_address") String id_address);
+
+    @POST("cart/add")
+    Call<Cart> addCart(@Body Cart cart);
+
+    @GET("cart/{id_user}")
+    Call<List<Cart>> getCarts(@Path("id_user") String id_user);
+
+
 }

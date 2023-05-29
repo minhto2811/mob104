@@ -44,18 +44,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="1.0" />
 
-                <ImageView
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginEnd="7dp"
-                    android:src="@drawable/shopping_cart"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -447,11 +436,24 @@
         android:scaleType="centerCrop"
         android:src="@drawable/ic_arrow_back" />
 
+    <ImageView
+        android:id="@+id/imv_cart"
+        android:layout_width="41dp"
+        android:layout_height="41dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/image_back"
+        android:scaleType="centerCrop"
+        android:src="@drawable/shopping_cart"
+        android:layout_marginRight="10dp"
+        android:paddingRight="10dp"/>
+
     <LinearLayout
         android:layout_height="60dp"
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_sold_out"
             android:layout_width="match_parent"
