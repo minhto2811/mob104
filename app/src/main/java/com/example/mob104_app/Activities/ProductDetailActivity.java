@@ -187,7 +187,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                             public void onResponse(Call<Cart> call, Response<Cart> response) {
                                 if (response.isSuccessful()) {
                                     Toast.makeText(ProductDetailActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
-                                    LIST.listCart.add(response.body());
                                     dialog1.cancel();
                                     dialog.cancel();
                                 }

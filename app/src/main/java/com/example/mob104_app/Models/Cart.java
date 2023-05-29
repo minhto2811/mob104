@@ -5,30 +5,40 @@ public class Cart {
     private String id_user;
     private String id_product;
     private String name_product;
-    private String price_product;
+    private Integer price_product;
+    private String image;
     private Integer quantity;
-    private Integer sale;
+    private Integer sale_product;
 
     public Cart() {
     }
 
-    public Cart(String _id, String id_user, String id_product, String name_product, String price_product, Integer quantity,Integer sale) {
+    public Cart(String _id, String id_user, String id_product, String name_product, Integer price_product, String image, Integer quantity, Integer sale_product) {
         this._id = _id;
         this.id_user = id_user;
         this.id_product = id_product;
         this.name_product = name_product;
         this.price_product = price_product;
+        this.image = image;
         this.quantity = quantity;
-        this.sale = sale;
+        this.sale_product = sale_product;
     }
 
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public Integer getSale() {
-        return sale;
+        return sale_product;
     }
 
     public void setSale(Integer sale) {
-        this.sale = sale;
+        this.sale_product = sale;
     }
 
     public String getName_product() {
@@ -39,11 +49,11 @@ public class Cart {
         this.name_product = name_product;
     }
 
-    public String getPrice_product() {
+    public Integer getPrice_product() {
         return price_product;
     }
 
-    public void setPrice_product(String price_product) {
+    public void setPrice_product(Integer price_product) {
         this.price_product = price_product;
     }
 
@@ -77,5 +87,19 @@ public class Cart {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "_id='" + _id + '\'' +
+                ", id_user='" + id_user + '\'' +
+                ", id_product='" + id_product + '\'' +
+                ", name_product='" + name_product + '\'' +
+                ", price_product=" + price_product +
+                ", image='" + image + '\'' +
+                ", quantity=" + quantity +
+                ", sale=" + sale_product +
+                '}';
     }
 }
