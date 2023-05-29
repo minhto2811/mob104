@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.Models.Address;
 import com.example.mob104_app.Models.Banner;
+import com.example.mob104_app.Models.Cart;
 import com.example.mob104_app.Models.Category;
 import com.example.mob104_app.Models.Product;
 import com.example.mob104_app.R;
@@ -59,6 +60,34 @@ public class SplashActivity extends AppCompatActivity {
         getFavourite();
         getUser();
         getAddress();
+        getCarts();
+    }
+
+    private void getCarts() {
+        if (TOOLS.getUser(this) != null) {
+            ApiService.apiService.getCarts(TOOLS.getUser(this).get_id()).enqueue(new Callback<List<Cart>>() {
+                @Override
+                public void onResponse(Call<List<Cart>> call, Response<List<Cart>> response) {
+                    if (response.isSuccessful()) {
+                        LIST.listCart = response.body();
+                        gotoMainActivity();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Cart>> call, Throwable t) {
+                    if (!isLoadingData) {
+                        return;
+                    }
+                    index_error++;
+                    if (index_error < 6) {
+                        getCarts();
+                    } else {
+                        ErrorLoadingData();
+                    }
+                }
+            });
+        }
     }
 
     public void getAddress() {
@@ -79,7 +108,7 @@ public class SplashActivity extends AppCompatActivity {
                     }
                     index_error++;
                     if (index_error < 6) {
-                        getAllCategory();
+                        getAddress();
                     } else {
                         ErrorLoadingData();
                     }
@@ -107,7 +136,7 @@ public class SplashActivity extends AppCompatActivity {
                     }
                     index_error++;
                     if (index_error < 6) {
-                        getAllCategory();
+                        getFavourite();
                     } else {
                         ErrorLoadingData();
                     }
@@ -205,7 +234,7 @@ public class SplashActivity extends AppCompatActivity {
     private void gotoMainActivity() {
         index_watting++;
         if (TOOLS.getUser(SplashActivity.this) != null) {
-            index_max = 4;
+            index_max = 5;
         }else {
             index_max = 3;
         }

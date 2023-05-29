@@ -1,6 +1,8 @@
 package com.example.mob104_app.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -29,6 +31,7 @@ import com.bumptech.glide.Glide;
 import com.example.mob104_app.Adapter.ImageAdapter;
 import com.example.mob104_app.Adapter.ProductAdapter;
 import com.example.mob104_app.Api.ApiService;
+import com.example.mob104_app.Models.Cart;
 import com.example.mob104_app.Models.Favourite;
 import com.example.mob104_app.Models.Product;
 import com.example.mob104_app.R;
@@ -73,7 +76,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         }
     };
-    private ImageView imv_back, imv_icon_sale, imv_banner, imv_sale, imv_favourite;
+    private ImageView imv_back, imv_icon_sale, imv_banner, imv_sale, imv_favourite, imv_cart;
     private Product product;
 
     private RecyclerView rcv_product_related;
@@ -91,10 +94,32 @@ public class ProductDetailActivity extends AppCompatActivity {
         favourite();
         buyNow();
         addToCart();
+        gotoCart();
+    }
+
+    private void gotoCart() {
+        imv_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProductDetailActivity.this);
+                builder.setTitle("Chuyển tới giỏ hàng?");
+                builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(ProductDetailActivity.this, MainActivity.class);
+                        intent.putExtra("cart", 1);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+                    }
+                });
+                builder.setNegativeButton("Hủy", null);
+                builder.create().show();
+            }
+        });
     }
 
 
-    private void addToCart(){
+    private void addToCart() {
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +172,34 @@ public class ProductDetailActivity extends AppCompatActivity {
                 btn_add_add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dialog.hide();
+                        Dialog dialog1 = new Dialog(ProductDetailActivity.this,R.style.AppBottomSheetDialogTheme);
+                        @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.layout_watting, null);
+                        Glide.with(ProductDetailActivity.this).asGif().load(R.drawable.spin).into((ImageView) view.findViewById(R.id.imv_watting));
+                        dialog1.setContentView(view);
+                        dialog1.setCancelable(false);
+                        dialog1.show();
+                        Cart cart = new Cart();
+                        cart.setId_user(ACCOUNT.user.get_id());
+                        cart.setId_product(product.getId());
+                        cart.setQuantity(quan);
+                        ApiService.apiService.addCart(cart).enqueue(new Callback<Cart>() {
+                            @Override
+                            public void onResponse(Call<Cart> call, Response<Cart> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(ProductDetailActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+                                    LIST.listCart.add(response.body());
+                                    dialog1.cancel();
+                                    dialog.cancel();
+                                }
+                                dialog.cancel();
+                            }
+
+                            @Override
+                            public void onFailure(Call<Cart> call, Throwable t) {
+                                Toast.makeText(ProductDetailActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
+                                dialog1.cancel();
+                            }
+                        });
                     }
                 });
 
@@ -182,12 +234,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
+        builder.setNegativeButton("Hủy", null);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
@@ -313,6 +360,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void mapping() {
+        imv_cart = findViewById(R.id.imv_cart);
         btn_buy_now = findViewById(R.id.btn_buy_now);
         imv_favourite = findViewById(R.id.imv_favourite);
         btn_sold_out = findViewById(R.id.btn_sold_out);

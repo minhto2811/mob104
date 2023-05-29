@@ -1,5 +1,6 @@
 package com.example.mob104_app.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
@@ -62,39 +64,40 @@ public class AddAddressActivity extends AppCompatActivity {
         btn_del_address_adr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONObject postData = new JSONObject();
-                try {
-                    postData.put("id_address", AddAddressActivity.address1.get_id());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                String jsonString = postData.toString();
-                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
-                ApiService.apiService.deleteAdsress(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<User>() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AddAddressActivity.this);
+                builder.setTitle("Xác nhận xóa địa chỉ này?");
+                builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-                        if (response.isSuccessful()) {
-                            TOOLS.saveUser(AddAddressActivity.this, response.body());
-                            ACCOUNT.user = response.body();
-                            for (int i = 0; i < LIST.listAddress.size(); i++) {
-                                if (LIST.listAddress.get(i).get_id().equals(address1.get_id())) {
-                                    LIST.listAddress.remove(i);
-                                    break;
+                    public void onClick(DialogInterface dialog, int which) {
+                        ApiService.apiService.deleteAdsress(address1.get_id()).enqueue(new Callback<Integer>() {
+                            @Override
+                            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                                if (response.isSuccessful()) {
+                                    if(response.body()==1){
+                                        for (int i = 0; i < LIST.listAddress.size(); i++) {
+                                            if (LIST.listAddress.get(i).get_id().equals(address1.get_id())) {
+                                                LIST.listAddress.remove(i);
+                                                break;
+                                            }
+                                        }
+                                        if (TOOLS.getDefaulAddress(AddAddressActivity.this).equals(address1.get_id())) {
+                                            TOOLS.clearDefaulAddress(AddAddressActivity.this);
+                                        }}
+                                    clearAddress();
+                                    onBackPressed();
                                 }
                             }
-                            if (TOOLS.getDefaulAddress(AddAddressActivity.this).equals(address1.get_id())) {
-                                TOOLS.clearDefaulAddress(AddAddressActivity.this);
-                            }
-                            clearAddress();
-                            onBackPressed();
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        Toast.makeText(AddAddressActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onFailure(Call<Integer> call, Throwable t) {
+                                Toast.makeText(AddAddressActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
+                builder.setNegativeButton("Hủy",null);
+                builder.create().show();
+
             }
         });
     }
@@ -163,6 +166,8 @@ public class AddAddressActivity extends AppCompatActivity {
                                 } else {
                                     if (TOOLS.getDefaulAddress(AddAddressActivity.this).equals(response.body().get_id())) {
                                         TOOLS.clearDefaulAddress(AddAddressActivity.this);
+                                    }else if(LIST.listAddress.isEmpty()){
+                                        TOOLS.saveDefaulAddress(AddAddressActivity.this, response.body().get_id());
                                     }
                                 }
                                 clearAddress();
@@ -178,6 +183,7 @@ public class AddAddressActivity extends AppCompatActivity {
                     return;
                 }
                 Address address = new Address();
+                address.setId_user(ACCOUNT.user.get_id());
                 address.setFullname(edt_fullname_adr.getText().toString().trim());
                 address.setNumberphone(edt_numberphone_adr.getText().toString().trim());
                 address.setProvince(ADDRESS.province.getName());

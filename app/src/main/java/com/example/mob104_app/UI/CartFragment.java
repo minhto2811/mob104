@@ -11,8 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.mob104_app.R;
+import com.example.mob104_app.Tools.LIST;
 
 import java.util.Objects;
 
@@ -35,9 +37,6 @@ public class CartFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        int a = 8;
-        int b = 3;
-        int c = a/b;
-        Log.e("c",""+c);
+        Toast.makeText(getContext(), "List cart = "+ LIST.listCart.size(), Toast.LENGTH_SHORT).show();
     }
 }

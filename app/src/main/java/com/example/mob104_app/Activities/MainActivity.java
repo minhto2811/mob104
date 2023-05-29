@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private final int MESSAGE = 4;
     private final int SETTINGS = 5;
     private int EXIT = 0;
+    private MeowBottomNavigation bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        MeowBottomNavigation bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.show(3, true);
+         bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.show(HOME, true);
         bottomNavigationView.add(new MeowBottomNavigation.Model(1, R.drawable.shopping_cart));
         bottomNavigationView.add(new MeowBottomNavigation.Model(2, R.drawable.local_shipping));
         bottomNavigationView.add(new MeowBottomNavigation.Model(3, R.drawable.widgets));
@@ -114,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_extend, menu);
@@ -128,5 +130,16 @@ public class MainActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int cart =  getIntent().getIntExtra("cart",-1);
+        if(cart == CART){
+            bottomNavigationView.show(CART, true);
+            replaceFragment(new CartFragment(), CartFragment.TAG, CART);
+        }
+
     }
 }
