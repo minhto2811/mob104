@@ -4,16 +4,47 @@ public class Cart {
     private String _id;
     private String id_user;
     private String id_product;
+    private String name_product;
+    private String price_product;
     private Integer quantity;
+    private Integer sale;
 
     public Cart() {
     }
 
-    public Cart(String _id, String id_user, String id_product, Integer quantity) {
+    public Cart(String _id, String id_user, String id_product, String name_product, String price_product, Integer quantity,Integer sale) {
         this._id = _id;
         this.id_user = id_user;
         this.id_product = id_product;
+        this.name_product = name_product;
+        this.price_product = price_product;
         this.quantity = quantity;
+        this.sale = sale;
+    }
+
+
+    public Integer getSale() {
+        return sale;
+    }
+
+    public void setSale(Integer sale) {
+        this.sale = sale;
+    }
+
+    public String getName_product() {
+        return name_product;
+    }
+
+    public void setName_product(String name_product) {
+        this.name_product = name_product;
+    }
+
+    public String getPrice_product() {
+        return price_product;
+    }
+
+    public void setPrice_product(String price_product) {
+        this.price_product = price_product;
     }
 
     public String get_id() {
