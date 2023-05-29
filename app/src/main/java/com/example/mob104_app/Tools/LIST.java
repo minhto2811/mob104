@@ -22,5 +22,4 @@ public class LIST {
 
     public static List<Product> getListProductByFavourite = new ArrayList<>();
     public static List<Address> listAddress = new ArrayList<>();
-    public static List<Cart> listCart = new ArrayList<>();
 }

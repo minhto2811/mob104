@@ -99,6 +99,9 @@ public class TOOLS {
         return null;
     }
 
+    public static boolean checkAllCarts;
+    public static int quantityCheckAllCarts = 0;
+
 }
 
 

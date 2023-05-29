@@ -56,6 +56,7 @@ public class SettingsFragment extends Fragment {
     public static final String TAG = SettingsFragment.class.getName();
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

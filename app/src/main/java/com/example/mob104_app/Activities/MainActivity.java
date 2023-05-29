@@ -93,7 +93,9 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 fragmentTransaction.replace(R.id.container_content, fragment,name);
             }
-            fragmentTransaction.addToBackStack(name);
+            if(ID!=1){
+                fragmentTransaction.addToBackStack(name);
+            }
             fragmentTransaction.commit();
             INDEX = ID;
         }
