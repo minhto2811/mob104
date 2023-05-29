@@ -1,5 +1,7 @@
 package com.example.mob104_app.Models;
 
+import java.util.List;
+
 public class User {
     private String _id;
     private String fullname;
@@ -11,9 +13,8 @@ public class User {
     //role định nghĩa phân quyền: true - admin, false - user
     private boolean role;
     private String email;
-    private String address;
     private String image;
-    private String sex;
+    private boolean sex;
     private String date;
 
 
@@ -21,7 +22,7 @@ public class User {
     }
 
 
-    public User(String _id, String fullname, String username, String password, String numberphone, boolean role, String email, String address, String image, String sex, String date) {
+    public User(String _id, String fullname, String username, String password, String numberphone, boolean role, String email,String image, boolean sex, String date) {
         this._id = _id;
         this.fullname = fullname;
         this.username = username;
@@ -29,7 +30,6 @@ public class User {
         this.numberphone = numberphone;
         this.role = role;
         this.email = email;
-        this.address = address;
         this.image = image;
         this.sex = sex;
         this.date = date;
@@ -95,13 +95,6 @@ public class User {
         this.email = email;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     public String getImage() {
         return image;
@@ -111,11 +104,11 @@ public class User {
         this.image = image;
     }
 
-    public String getSex() {
+    public boolean getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(boolean sex) {
         this.sex = sex;
     }
 
@@ -136,7 +129,6 @@ public class User {
                 ", numberphone='" + numberphone + '\'' +
                 ", role=" + role +
                 ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
                 ", image='" + image + '\'' +
                 ", sex='" + sex + '\'' +
                 ", date='" + date + '\'' +

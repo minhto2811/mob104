@@ -8,12 +8,14 @@
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingHorizontal="10dp"
-    android:paddingVertical="5dp">
+    android:paddingVertical="5dp"
+    android:background="@color/white">
 
     <androidx.cardview.widget.CardView
         android:layout_width="70dp"
         android:layout_height="70dp"
-        app:cardElevation="5dp">
+        app:cardElevation="5dp"
+        app:cardCornerRadius="7dp">
 
         <ImageView
             android:id="@+id/imv_image_favourite"

@@ -5,11 +5,16 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
 
     <application
         android:allowBackup="true"
@@ -26,21 +31,15 @@
             android:name=".VoteActivity"
             android:exported="false" />
         <activity
-            android:name=".ChangePasswordActivity"
+            android:screenOrientation="portrait"
+            android:name=".Activities.ChooseAddressActivity"
             android:exported="false" />
         <activity
-            android:name=".ChangePassActivity2"
+            android:screenOrientation="portrait"
+            android:name=".Activities.AddAddressActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.FavouriteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activities.ExportBillActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activities.InfoCustomerActivity"
-            android:exported="false" />
-        <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -50,40 +49,72 @@
             </intent-filter>
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.LoginActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.MainActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.NotifyActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.BannerActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.CategoryActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.RegisterActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.ForgetPasswordActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.ProductDetailActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.Products.AddProductActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.Products.ViewProductActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.Products.UpdateProductActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.ImportBillActivity"
+            android:exported="false" />
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".Activities.AddressActivity"
+            android:exported="false" />
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".Activities.PasswordActivity"
+            android:exported="false" />
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".Activities.FavouriteActivity"
+            android:exported="false" />
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".Activities.ExportBillActivity"
+            android:exported="false" />
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".Activities.InfoCustomerActivity"
             android:exported="false" />
     </application>
 

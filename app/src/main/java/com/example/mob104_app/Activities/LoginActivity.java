@@ -3,16 +3,15 @@ package com.example.mob104_app.Activities;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,16 +25,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.mob104_app.Api.ApiService;
+import com.example.mob104_app.Models.Address;
 import com.example.mob104_app.Models.User;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.ACCOUNT;
+import com.example.mob104_app.Tools.LIST;
 import com.example.mob104_app.Tools.TOOLS;
-import com.example.mob104_app.UI.SettingsFragment;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -45,11 +46,14 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_NEXT = 555;
-    private ImageView imv_back, imv_password;
-    private TextView tv_signup, tv_err_username, tv_err_password, tv_forgot_password;
+    private ImageView imv_back;
+    private TextView tv_signup, tv_forgot_password;
+    private TextInputLayout til_username, til_password;
     private EditText edt_username, edt_password;
     private Button btn_login;
-    private boolean isShow = false, checkUser, checkPass;
+    private int check = 0;
+
+    private static final int REQUEST_CODE_FORGET = 555;
 
 
     @Override
@@ -60,62 +64,57 @@ public class LoginActivity extends AppCompatActivity {
         back();
         changeRegistrationPage();
         login();
-        showHidePassword();
         forgotPassword();
     }
 
     private void forgotPassword() {
         tv_forgot_password.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.next_enter,R.anim.next_exit);
+            startActivityForResult(intent, REQUEST_CODE_FORGET);
+            overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
         });
     }
 
     private void mapping() {
         imv_back = findViewById(R.id.imv_back);
         tv_forgot_password = findViewById(R.id.tv_forgot_password);
-        imv_password = findViewById(R.id.imv_password);
         edt_username = findViewById(R.id.edt_username);
         edt_password = findViewById(R.id.edt_password);
         btn_login = findViewById(R.id.btn_login);
         tv_signup = findViewById(R.id.tv_signup);
-        tv_err_username = findViewById(R.id.tv_err_username);
-        tv_err_password = findViewById(R.id.tv_err_password);
+        til_username = findViewById(R.id.til_username);
+        til_password = findViewById(R.id.til_password);
     }
 
     @SuppressLint("SetTextI18n")
     private void login() {
 
         btn_login.setOnClickListener(v -> {
-            if (edt_password.getText().toString().trim().isEmpty()) {
-                tv_err_password.setText("Mật khẩu không được để trống!");
-                edt_password.requestFocus();
-                checkPass = false;
-            } else {
-                tv_err_password.setText(null);
-                edt_password.clearFocus();
-                checkPass = true;
-            }
-
-
-            if (edt_username.getText().toString().trim().isEmpty()) {
-                tv_err_username.setText("Tài khoản không được để trống!");
-                edt_username.requestFocus();
-                checkUser = false;
-            } else {
-                tv_err_username.setText(null);
-                edt_username.clearFocus();
-                checkUser = true;
-            }
-
-
-            if (!checkUser || !checkPass) {
+            if (!checkFielEmty(edt_username, til_username) || !checkFielEmty(edt_password, til_password)) {
                 return;
             }
-
             checkAccount(edt_username.getText().toString(), edt_password.getText().toString());
         });
+    }
+
+    private boolean checkFielEmty(EditText editText, TextInputLayout textInputLayout) {
+        if (editText.getText().toString().trim().isEmpty()) {
+            textInputLayout.setHintTextColor(ColorStateList.valueOf(getResources().getColor(R.color.red)));
+            if (editText == edt_username) {
+                textInputLayout.setHint("Tài khoản không được để trống!");
+            } else {
+                textInputLayout.setHint("Mật khẩu không được để trống!");
+            }
+            editText.requestFocus();
+            return false;
+        }
+        if (editText == edt_username) {
+            textInputLayout.setHint("Nhập tài khoản. . .");
+        } else {
+            textInputLayout.setHint("Nhập mật khẩu. . .");
+        }
+        editText.clearFocus();
+        return true;
     }
 
     private void back() {
@@ -152,10 +151,35 @@ public class LoginActivity extends AppCompatActivity {
                     if (user1 != null) {
                         TOOLS.saveUser(LoginActivity.this, user1);
                         ACCOUNT.user = user1;
-                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                        setResult(SettingsFragment.REQUEST_LOGIN);
-                        finish();
-                        overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
+                        ApiService.apiService.getListFavourite(user1.get_id()).enqueue(new Callback<List<String>>() {
+                            @Override
+                            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                                if (response.isSuccessful()) {
+                                    LIST.listFavourite = response.body();
+                                    Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                    gotoSettings();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<String>> call, Throwable t) {
+                                gotoSettings();
+                            }
+                        });
+                        ApiService.apiService.getAddress(user1.get_id()).enqueue(new Callback<List<Address>>() {
+                            @Override
+                            public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
+                                if (response.isSuccessful()) {
+                                    LIST.listAddress = response.body();
+                                    gotoSettings();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<Address>> call, Throwable t) {
+                                gotoSettings();
+                            }
+                        });
                     } else {
                         Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác!", Toast.LENGTH_SHORT).show();
                     }
@@ -171,18 +195,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void showHidePassword() {
-        imv_password.setOnClickListener(v -> {
-            isShow = !isShow;
-            if (isShow) {
-                imv_password.setImageResource(R.drawable.visibility_off);
-                edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-            } else {
-                imv_password.setImageResource(R.drawable.visibility);
-                edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            }
-            edt_password.setSelection(edt_password.getText().length());
-        });
+    private void gotoSettings() {
+        check++;
+        if (check < 2) {
+            return;
+        }
+        finish();
+        overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
     }
 
 
@@ -227,17 +246,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_NEXT && resultCode == RESULT_OK) {
+        if ((requestCode == REQUEST_CODE_NEXT || requestCode == REQUEST_CODE_FORGET) && resultCode == RESULT_OK) {
             assert data != null;
             edt_username.setText(data.getStringExtra("username"));
             edt_password.setText(data.getStringExtra("password"));
-            tv_err_username.setText(null);
             edt_username.clearFocus();
-            checkUser = true;
-            tv_err_password.setText(null);
             edt_password.clearFocus();
-            checkPass = true;
+            til_username.setHint("Nhập tài khoản. . .");
+            til_password.setHint("Nhập mật khẩu. . .");
         }
-    }
 
+    }
 }

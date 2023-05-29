@@ -1,14 +1,18 @@
 package com.example.mob104_app.Api;
 
+import com.example.mob104_app.Models.Address;
 import com.example.mob104_app.Models.Banner;
+import com.example.mob104_app.Models.Cart;
 import com.example.mob104_app.Models.Category;
+import com.example.mob104_app.Models.District;
 import com.example.mob104_app.Models.Favourite;
 import com.example.mob104_app.Models.Product;
+import com.example.mob104_app.Models.Province;
 import com.example.mob104_app.Models.User;
+import com.example.mob104_app.Models.Ward;
 import com.example.mob104_app.Tools.TOOLS;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
 import java.util.List;
 
@@ -58,15 +62,24 @@ public interface ApiService {
     @POST("user/login")
     Call<User> loginUser(@Body RequestBody requestBody);
 
-    @POST("user/info")
-    Call<User> getInfoUser(@Body JsonObject jsonObject);
+    @POST("user/update/info")
+    Call<Integer> updateInfo(@Body User user);
 
     @Multipart
     @POST("user/update/image/{username}")
     Call<User> changeAvatar(@Part MultipartBody.Part image, @Path("username") String id);
 
+    @POST("user/password")
+    Call<Integer> changePassword(@Body RequestBody requestBody);
+
+    @GET("user/forgetpassword/{username}")
+    Call<Integer> getCodeConfirmPassword(@Path("username") String username);
+
+    @POST("user/reset-password/{resetToken}")
+    Call<Integer> changePasswordNew(@Path("resetToken") String resetToken,@Body RequestBody password);
+
     @POST("favourites/add/{id_user}")
-    Call<Favourite> addToFavourite(@Path("id_user") String id_user,@Body RequestBody id_product);
+    Call<Favourite> addToFavourite(@Path("id_user") String id_user, @Body RequestBody id_product);
 
     @GET("favourites/{id_user}")
     Call<List<String>> getListFavourite(@Path("id_user") String id_user);
@@ -75,8 +88,34 @@ public interface ApiService {
     Call<List<Product>> getListProductByFavourite(@Path("id_user") String id_user);
 
     @POST("favourites/update/{id_user}")
-    Call<Favourite> delToFavourite(@Path("id_user") String id_user,@Body RequestBody id_product);
+    Call<Favourite> delToFavourite(@Path("id_user") String id_user, @Body RequestBody id_product);
 
+    @GET("address/provinces")
+    Call<List<Province>> getProvinces();
+
+    @GET("address/districts/{parent_code}")
+    Call<List<District>> getDistricts(@Path("parent_code") String parent_code);
+
+    @GET("address/wards/{parent_code}")
+    Call<List<Ward>> getWards(@Path("parent_code") String parent_code);
+
+    @POST("address/addNew/{id_user}")
+    Call<Address> saveNewAddress(@Path("id_user") String id_user, @Body Address address);
+
+    @GET("address/all/{id_user}")
+    Call<List<Address>> getAddress(@Path("id_user") String id_user);
+
+    @POST("address/update")
+    Call<Address> updateAddress(@Body Address Address);
+
+    @POST("address/delete/{id_address}")
+    Call<Integer> deleteAdsress(@Path("id_address") String id_address);
+
+    @POST("cart/add")
+    Call<Cart> addCart(@Body Cart cart);
+
+    @GET("cart/{id_user}")
+    Call<List<Cart>> getCarts(@Path("id_user") String id_user);
 
 
 }

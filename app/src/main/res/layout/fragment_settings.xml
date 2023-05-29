@@ -78,6 +78,7 @@
                 android:textSize="20dp" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -92,6 +93,7 @@
                 android:textSize="20dp" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -106,6 +108,7 @@
                 android:textSize="20dp" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -120,6 +123,7 @@
                 android:textSize="20dp" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_change_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"

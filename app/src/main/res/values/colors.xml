@@ -7,6 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="statusbar">#ef6534</color>
     <color name="black">#FF000000</color>
+    <color name="green">#67e784</color>
     <color name="white">#FFFFFFFF</color>
     <color name="white1">#A6FFFFFF</color>
     <color name="colormain">#209de0</color>
@@ -15,7 +16,8 @@
     <color name="red">#FB0D0D</color>
     <color name="sale">#AB000000</color>
     <color name="yellow">#ffe21e</color>
-    <color name="gray">#bfbfbf</color>
-    <color name="grey">#FB0D0D</color>
+    <color name="gray">#80DAD5D5</color>
+    <color name="grey">#DB5555</color>
+    <color name="pink">#ECBCBC</color>
     <color name="title">#11599C</color>
 </resources>

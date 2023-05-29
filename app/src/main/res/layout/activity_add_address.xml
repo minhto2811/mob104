@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray"
+    android:orientation="vertical"
+    tools:context="com.example.mob104_app.Activities.AddressActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_add_address"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colormain"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:paddingVertical="7dp"
+        android:text="Liên hệ (*)"
+        android:textColor="@color/red"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/edt_fullname_adr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:hint="Họ và tên"
+        android:imeOptions="actionNext"
+        android:inputType="text"
+        android:lines="1"
+        android:maxLines="1"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
+        android:textSize="17sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/product" />
+
+    <TextView
+        android:id="@+id/tv_err_fullname_adr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pink"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="3dp"
+        android:text="Vui lòng nhập Họ và tên"
+        android:textColor="@color/grey"
+        android:textSize="15dp"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/edt_numberphone_adr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:hint="Số điện thoại"
+        android:imeOptions="actionNext"
+        android:inputType="numberSigned"
+        android:lines="1"
+        android:maxLength="10"
+        android:maxLines="1"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
+        android:textSize="17sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/product" />
+
+    <TextView
+        android:id="@+id/tv_err_numberphone_adr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pink"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="3dp"
+        android:text="Vui lòng nhập Số điện thoại"
+        android:textColor="@color/grey"
+        android:textSize="15dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:paddingVertical="7dp"
+        android:text="Địa chỉ  (*)"
+        android:textColor="@color/red"
+        android:textSize="18sp" />
+
+    <EditText
+        android:focusable="false"
+        android:id="@+id/edt_select_address_adr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clickable="true"
+        android:drawableEnd="@drawable/baseline_arrow_forward_ios_24"
+        android:hint="Tỉnh/Thành phố, Quận/Huyện, Phường xã"
+        android:imeOptions="actionNext"
+        android:inputType="textMultiLine"
+        android:paddingVertical="10dp"
+        android:paddingStart="10dp"
+        android:textSize="17sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/product" />
+
+    <TextView
+        android:id="@+id/tv_err_select_address_adr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pink"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="3dp"
+        android:text="Vui lòng chọn Tỉnh/Thành phố, Quận/Huyện, Phường xã"
+        android:textColor="@color/grey"
+        android:textSize="15dp"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/edt_name_address_adr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:hint="Tên đường, tòa nhà, số nhà"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:lines="1"
+        android:maxLines="1"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
+        android:textSize="17sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/product" />
+
+    <TextView
+        android:id="@+id/tv_err_name_address_adr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pink"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="3dp"
+        android:text="Vui lòng nhập Tên đường, tòa nhà, số nhà"
+        android:textColor="@color/grey"
+        android:textSize="15dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:paddingVertical="7dp"
+        android:text="Cài đặt"
+        android:textColor="@color/red"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:inputType="text"
+            android:paddingVertical="10dp"
+            android:text="Đặt làm địa chỉ mặc định"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sw_select_adr"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/product" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_add_new_address_adr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:background="@color/colormain"
+        android:text="Xác nhận"
+        android:textColor="@color/white"
+        android:textSize="22sp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_del_address_adr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/red"
+        android:text="Xóa địa chỉ"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:visibility="gone" />
+</LinearLayout>

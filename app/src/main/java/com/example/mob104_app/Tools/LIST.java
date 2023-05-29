@@ -1,6 +1,8 @@
 package com.example.mob104_app.Tools;
 
+import com.example.mob104_app.Models.Address;
 import com.example.mob104_app.Models.Banner;
+import com.example.mob104_app.Models.Cart;
 import com.example.mob104_app.Models.Category;
 import com.example.mob104_app.Models.Favourite;
 import com.example.mob104_app.Models.Product;
@@ -19,4 +21,5 @@ public class LIST {
     public static List<String> listFavourite = new ArrayList<>();
 
     public static List<Product> getListProductByFavourite = new ArrayList<>();
+    public static List<Address> listAddress = new ArrayList<>();
 }
