@@ -121,7 +121,14 @@ public class RegisterActivity extends AppCompatActivity {
         ApiService.apiService.createUser(user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                dialog.hide();
                 if (response.isSuccessful()) {
+                    if (response.body() == null) {
+                        til_username.setError("Tên tài khoản đã được sử dụng");
+                        edt_username.setSelection(edt_username.getSelectionEnd());
+                        Toast.makeText(RegisterActivity.this, "Tên tài khoản đã được sử dụng!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     Toast.makeText(RegisterActivity.this, "Tạo tài khoản thành công", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
                     assert response.body() != null;
@@ -129,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
                     intent.putExtra("password", response.body().getPassword());
                     setResult(RESULT_OK, intent);
                     finish();
-                    dialog.hide();
+
                 }
             }
 

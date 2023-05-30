@@ -100,21 +100,21 @@ public class UserActivity extends AppCompatActivity {
                 ApiService.apiService.updateInfo(user).enqueue(new Callback<Integer>() {
                     @Override
                     public void onResponse(Call<Integer> call, Response<Integer> response) {
-                        if (response.isSuccessful() && response.body() == 1) {
-                            ACCOUNT.user = user;
-                            TOOLS.saveUser(UserActivity.this, user);
-                            Toast.makeText(UserActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                            onBackPressed();
-                        }else if(response.isSuccessful() && response.body() == -1){
-                            Toast.makeText(UserActivity.this, "Không có sự thay đổi thông tin", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(UserActivity.this, "Email hoặc số điện thoại đã được sử dụng!", Toast.LENGTH_SHORT).show();
+                        if (response.isSuccessful()) {
+                            if (response.body() == 1) {
+                                ACCOUNT.user = user;
+                                TOOLS.saveUser(UserActivity.this, user);
+                                Toast.makeText(UserActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                                onBackPressed();
+                            } else {
+                                Toast.makeText(UserActivity.this, "Không có sự thay đổi thông tin", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Integer> call, Throwable t) {
-                        Toast.makeText(UserActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserActivity.this, "Email hoặc số điện thoại đã được sử dụng!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
