@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.show(CART, true);
             replaceFragment(new CartFragment(), CartFragment.TAG, CART);
         }
+        getIntent().removeExtra("cart");
 
     }
 }

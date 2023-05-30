@@ -70,7 +70,7 @@ public class SettingsFragment extends Fragment {
     private Button btn_logout, btn_favourite, btn_password, btn_address, btn_user;
     private CircleImageView civ_avatar;
     private TextView tv_fullname;
-    private ImageView imv_bg_settings, imv_change_avatar;
+    private ImageView  imv_change_avatar;
     private static final int REQUEST_IMAGE_CAPTURE = 111;
 
     @Override
@@ -99,9 +99,8 @@ public class SettingsFragment extends Fragment {
         btn_logout = view.findViewById(R.id.btn_logout);
         civ_avatar = view.findViewById(R.id.civ_avatar);
         tv_fullname = view.findViewById(R.id.tv_fullname);
-        imv_bg_settings = view.findViewById(R.id.imv_bg_settings);
-        imv_change_avatar = view.findViewById(R.id.imv_change_avatar);
-        Glide.with(requireContext()).asGif().load(R.drawable.settings_bg).into(imv_bg_settings);
+             imv_change_avatar = view.findViewById(R.id.imv_change_avatar);
+
     }
 
     private void user() {

@@ -7,7 +7,7 @@
     tools:context="com.example.mob104_app.UI.SettingsFragment">
 
     <ImageView
-        android:id="@+id/imv_bg_settings"
+    android:src="@drawable/bg_settings"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
