@@ -27,9 +27,7 @@
         android:theme="@style/Theme.Clothing_store"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".VoteActivity"
-            android:exported="false" />
+
         <activity
             android:screenOrientation="portrait"
             android:name=".Activities.ChooseAddressActivity"
@@ -115,6 +113,10 @@
         <activity
             android:screenOrientation="portrait"
             android:name=".Activities.InfoCustomerActivity"
+            android:exported="false" />
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".Activities.UserActivity"
             android:exported="false" />
     </application>
 
