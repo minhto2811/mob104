@@ -1,5 +1,6 @@
 package com.example.mob104_app.Activities;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,18 +23,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.Models.Address;
-import com.example.mob104_app.Models.User;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.ACCOUNT;
 import com.example.mob104_app.Tools.ADDRESS;
 import com.example.mob104_app.Tools.LIST;
 import com.example.mob104_app.Tools.TOOLS;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,11 +43,14 @@ public class AddAddressActivity extends AppCompatActivity {
     public static int REQUSET_CODE_ADDRESS = 888;
     public static Address address1;
 
+    private Dialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_address);
         mapping();
+        createDialog();
         setToolbar();
         selectAddress();
         editAddress();
@@ -60,20 +58,30 @@ public class AddAddressActivity extends AppCompatActivity {
         addNewAddress();
     }
 
+    private void createDialog() {
+        dialog = TOOLS.createDialog(AddAddressActivity.this);
+    }
+
     private void deleteAddress() {
         btn_del_address_adr.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+                if(LIST.listAddress.size()<=1){
+                    Toast.makeText(AddAddressActivity.this, "Cần ít nhất một địa chỉ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(AddAddressActivity.this);
                 builder.setTitle("Xác nhận xóa địa chỉ này?");
                 builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog1, int which) {
+                        dialog.show();
                         ApiService.apiService.deleteAdsress(address1.get_id()).enqueue(new Callback<Integer>() {
                             @Override
                             public void onResponse(Call<Integer> call, Response<Integer> response) {
                                 if (response.isSuccessful()) {
-                                    if(response.body()==1){
+                                    if (response.body() == 1) {
                                         for (int i = 0; i < LIST.listAddress.size(); i++) {
                                             if (LIST.listAddress.get(i).get_id().equals(address1.get_id())) {
                                                 LIST.listAddress.remove(i);
@@ -84,6 +92,7 @@ public class AddAddressActivity extends AppCompatActivity {
                                             TOOLS.clearDefaulAddress(AddAddressActivity.this);
                                         }}
                                     clearAddress();
+                                    dialog.dismiss();
                                     onBackPressed();
                                 }
                             }
@@ -91,6 +100,7 @@ public class AddAddressActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(Call<Integer> call, Throwable t) {
                                 Toast.makeText(AddAddressActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
                             }
                         });
                     }
@@ -138,6 +148,7 @@ public class AddAddressActivity extends AppCompatActivity {
                 if (!checkFielEmty(edt_fullname_adr) || !checkFielEmty(edt_numberphone_adr) || !checkFielEmty(edt_select_address_adr) || !checkFielEmty(edt_name_address_adr)) {
                     return;
                 }
+                dialog.show();
                 if (address1 != null) {
                     address1.setFullname(edt_fullname_adr.getText().toString().trim());
                     address1.setNumberphone(edt_numberphone_adr.getText().toString().trim());
@@ -171,6 +182,7 @@ public class AddAddressActivity extends AppCompatActivity {
                                     }
                                 }
                                 clearAddress();
+                                dialog.dismiss();
                                 onBackPressed();
                             }
                         }
@@ -178,6 +190,7 @@ public class AddAddressActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<Address> call, Throwable t) {
                             Toast.makeText(AddAddressActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
                         }
                     });
                     return;
@@ -189,7 +202,7 @@ public class AddAddressActivity extends AppCompatActivity {
                 address.setProvince(ADDRESS.province.getName());
                 address.setDistrict(ADDRESS.district.getName());
                 address.setWards(ADDRESS.ward.getName());
-                address.setAddress(edt_name_address_adr.getText().toString() + ".");
+                address.setAddress(edt_name_address_adr.getText().toString());
                 ApiService.apiService.saveNewAddress(ACCOUNT.user.get_id(), address).enqueue(new Callback<Address>() {
                     @Override
                     public void onResponse(Call<Address> call, Response<Address> response) {
@@ -324,4 +337,11 @@ public class AddAddressActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+    }
 }

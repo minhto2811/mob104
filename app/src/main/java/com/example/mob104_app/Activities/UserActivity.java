@@ -1,6 +1,7 @@
 package com.example.mob104_app.Activities;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -91,6 +92,8 @@ public class UserActivity extends AppCompatActivity {
                     Toast.makeText(UserActivity.this, "Vui lòng xác nhận thông tin cập nhật!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                Dialog dialog = TOOLS.createDialog(UserActivity.this);
+                dialog.show();
                 User user = ACCOUNT.user;
                 user.setFullname(edt_fullname_user.getText().toString().trim());
                 user.setNumberphone(edt_numberphone_user.getText().toString().trim());
@@ -109,12 +112,14 @@ public class UserActivity extends AppCompatActivity {
                             } else {
                                 Toast.makeText(UserActivity.this, "Không có sự thay đổi thông tin", Toast.LENGTH_SHORT).show();
                             }
+                            dialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Integer> call, Throwable t) {
                         Toast.makeText(UserActivity.this, "Email hoặc số điện thoại đã được sử dụng!", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                     }
                 });
             }

@@ -88,14 +88,12 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.setCustomAnimations(R.anim.prev_enter, R.anim.prev_exit);
             }
             Fragment existingFragment = fragmentManager.findFragmentByTag(name);
-            if (existingFragment != null) {
+            if (existingFragment != null && ID!=CART) {
                 fragmentTransaction.replace(R.id.container_content, existingFragment,name);
             } else {
                 fragmentTransaction.replace(R.id.container_content, fragment,name);
             }
-            if(ID!=1){
-                fragmentTransaction.addToBackStack(name);
-            }
+            fragmentTransaction.addToBackStack(name);
             fragmentTransaction.commit();
             INDEX = ID;
         }

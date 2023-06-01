@@ -22,10 +22,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.Models.User;
 import com.example.mob104_app.R;
+import com.example.mob104_app.Tools.TOOLS;
 import com.google.android.material.textfield.TextInputLayout;
 
 import retrofit2.Call;
@@ -41,7 +41,6 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btn_signup;
     private boolean name, user, pass, isShow = true, hasUppercase = false, hasLowercase = false, hasDigit = false;
 
-    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,13 +106,8 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     private void register(String fullname, String username, String password) {
-        dialog = new Dialog(RegisterActivity.this);
-        @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.layout_watting, null);
-        Glide.with(RegisterActivity.this).asGif().load(R.drawable.spin).into((ImageView) view.findViewById(R.id.imv_watting));
-        dialog.setContentView(view);
-        dialog.setCancelable(false);
+        Dialog dialog = TOOLS.createDialog(RegisterActivity.this);
         dialog.show();
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         User user = new User();
         user.setFullname(fullname);
         user.setUsername(username);
@@ -121,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
         ApiService.apiService.createUser(user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
-                dialog.hide();
+                dialog.dismiss();
                 if (response.isSuccessful()) {
                     if (response.body() == null) {
                         til_username.setError("Tên tài khoản đã được sử dụng");
@@ -143,7 +137,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                 Toast.makeText(RegisterActivity.this, "Tạo tài khoản thất bại!", Toast.LENGTH_SHORT).show();
-                dialog.hide();
+                dialog.dismiss();
             }
         });
     }
@@ -190,8 +184,5 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(dialog !=null){
-            dialog.dismiss();
-        }
     }
 }

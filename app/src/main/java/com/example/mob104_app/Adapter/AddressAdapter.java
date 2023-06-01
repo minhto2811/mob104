@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mob104_app.Activities.AddAddressActivity;
+import com.example.mob104_app.Activities.AddressActivity;
 import com.example.mob104_app.Models.Address;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.TOOLS;
@@ -22,10 +24,13 @@ import java.util.List;
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressviewHolder> {
     private Context context;
     private List<Address> list;
+    private boolean choose;
 
-    public AddressAdapter(Context context) {
+    public AddressAdapter(Context context, boolean choose) {
         this.context = context;
+        this.choose = choose;
     }
+
 
     public void setData(List<Address> list) {
         this.list = list;
@@ -60,16 +65,25 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.Addressv
             if (TOOLS.getDefaulAddress(context) == null) {
                 if (position == 0) {
                     holder.tv_default.setVisibility(View.VISIBLE);
-                    TOOLS.saveDefaulAddress(context,address.get_id());
+                    TOOLS.saveDefaulAddress(context, address.get_id());
                 }
                 return;
             }
             if (TOOLS.getDefaulAddress(context).equals(address.get_id())) {
                 holder.tv_default.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 holder.tv_default.setVisibility(View.GONE);
             }
         }
+        if (!choose) {
+            holder.btn_choose_address.setVisibility(View.GONE);
+        }
+        holder.btn_choose_address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddressActivity.chooseAddress(address);
+            }
+        });
     }
 
     @Override
@@ -81,9 +95,11 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.Addressv
 
         private TextView tv_name, tv_numberphone, tv_more, tv_address, tv_default;
         private LinearLayout ln_address;
+        private CheckBox btn_choose_address;
 
         public AddressviewHolder(@NonNull View itemView) {
             super(itemView);
+            btn_choose_address = itemView.findViewById(R.id.btn_choose_address);
             tv_name = itemView.findViewById(R.id.tv_name);
             tv_numberphone = itemView.findViewById(R.id.tv_numberphone);
             tv_more = itemView.findViewById(R.id.tv_more);

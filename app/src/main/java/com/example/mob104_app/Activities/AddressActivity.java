@@ -1,10 +1,12 @@
 package com.example.mob104_app.Activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mob104_app.Adapter.AddressAdapter;
+import com.example.mob104_app.Models.Address;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.LIST;
 
@@ -24,10 +27,14 @@ public class AddressActivity extends AppCompatActivity {
     private AddressAdapter adapter;
     private LinearLayout ln_add_address;
 
+    private static Activity activity;
+    private boolean choose;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
+        activity = this;
         mapping();
         setToolbar();
         getListAddress();
@@ -39,7 +46,14 @@ public class AddressActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(AddressActivity.this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
-        adapter = new AddressAdapter(AddressActivity.this);
+        choose = getIntent().getBooleanExtra("choose", false);
+        if (choose) {
+            getSupportActionBar().setTitle(R.string.title_choose_address_pay);
+            adapter = new AddressAdapter(AddressActivity.this, true);
+        } else {
+            adapter = new AddressAdapter(AddressActivity.this, false);
+        }
+
         adapter.setData(LIST.listAddress);
         recyclerView.setAdapter(adapter);
     }
@@ -80,6 +94,14 @@ public class AddressActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         adapter.notifyDataSetChanged();
+    }
+
+    public static void chooseAddress(Address address) {
+        Intent intent = new Intent();
+        intent.putExtra("address", address);
+        activity.setResult(RESULT_OK, intent);
+        activity.finish();
+        activity.overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
     }
 
     @Override

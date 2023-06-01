@@ -1,9 +1,11 @@
 package com.example.mob104_app.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,10 +21,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mob104_app.Adapter.CartAdapter;
 import com.example.mob104_app.Api.ApiService;
+import com.example.mob104_app.Activities.CreateBillActivity;
+import com.example.mob104_app.Models.Bill;
 import com.example.mob104_app.Models.Cart;
 import com.example.mob104_app.R;
+import com.example.mob104_app.Tools.ACCOUNT;
+import com.example.mob104_app.Tools.LIST;
 import com.example.mob104_app.Tools.TOOLS;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,9 +55,13 @@ public class CartFragment extends Fragment {
     private RecyclerView recyclerView;
     private CartAdapter adapter;
     private LinearLayout ln_speed;
-    private static TextView tv_check_all;
+    private static TextView tv_check_all, tv_price_pay;
     private static CheckBox cbox_check_all;
-    private int ListSize = 0;
+
+    private static LinearLayout ln_pay;
+    private Button btn_pay;
+    private static int price_pay;
+    private List<Cart> cartList;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -57,6 +69,43 @@ public class CartFragment extends Fragment {
         mapping(view);
         showCarts();
         checkAll();
+        pay();
+    }
+
+    private void pay() {
+        btn_pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bill bill = new Bill();
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                String formattedDate = dateFormat.format(calendar.getTime());
+                bill.setDate(formattedDate);
+                bill.setStatus(0);
+                bill.setId_user(ACCOUNT.user.get_id());
+                bill.setTotal(price_pay);
+                bill.setList(LIST.listBuyCart);
+                Intent intent = new Intent(requireContext(), CreateBillActivity.class);
+                intent.putExtra("bill", bill);
+                startActivity(intent);
+                requireActivity().finish();
+                requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+            }
+        });
+    }
+
+    public static void showLayoutPay(List<Cart> list) {
+        if (list.size() == 0) {
+            ln_pay.setVisibility(View.GONE);
+            return;
+        }
+        ln_pay.setVisibility(View.VISIBLE);
+        price_pay = 0;
+        for (int i = 0; i < list.size(); i++) {
+            Cart cart = list.get(i);
+            price_pay += cart.getPrice_product() * cart.getQuantity();
+        }
+        tv_price_pay.setText(TOOLS.convertPrice(price_pay) + "VND");
     }
 
     private void checkAll() {
@@ -64,13 +113,13 @@ public class CartFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 TOOLS.checkAllCarts = cbox_check_all.isChecked();
-                if(TOOLS.checkAllCarts){
-                    TOOLS.quantityCheckAllCarts = ListSize;
+                if (TOOLS.checkAllCarts) {
                     tv_check_all.setText("Bỏ chọn tất cả");
-                    adapter.notifyDataSetChanged();
-                }else {
-                    TOOLS.quantityCheckAllCarts = 0;
+                    showLayoutPay(cartList);
+                } else {
+                    LIST.listBuyCart.clear();
                     tv_check_all.setText("Chọn tất cả");
+                    showLayoutPay(LIST.listBuyCart);
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -78,7 +127,7 @@ public class CartFragment extends Fragment {
     }
 
     private void showCarts() {
-        adapter = new CartAdapter(requireContext());
+        adapter = new CartAdapter(requireContext(),false);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
@@ -89,7 +138,7 @@ public class CartFragment extends Fragment {
                 @Override
                 public void onResponse(Call<List<Cart>> call, Response<List<Cart>> response) {
                     if (response.isSuccessful() && response.body().size() > 0) {
-                        ListSize = response.body().size();
+                        cartList = response.body();
                         adapter.setData(response.body());
                         ln_speed.setVisibility(View.VISIBLE);
                         recyclerView.setPadding(0, 0, 0, 140);
@@ -106,6 +155,9 @@ public class CartFragment extends Fragment {
     }
 
     private void mapping(View view) {
+        btn_pay = view.findViewById(R.id.btn_pay);
+        tv_price_pay = view.findViewById(R.id.tv_price_pay);
+        ln_pay = view.findViewById(R.id.ln_pay);
         cbox_check_all = view.findViewById(R.id.cbox_check_all);
         tv_check_all = view.findViewById(R.id.tv_check_all);
         ln_speed = view.findViewById(R.id.ln_speed);

@@ -1,10 +1,16 @@
 package com.example.mob104_app.Tools;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.mob104_app.Models.User;
+import com.example.mob104_app.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -24,7 +30,7 @@ public class TOOLS {
 
     public static String convertPrice(int price) {
         DecimalFormat formatter = new DecimalFormat("###,###");
-        return formatter.format(price);
+        return formatter.format(price)+"₫";
     }
 
     public static void saveUser(Context context, User user) {
@@ -100,7 +106,20 @@ public class TOOLS {
     }
 
     public static boolean checkAllCarts;
-    public static int quantityCheckAllCarts = 0;
+
+
+    public static Dialog createDialog(Context context) {
+        Dialog dialog = new Dialog(context);
+        @SuppressLint("InflateParams")
+        View view = ((Activity) context).getLayoutInflater().inflate(R.layout.layout_watting, null);
+        Glide.with(context).asGif().load(R.drawable.spin).into((ImageView) view.findViewById(R.id.imv_watting));
+        dialog.setContentView(view);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        return dialog;
+    }
+
+
 
 }
 

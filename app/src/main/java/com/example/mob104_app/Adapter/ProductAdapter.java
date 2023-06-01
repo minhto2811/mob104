@@ -64,7 +64,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         if (product != null) {
             holder.tv_name.setText(product.getName());
             holder.tv_sale.setText("-" + product.getSale() + "%");
-            holder.tv_price.setText(TOOLS.convertPrice(product.getPrice() - product.getPrice()* product.getSale()/100) + "VND");
+            holder.tv_price.setText(TOOLS.convertPrice(product.getPrice() - product.getPrice()* product.getSale()/100));
             Glide
                     .with(context)
                     .load(TOOLS.doMainDevice + product.getImage().get(0))
