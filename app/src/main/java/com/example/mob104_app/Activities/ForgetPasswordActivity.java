@@ -52,7 +52,6 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         back();
         resetPassword();
         phone();
-
     }
 
     private void createDialog() {
