@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.mob104_app.R;
+import com.example.mob104_app.Tools.TOOLS;
 import com.example.mob104_app.UI.BillFragment;
 import com.example.mob104_app.UI.CartFragment;
 import com.example.mob104_app.UI.HomeFragment;
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             if (existingFragment != null && ID!=CART) {
                 fragmentTransaction.replace(R.id.container_content, existingFragment,name);
             } else {
+                TOOLS.checkAllCarts = false;
                 fragmentTransaction.replace(R.id.container_content, fragment,name);
             }
             fragmentTransaction.addToBackStack(name);

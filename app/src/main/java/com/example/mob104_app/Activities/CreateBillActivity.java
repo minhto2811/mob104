@@ -302,8 +302,5 @@ public class CreateBillActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
+
 }
