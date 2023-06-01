@@ -77,15 +77,9 @@ public class PasswordActivity extends AppCompatActivity {
                     return;
                 }
 
-                Dialog dialog = new Dialog(PasswordActivity.this);
-
-                @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.layout_watting, null);
-                Glide.with(PasswordActivity.this).asGif().load(R.drawable.spin).into((ImageView) view.findViewById(R.id.imv_watting));
-                dialog.setContentView(view);
-                dialog.setCancelable(false);
+                Dialog dialog = TOOLS.createDialog(PasswordActivity.this);
 
                 dialog.show();
-                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
                 JSONObject postData = new JSONObject();
                 try {
@@ -110,12 +104,12 @@ public class PasswordActivity extends AppCompatActivity {
                         }else {
                             Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
                         }
-                        dialog.cancel();
+                        dialog.dismiss();
                     }
 
                     @Override
                     public void onFailure(Call<Integer> call, Throwable t) {
-                        dialog.cancel();
+                        dialog.dismiss();
                         Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
                     }
                 });

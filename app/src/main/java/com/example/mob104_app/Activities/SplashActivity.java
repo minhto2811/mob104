@@ -70,7 +70,9 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
                     if (response.isSuccessful()) {
-                        LIST.listAddress = response.body();
+                        if(response.body()!=null){
+                            LIST.listAddress = response.body();
+                        }
                         gotoMainActivity();
                     }
                 }
@@ -98,7 +100,9 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<String>> call, Response<List<String>> response) {
                     if (response.isSuccessful()) {
-                        LIST.listFavourite = response.body();
+                        if(response.body()!=null){
+                            LIST.listFavourite = response.body();
+                        }
                         gotoMainActivity();
                     }
                 }

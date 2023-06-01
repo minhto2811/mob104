@@ -2,6 +2,7 @@ package com.example.mob104_app.Api;
 
 import com.example.mob104_app.Models.Address;
 import com.example.mob104_app.Models.Banner;
+import com.example.mob104_app.Models.Bill;
 import com.example.mob104_app.Models.Cart;
 import com.example.mob104_app.Models.Category;
 import com.example.mob104_app.Models.District;
@@ -116,6 +117,12 @@ public interface ApiService {
 
     @GET("cart/{id_user}")
     Call<List<Cart>> getCarts(@Path("id_user") String id_user);
+
+    @GET("cart/delete/{id_cart}")
+    Call<Integer> deleteCart(@Path("id_cart") String id_cart);
+
+    @POST("bill/add")
+    Call<Bill> createBill(@Body Bill bill);
 
 
 }

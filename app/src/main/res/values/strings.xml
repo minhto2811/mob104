@@ -9,8 +9,12 @@
     <string name="title_settings">Thiết lập</string>
     <string name="title_mess">Liên hệ</string>
     <string name="title_notify">Thông báo</string>
+    <string name="title_method_shipping">Phương thức vận chuyển</string>
+    <string name="title_method_payment">Hình thức thanh toán</string>
+    <string name="title_buy">Đặt hàng</string>
     <string name="title_user">Thông tin tài khoản</string>
     <string name="title_address">Cập nhật địa chỉ</string>
+    <string name="title_choose_address_pay">Chọn địa chỉ giao hàng</string>
     <string name="title_add_address">Thêm địa chỉ mới</string>
     <string name="title_uppdate_address">Sửa địa chỉ</string>
     <string name="title_choose_address">Chọn vị trí</string>

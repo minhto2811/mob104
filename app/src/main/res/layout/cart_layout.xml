@@ -1,90 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingHorizontal="5dp"
-    android:paddingVertical="5dp">
-    <androidx.cardview.widget.CardView
-
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:cardElevation="10dp"
-        app:cardCornerRadius="10dp">
-
-        <ImageView
-            android:id="@+id/imv_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-           android:scaleType="centerCrop"
-            />
-    </androidx.cardview.widget.CardView>
-
+    app:mode="same_level"
+    app:dragEdge="right"
+    android:background="@color/white">
 
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/ln_delete"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/tv_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp" />
+        android:gravity="center"
+        android:background="@color/red"
+        android:paddingHorizontal="25dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Số lượng:"
-            android:textSize="16sp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imv_add"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@color/gray"
-                android:src="@drawable/ic_baseline_add" />
-
-
-            <TextView
-                android:id="@+id/tv_quantity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:textSize="20sp" />
-
-            <ImageView
-                android:id="@+id/imv_subtract"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@color/gray"
-                android:src="@drawable/ic_tru" />
-        </LinearLayout>
+            android:text="Xóa"
+            android:textColor="@color/white"
+            android:textSize="19sp" />
     </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/cbox_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleX="1.5"
-        android:scaleY="1.5" />
 
-</LinearLayout>
+    <LinearLayout
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <androidx.cardview.widget.CardView
+
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp">
+
+            <ImageView
+                android:id="@+id/imv_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+        </androidx.cardview.widget.CardView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Số lượng:"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <ImageView
+                    android:id="@+id/imv_subtract"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@color/gray"
+                    android:src="@drawable/ic_tru" />
+
+                <TextView
+                    android:id="@+id/tv_quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/imv_add"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@color/gray"
+                    android:src="@drawable/ic_baseline_add" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/cbox_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="1.5"
+            android:scaleY="1.5" />
+    </LinearLayout>
+</com.chauthai.swipereveallayout.SwipeRevealLayout>

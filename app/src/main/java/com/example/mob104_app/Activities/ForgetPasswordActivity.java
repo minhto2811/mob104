@@ -1,7 +1,6 @@
 package com.example.mob104_app.Activities;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -15,9 +14,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.R;
+import com.example.mob104_app.Tools.TOOLS;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.gun0912.tedpermission.PermissionListener;
@@ -42,15 +41,22 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     private boolean OK;
 
     private FloatingActionButton fbtn_phone;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
         mapping();
+        createDialog();
         back();
         resetPassword();
         phone();
+
+    }
+
+    private void createDialog() {
+        dialog = TOOLS.createDialog(ForgetPasswordActivity.this);
     }
 
     private void phone() {
@@ -112,12 +118,6 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                 if (!checkInputFiel(edt_username, til_username)) {
                     return;
                 }
-                Dialog dialog = new Dialog(ForgetPasswordActivity.this);
-                @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.layout_watting, null);
-                Glide.with(ForgetPasswordActivity.this).asGif().load(R.drawable.spin).into((ImageView) view.findViewById(R.id.imv_watting));
-                dialog.setContentView(view);
-                dialog.setCancelable(false);
-                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 if (!OK) {
                     dialog.show();
 
@@ -136,14 +136,14 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(ForgetPasswordActivity.this, "Lỗi khi gửi email xác thực", Toast.LENGTH_SHORT).show();
                                 }
-                                dialog.cancel();
+                                dialog.hide();
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Integer> call, Throwable t) {
                             Toast.makeText(ForgetPasswordActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
-                            dialog.cancel();
+                            dialog.hide();
                         }
                     });
                 } else {
@@ -176,13 +176,13 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                                     Toast.makeText(ForgetPasswordActivity.this, "Mã thông báo không hợp lệ hoặc đã hết hạn", Toast.LENGTH_SHORT).show();
                                 }
                             }
-                            dialog.cancel();
+                            dialog.hide();
                         }
 
                         @Override
                         public void onFailure(Call<Integer> call, Throwable t) {
                             Toast.makeText(ForgetPasswordActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
-                            dialog.cancel();
+                            dialog.hide();
                         }
                     });
 
@@ -225,6 +225,15 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-        overridePendingTransition(R.anim.prev_enter,R.anim.prev_exit);
+        overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
     }
 }

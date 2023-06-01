@@ -1,5 +1,7 @@
 package com.example.mob104_app.Models;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class Address implements Serializable {
@@ -90,4 +92,6 @@ public class Address implements Serializable {
     public void setAddress(String address) {
         this.address = address;
     }
+
+
 }

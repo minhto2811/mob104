@@ -124,15 +124,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void checkAccount(String user, String pass) {
 
-        Dialog dialog = new Dialog(LoginActivity.this);
-
-        @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.layout_watting, null);
-        Glide.with(LoginActivity.this).asGif().load(R.drawable.spin).into((ImageView) view.findViewById(R.id.imv_watting));
-        dialog.setContentView(view);
-        dialog.setCancelable(false);
-
+        Dialog dialog = TOOLS.createDialog(LoginActivity.this);
         dialog.show();
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         JSONObject postData = new JSONObject();
         try {
             postData.put("username", user);
@@ -155,7 +148,9 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<List<String>> call, Response<List<String>> response) {
                                 if (response.isSuccessful()) {
-                                    LIST.listFavourite = response.body();
+                                    if(response.body()!=null){
+                                        LIST.listFavourite = response.body();
+                                    }
                                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                                     gotoSettings();
                                 }
@@ -170,7 +165,9 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
                                 if (response.isSuccessful()) {
-                                    LIST.listAddress = response.body();
+                                    if(response.body()!=null){
+                                        LIST.listAddress = response.body();
+                                    }
                                     gotoSettings();
                                 }
                             }

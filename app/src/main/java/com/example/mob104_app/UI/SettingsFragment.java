@@ -3,6 +3,7 @@ package com.example.mob104_app.UI;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -236,17 +238,27 @@ public class SettingsFragment extends Fragment {
     private void logout() {
 
         btn_logout.setOnClickListener(v -> {
-            TOOLS.clearUser(getContext());
-            TOOLS.clearDefaulAddress(getContext());
-            LIST.listFavourite.clear();
-            LIST.getListProductByFavourite.clear();
-            ACCOUNT.user = null;
-            ADDRESS.province = null;
-            ADDRESS.district = null;
-            ADDRESS.ward = null;
-            LIST.listFavourite.clear();
-            LIST.listAddress.clear();
-            gotoActivity(LoginActivity.class);
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setTitle("Xác nhận đăng xuất");
+            builder.setPositiveButton("Đăng xuất", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    TOOLS.clearUser(getContext());
+                    TOOLS.clearDefaulAddress(getContext());
+                    LIST.listFavourite.clear();
+                    LIST.getListProductByFavourite.clear();
+                    ACCOUNT.user = null;
+                    ADDRESS.province = null;
+                    ADDRESS.district = null;
+                    ADDRESS.ward = null;
+                    LIST.listFavourite.clear();
+                    LIST.listAddress.clear();
+                    gotoActivity(LoginActivity.class);
+                }
+            });
+            builder.setNegativeButton("Hủy", null);
+            builder.create().show();
+
         });
     }
 

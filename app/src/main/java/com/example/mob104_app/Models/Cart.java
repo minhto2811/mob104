@@ -1,6 +1,8 @@
 package com.example.mob104_app.Models;
 
-public class Cart {
+import java.io.Serializable;
+
+public class Cart implements Serializable {
     private String _id;
     private String id_user;
     private String id_product;
@@ -10,8 +12,10 @@ public class Cart {
     private Integer quantity;
     private Integer sale_product;
 
+
     public Cart() {
     }
+
 
     public Cart(String _id, String id_user, String id_product, String name_product, Integer price_product, String image, Integer quantity, Integer sale_product) {
         this._id = _id;
@@ -23,6 +27,15 @@ public class Cart {
         this.quantity = quantity;
         this.sale_product = sale_product;
     }
+
+    public Integer getSale_product() {
+        return sale_product;
+    }
+
+    public void setSale_product(Integer sale_product) {
+        this.sale_product = sale_product;
+    }
+
 
 
     public String getImage() {

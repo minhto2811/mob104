@@ -78,4 +78,7 @@ dependencies {
 
     //fbutton
     implementation 'com.github.clans:fab:1.6.4'
+
+    //swipe delete
+    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
 }

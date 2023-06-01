@@ -1,6 +1,5 @@
 package com.example.mob104_app.Activities;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -81,12 +80,15 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private RecyclerView rcv_product_related;
 
+    private Dialog dialog1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
         mapping();
+        createDialog();
         back();
         showDetailProduct();
         sale();
@@ -97,23 +99,18 @@ public class ProductDetailActivity extends AppCompatActivity {
         gotoCart();
     }
 
+    private void createDialog() {
+        dialog1 = TOOLS.createDialog(ProductDetailActivity.this);
+    }
+
     private void gotoCart() {
         imv_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ProductDetailActivity.this);
-                builder.setTitle("Chuyển tới giỏ hàng?");
-                builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(ProductDetailActivity.this, MainActivity.class);
-                        intent.putExtra("cart", 1);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
-                    }
-                });
-                builder.setNegativeButton("Hủy", null);
-                builder.create().show();
+                Intent intent = new Intent(ProductDetailActivity.this, MainActivity.class);
+                intent.putExtra("cart", 1);
+                startActivity(intent);
+                overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
             }
         });
     }
@@ -172,11 +169,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                 btn_add_add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Dialog dialog1 = new Dialog(ProductDetailActivity.this,R.style.AppBottomSheetDialogTheme);
-                        @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.layout_watting, null);
-                        Glide.with(ProductDetailActivity.this).asGif().load(R.drawable.spin).into((ImageView) view.findViewById(R.id.imv_watting));
-                        dialog1.setContentView(view);
-                        dialog1.setCancelable(false);
                         dialog1.show();
                         Cart cart = new Cart();
                         cart.setId_user(ACCOUNT.user.get_id());
@@ -187,8 +179,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                             public void onResponse(Call<Cart> call, Response<Cart> response) {
                                 if (response.isSuccessful()) {
                                     Toast.makeText(ProductDetailActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
-                                    dialog1.cancel();
-                                    dialog.cancel();
+                                    dialog1.hide();
                                 }
                                 dialog.cancel();
                             }
@@ -196,7 +187,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(Call<Cart> call, Throwable t) {
                                 Toast.makeText(ProductDetailActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
-                                dialog1.cancel();
+                                dialog1.hide();
                             }
                         });
                     }
@@ -250,6 +241,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     showDialogLogin();
                 } else {
                     if (!checkFavourite(product.getId())) {
+                        dialog1.show();
                         JSONObject postData = new JSONObject();
                         try {
                             postData.put("id_product", product.getId());
@@ -267,6 +259,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                     imv_favourite.setImageResource(R.drawable.mark);
 
                                 }
+                                dialog1.hide();
                             }
 
                             @Override
@@ -276,6 +269,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                         });
                     } else {
                         Toast.makeText(ProductDetailActivity.this, "Sản phẩm đã được thêm vào mục yêu thích", Toast.LENGTH_SHORT).show();
+                        dialog1.hide();
                     }
                 }
             }
@@ -387,7 +381,15 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void showDetailProduct() {
         product = (Product) getIntent().getSerializableExtra("product");
-        Log.e("showDetailProduct: ", product.toString());
+        if (product == null) {
+            String id_product = getIntent().getStringExtra("id_product");
+            for (int i = 0; i < LIST.listProduct.size(); i++) {
+                if (LIST.listProduct.get(i).getId().equals(id_product)) {
+                    product = LIST.listProduct.get(i);
+                    break;
+                }
+            }
+        }
         listImage = product.getImage();
         imageAdapter.setData(listImage);
         tv_name.setText(product.getName());
@@ -406,13 +408,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         tv_category.setText(": " + product.getCategory());
         tv_status.setText(": " + product.getStatus());
         if (product.getSale() > 0) {
-            String text = ": " + TOOLS.convertPrice(product.getPrice()) + "VND";
+            String text = ": " + TOOLS.convertPrice(product.getPrice());
             SpannableString spannableString = new SpannableString(text);
             spannableString.setSpan(new StrikethroughSpan(), 1, text.length(), 0);
             spannableString.setSpan(new ForegroundColorSpan(Color.RED), 1, text.length(), 0);
             tv_price.setText(spannableString);
             price_new = product.getPrice() - product.getPrice() * product.getSale() / 100;
-            tv_price_new_detail.setText(": " + TOOLS.convertPrice(price_new) + "VND");
+            tv_price_new_detail.setText(": " + TOOLS.convertPrice(price_new));
             tv_text_price_splashsale.setVisibility(View.VISIBLE);
             tv_text_price.setText("Giá bán cũ");
         } else {
@@ -465,5 +467,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         super.onBackPressed();
         finish();
         overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dialog1 != null && dialog1.isShowing()) {
+            dialog1.dismiss();
+        }
     }
 }

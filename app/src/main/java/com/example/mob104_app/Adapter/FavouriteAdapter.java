@@ -3,6 +3,7 @@ package com.example.mob104_app.Adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -71,7 +72,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
             Glide.with(context).load(TOOLS.doMainDevice + product.getImage().get(0)).into(holder.imv_image_favourite);
             holder.tv_name_favourite.setText(product.getName());
             holder.tv_status_favourite.setText(product.getStatus());
-            holder.tv_price_favourite.setText(TOOLS.convertPrice(product.getPrice() - product.getPrice() * product.getSale() / 100) + "VND");
+            holder.tv_price_favourite.setText(TOOLS.convertPrice(product.getPrice() - product.getPrice() * product.getSale() / 100));
             holder.ln_favourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -81,7 +82,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
                     ((Activity) context).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
                 }
             });
-            holder.imv_bin_favourite.setOnClickListener(new View.OnClickListener() {
+            holder.ln_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -89,6 +90,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
                     builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            Dialog dialog1 = TOOLS.createDialog(context);
+                            dialog1.show();
                             JSONObject postData = new JSONObject();
                             try {
                                 postData.put("id_product", product.getId());
@@ -102,15 +105,17 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
                                 public void onResponse(Call<Favourite> call, Response<Favourite> response) {
                                     if (response.isSuccessful()) {
                                         LIST.listFavourite = response.body().getList_id_product();
-                                        list.remove(product);
-                                        notifyDataSetChanged();
+                                        list.remove(holder.getAdapterPosition());
+                                        notifyItemRemoved(holder.getAdapterPosition());
                                     }
+                                    dialog1.dismiss();
                                 }
 
 
                                 @Override
                                 public void onFailure(Call<Favourite> call, Throwable t) {
                                     Toast.makeText(context, "Xóa thất bại!", Toast.LENGTH_SHORT).show();
+                                    dialog1.dismiss();
                                 }
                             });
                         }
@@ -168,8 +173,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
     public class FavouriteHolder extends RecyclerView.ViewHolder {
 
         private TextView tv_name_favourite, tv_status_favourite, tv_price_favourite;
-        private ImageView imv_image_favourite, imv_bin_favourite;
-        private LinearLayout ln_favourite;
+        private ImageView imv_image_favourite;
+        private LinearLayout ln_favourite, ln_delete;
 
         public FavouriteHolder(@NonNull View itemView) {
             super(itemView);
@@ -177,7 +182,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
             tv_name_favourite = itemView.findViewById(R.id.tv_name_favourite);
             tv_status_favourite = itemView.findViewById(R.id.tv_status_favourite);
             imv_image_favourite = itemView.findViewById(R.id.imv_image_favourite);
-            imv_bin_favourite = itemView.findViewById(R.id.imv_bin_favourite);
+            ln_delete = itemView.findViewById(R.id.ln_delete);
             ln_favourite = itemView.findViewById(R.id.ln_favourite);
         }
     }
