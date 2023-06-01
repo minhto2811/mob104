@@ -30,7 +30,7 @@ public class TOOLS {
 
     public static String convertPrice(int price) {
         DecimalFormat formatter = new DecimalFormat("###,###");
-        return formatter.format(price)+"₫";
+        return formatter.format(price)+" ₫";
     }
 
     public static void saveUser(Context context, User user) {

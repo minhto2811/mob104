@@ -253,5 +253,11 @@ public class SplashActivity extends AppCompatActivity {
         alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (alertDialog != null && alertDialog.isShowing()) {
+            alertDialog.dismiss();
+        }
+    }
 }
