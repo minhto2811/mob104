@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.setCustomAnimations(R.anim.prev_enter, R.anim.prev_exit);
             }
             Fragment existingFragment = fragmentManager.findFragmentByTag(name);
-            if (existingFragment != null && ID!=CART) {
+            if (existingFragment != null && (ID!=CART || ID!=BILL)) {
                 fragmentTransaction.replace(R.id.container_content, existingFragment,name);
             } else {
                 TOOLS.checkAllCarts = false;

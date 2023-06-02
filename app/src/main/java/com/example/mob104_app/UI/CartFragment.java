@@ -19,9 +19,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mob104_app.Activities.CreateBillActivity;
+import com.example.mob104_app.Activities.LoginActivity;
 import com.example.mob104_app.Adapter.CartAdapter;
 import com.example.mob104_app.Api.ApiService;
-import com.example.mob104_app.Activities.CreateBillActivity;
 import com.example.mob104_app.Models.Bill;
 import com.example.mob104_app.Models.Cart;
 import com.example.mob104_app.R;
@@ -29,8 +30,6 @@ import com.example.mob104_app.Tools.ACCOUNT;
 import com.example.mob104_app.Tools.LIST;
 import com.example.mob104_app.Tools.TOOLS;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,12 +53,12 @@ public class CartFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private CartAdapter adapter;
-    private LinearLayout ln_speed;
+    private LinearLayout ln_speed, ln_check_cart;
     private static TextView tv_check_all, tv_price_pay;
     private static CheckBox cbox_check_all;
 
     private static LinearLayout ln_pay;
-    private Button btn_pay;
+    private Button btn_pay, btn_login_cart;
     private static int price_pay;
     private List<Cart> cartList;
 
@@ -67,9 +66,26 @@ public class CartFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mapping(view);
+        if (ACCOUNT.user == null) {
+            login();
+            ln_check_cart.setVisibility(View.VISIBLE);
+            return;
+        }
         showCarts();
         checkAll();
         pay();
+    }
+
+    private void login() {
+        btn_login_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireContext(), LoginActivity.class);
+                startActivity(intent);
+                requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+                requireActivity().finish();
+            }
+        });
     }
 
     private void pay() {
@@ -77,10 +93,6 @@ public class CartFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bill bill = new Bill();
-                Calendar calendar = Calendar.getInstance();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                String formattedDate = dateFormat.format(calendar.getTime());
-                bill.setDate(formattedDate);
                 bill.setStatus(0);
                 bill.setId_user(ACCOUNT.user.get_id());
                 bill.setTotal(price_pay);
@@ -155,6 +167,8 @@ public class CartFragment extends Fragment {
     }
 
     private void mapping(View view) {
+        ln_check_cart = view.findViewById(R.id.ln_check_cart);
+        btn_login_cart = view.findViewById(R.id.btn_login_cart);
         btn_pay = view.findViewById(R.id.btn_pay);
         tv_price_pay = view.findViewById(R.id.tv_price_pay);
         ln_pay = view.findViewById(R.id.ln_pay);

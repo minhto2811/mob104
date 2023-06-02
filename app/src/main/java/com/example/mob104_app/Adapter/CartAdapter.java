@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,12 +80,14 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder1, int position) {
         Cart cart = list.get(position);
         if (cart != null) {
+            int lastPrice = cart.getPrice_product()*(100-cart.getSale())/100;
+            Log.e( "onBindViewHolder: ",lastPrice+"" );
             if (holder1 instanceof CartHolderView) {
                 CartHolderView holder = (CartHolderView) holder1;
 
                 Glide.with(context).load(TOOLS.doMainDevice + cart.getImage()).into(holder.imv_image);
                 holder.tv_name.setText(cart.getName_product());
-                holder.tv_price.setText("Tổng tiền: " + TOOLS.convertPrice(cart.getQuantity() * cart.getPrice_product()) );
+                holder.tv_price.setText("Tổng tiền: " + TOOLS.convertPrice(cart.getQuantity() * lastPrice) );
                 holder.tv_quantity.setText(String.valueOf(cart.getQuantity()));
                 holder.cbox_add.setChecked(TOOLS.checkAllCarts);
                 if (TOOLS.checkAllCarts) {
@@ -142,7 +145,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         }
                         cart.setQuantity(cart.getQuantity() - 1);
                         holder.tv_quantity.setText(String.valueOf(cart.getQuantity()));
-                        holder.tv_price.setText("Tổng tiền: " + TOOLS.convertPrice(cart.getQuantity() * cart.getPrice_product()));
+                        holder.tv_price.setText("Tổng tiền: " + TOOLS.convertPrice(cart.getQuantity() * lastPrice));
                         CartFragment.showLayoutPay(LIST.listBuyCart);
                     }
                 });
@@ -151,7 +154,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     public void onClick(View v) {
                         cart.setQuantity(cart.getQuantity() + 1);
                         holder.tv_quantity.setText(String.valueOf(cart.getQuantity()));
-                        holder.tv_price.setText("Tổng tiền: " + TOOLS.convertPrice(cart.getQuantity() * cart.getPrice_product()));
+                        holder.tv_price.setText("Tổng tiền: " + TOOLS.convertPrice(cart.getQuantity() * lastPrice));
                         CartFragment.showLayoutPay(LIST.listBuyCart);
                     }
                 });
@@ -165,7 +168,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 CartHolderView1 holder = (CartHolderView1) holder1;
                 Glide.with(context).load(TOOLS.doMainDevice + cart.getImage()).into(holder.imv_image);
                 holder.tv_name.setText(cart.getName_product());
-                holder.tv_price.setText("Đơn giá: "+TOOLS.convertPrice(cart.getPrice_product()));
+                holder.tv_price.setText("Đơn giá: "+TOOLS.convertPrice(lastPrice));
                 holder.tv_quantity.setText("Số Lượng: "+cart.getQuantity());
             }
         }

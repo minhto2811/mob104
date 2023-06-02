@@ -2,6 +2,7 @@ package com.example.mob104_app.Tools;
 
 import com.example.mob104_app.Models.Address;
 import com.example.mob104_app.Models.Banner;
+import com.example.mob104_app.Models.Bill;
 import com.example.mob104_app.Models.Cart;
 import com.example.mob104_app.Models.Category;
 import com.example.mob104_app.Models.MethodPayment;
@@ -20,9 +21,9 @@ public class LIST {
     public static List<Product> listProductByBanner = new ArrayList<>();
     public static List<Product> listProductByCategory = new ArrayList<>();
 
-    public static List<String> listFavourite = new ArrayList<>();
 
     public static List<Product> getListProductByFavourite = new ArrayList<>();
+    public static List<Product> listRecently = new ArrayList<>();
     public static List<Address> listAddress = new ArrayList<>();
     public static List<Cart> listBuyCart = new ArrayList<>();
 
@@ -39,6 +40,18 @@ public class LIST {
         list.add(new MethodPayment("Thanh toán tiền mặt khi nhận hàng", true));
         list.add(new MethodPayment("Thanh toán bằng ví điện tử", false));
         list.add(new MethodPayment("Thanh toán bằng thẻ ngân hàng", false));
+        return list;
+    }
+
+    public static List<Bill> listBill = new ArrayList<>();
+
+    public static List<Bill> getListBillByStatus(int status) {
+        List<Bill> list = new ArrayList<>();
+        for (int i = 0; i < listBill.size(); i++) {
+            if (listBill.get(i).getStatus() == status) {
+                list.add(listBill.get(i));
+            }
+        }
 
         return list;
     }

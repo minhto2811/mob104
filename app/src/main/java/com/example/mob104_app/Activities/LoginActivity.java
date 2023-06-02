@@ -23,9 +23,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.Models.Address;
+import com.example.mob104_app.Models.Product;
 import com.example.mob104_app.Models.User;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.ACCOUNT;
@@ -144,20 +144,20 @@ public class LoginActivity extends AppCompatActivity {
                     if (user1 != null) {
                         TOOLS.saveUser(LoginActivity.this, user1);
                         ACCOUNT.user = user1;
-                        ApiService.apiService.getListFavourite(user1.get_id()).enqueue(new Callback<List<String>>() {
+                        ApiService.apiService.getListProductByFavourite(user1.get_id()).enqueue(new Callback<List<Product>>() {
                             @Override
-                            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                                 if (response.isSuccessful()) {
                                     if(response.body()!=null){
-                                        LIST.listFavourite = response.body();
+                                        LIST.getListProductByFavourite = response.body();
                                     }
                                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                    gotoSettings();
                                 }
+                                gotoSettings();
                             }
 
                             @Override
-                            public void onFailure(Call<List<String>> call, Throwable t) {
+                            public void onFailure(Call<List<Product>> call, Throwable t) {
                                 gotoSettings();
                             }
                         });
@@ -168,8 +168,8 @@ public class LoginActivity extends AppCompatActivity {
                                     if(response.body()!=null){
                                         LIST.listAddress = response.body();
                                     }
-                                    gotoSettings();
                                 }
+                                gotoSettings();
                             }
 
                             @Override
@@ -177,6 +177,24 @@ public class LoginActivity extends AppCompatActivity {
                                 gotoSettings();
                             }
                         });
+
+                        ApiService.apiService.getRecently(ACCOUNT.user.get_id()).enqueue(new Callback<List<Product>>() {
+                            @Override
+                            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                                if (response.isSuccessful()) {
+                                    if (response.body() != null) {
+                                        LIST.listRecently = response.body();
+                                    }
+                                }
+                                gotoSettings();
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<Product>> call, Throwable t) {
+                                gotoSettings();
+                            }
+                        });
+
                     } else {
                         Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác!", Toast.LENGTH_SHORT).show();
                     }
@@ -194,7 +212,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void gotoSettings() {
         check++;
-        if (check < 2) {
+        if (check < 3) {
             return;
         }
         finish();

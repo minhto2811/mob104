@@ -57,9 +57,7 @@
                 <TextView
                     android:id="@+id/tv_tilte_address"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:gravity="bottom"
-                    android:paddingTop="3dp"
+                    android:layout_height="wrap_content"
                     android:text="Địa chỉ nhận hàng"
                     android:textColor="@color/black"
                     android:textSize="20sp" />

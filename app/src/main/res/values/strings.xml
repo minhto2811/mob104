@@ -9,6 +9,8 @@
     <string name="title_settings">Thiết lập</string>
     <string name="title_mess">Liên hệ</string>
     <string name="title_notify">Thông báo</string>
+    <string name="title_ex_bill">Chi tiết hóa đơn</string>
+    <string name="title_bill_1">Đơn mua</string>
     <string name="title_method_shipping">Phương thức vận chuyển</string>
     <string name="title_method_payment">Hình thức thanh toán</string>
     <string name="title_buy">Đặt hàng</string>
@@ -48,4 +50,6 @@
     <string name="review">Đánh giá của bạn</string>
     <string name="tv_gui">Gửi</string>
     <string name="tv_vietreview">Viết nhận xét ...</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

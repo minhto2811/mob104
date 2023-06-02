@@ -198,6 +198,8 @@ public class CreateBillActivity extends AppCompatActivity {
     private void showAddress() {
         address = ADDRESS.aDefault(CreateBillActivity.this);
         if (address != null) {
+            bill.setName(address.getFullname());
+            bill.setPhone(address.getNumberphone());
             bill.setAddress(address.getAddress() + ", " + address.getWards() + ", " + address.getDistrict() + ", " + address.getProvince() + ".");
             tv_name.setText(address.getFullname());
             tv_numberphone.setText(address.getNumberphone());

@@ -82,8 +82,7 @@ public interface ApiService {
     @POST("favourites/add/{id_user}")
     Call<Favourite> addToFavourite(@Path("id_user") String id_user, @Body RequestBody id_product);
 
-    @GET("favourites/{id_user}")
-    Call<List<String>> getListFavourite(@Path("id_user") String id_user);
+
 
     @GET("favourites/product/{id_user}")
     Call<List<Product>> getListProductByFavourite(@Path("id_user") String id_user);
@@ -124,5 +123,14 @@ public interface ApiService {
     @POST("bill/add")
     Call<Bill> createBill(@Body Bill bill);
 
+    @GET("bill/{id_user}")
+    Call<List<Bill>> getBill(@Path("id_user") String id_user);
+    @POST("recently/add/{id_user}")
+    Call<Integer> addRecently(@Path("id_user") String id_user, @Body RequestBody requestBody);
 
+    @GET("recently/{id_user}")
+    Call<List<Product>> getRecently(@Path("id_user") String id_user);
+
+    @POST("recently/delete/{id_user}")
+    Call<Integer> deleteRecently(@Path("id_user") String id_user, @Body RequestBody requestBody);
 }
