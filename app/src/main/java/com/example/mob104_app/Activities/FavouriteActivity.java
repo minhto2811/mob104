@@ -54,7 +54,7 @@ public class FavouriteActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
-        adapter = new FavouriteAdapter(this);
+        adapter = new FavouriteAdapter(this,true);
         recyclerView.setAdapter(adapter);
         getListProduct();
     }

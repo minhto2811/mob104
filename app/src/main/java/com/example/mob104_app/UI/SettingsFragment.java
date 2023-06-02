@@ -245,14 +245,13 @@ public class SettingsFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     TOOLS.clearUser(getContext());
                     TOOLS.clearDefaulAddress(getContext());
-                    LIST.listFavourite.clear();
                     LIST.getListProductByFavourite.clear();
                     ACCOUNT.user = null;
                     ADDRESS.province = null;
                     ADDRESS.district = null;
                     ADDRESS.ward = null;
-                    LIST.listFavourite.clear();
                     LIST.listAddress.clear();
+                    LIST.listRecently.clear();
                     gotoActivity(LoginActivity.class);
                 }
             });

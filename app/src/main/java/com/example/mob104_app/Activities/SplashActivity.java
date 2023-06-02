@@ -20,7 +20,6 @@ import com.bumptech.glide.Glide;
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.Models.Address;
 import com.example.mob104_app.Models.Banner;
-import com.example.mob104_app.Models.Cart;
 import com.example.mob104_app.Models.Category;
 import com.example.mob104_app.Models.Product;
 import com.example.mob104_app.R;
@@ -54,14 +53,41 @@ public class SplashActivity extends AppCompatActivity {
         Glide.with(this).asGif().load(R.drawable.spin).into(imv_splash);
         Glide.with(this).asGif().load(R.drawable.splash).into((ImageView) findViewById(R.id.bg_splash));
         //load data
+        getUser();
         getAllBanner();
         getAllCategory();
         getAllProduct();
         getFavourite();
-        getUser();
         getAddress();
+        getRecently();
     }
 
+    private void getRecently() {
+        if (TOOLS.getUser(this) != null) {
+            ApiService.apiService.getRecently(ACCOUNT.user.get_id()).enqueue(new Callback<List<Product>>() {
+                @Override
+                public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        LIST.listRecently = response.body();
+                    }
+                    gotoMainActivity();
+                }
+
+                @Override
+                public void onFailure(Call<List<Product>> call, Throwable t) {
+                    if (!isLoadingData) {
+                        return;
+                    }
+                    index_error++;
+                    if (index_error < 6) {
+                        getAddress();
+                    } else {
+                        ErrorLoadingData();
+                    }
+                }
+            });
+        }
+    }
 
 
     public void getAddress() {
@@ -70,7 +96,7 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
                     if (response.isSuccessful()) {
-                        if(response.body()!=null){
+                        if (response.body() != null) {
                             LIST.listAddress = response.body();
                         }
                         gotoMainActivity();
@@ -96,19 +122,19 @@ public class SplashActivity extends AppCompatActivity {
     private void getFavourite() {
         Log.e("getFavourite: ", "");
         if (TOOLS.getUser(this) != null) {
-            ApiService.apiService.getListFavourite(TOOLS.getUser(this).get_id()).enqueue(new Callback<List<String>>() {
+            ApiService.apiService.getListProductByFavourite(TOOLS.getUser(this).get_id()).enqueue(new Callback<List<Product>>() {
                 @Override
-                public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                     if (response.isSuccessful()) {
                         if(response.body()!=null){
-                            LIST.listFavourite = response.body();
+                            LIST.getListProductByFavourite = response.body();
                         }
                         gotoMainActivity();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<List<String>> call, Throwable t) {
+                public void onFailure(Call<List<Product>> call, Throwable t) {
                     if (!isLoadingData) {
                         return;
                     }
@@ -132,7 +158,7 @@ public class SplashActivity extends AppCompatActivity {
         ApiService.apiService.getAllCategory().enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(@NonNull Call<List<Category>> call, @NonNull Response<List<Category>> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null) {
                     LIST.listCategory = response.body();
                     gotoMainActivity();
                 }
@@ -157,7 +183,7 @@ public class SplashActivity extends AppCompatActivity {
         ApiService.apiService.getAllProduct().enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(@NonNull Call<List<Product>> call, @NonNull Response<List<Product>> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null) {
                     Collections.sort(response.body(), new Comparator<Product>() {
                         @Override
                         public int compare(Product o1, Product o2) {
@@ -188,7 +214,7 @@ public class SplashActivity extends AppCompatActivity {
         ApiService.apiService.getAllBanner().enqueue(new Callback<List<Banner>>() {
             @Override
             public void onResponse(@NonNull Call<List<Banner>> call, @NonNull Response<List<Banner>> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null) {
                     LIST.listBanner = response.body();
                     gotoMainActivity();
                 }
@@ -212,7 +238,7 @@ public class SplashActivity extends AppCompatActivity {
     private void gotoMainActivity() {
         index_watting++;
         if (TOOLS.getUser(SplashActivity.this) != null) {
-            index_max = 4;
+            index_max = 5;
         }else {
             index_max = 3;
         }

@@ -2,10 +2,8 @@ package com.example.mob104_app.Adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +25,6 @@ import com.example.mob104_app.Models.Favourite;
 import com.example.mob104_app.Models.Product;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.ACCOUNT;
-import com.example.mob104_app.Tools.LIST;
 import com.example.mob104_app.Tools.TOOLS;
 
 import org.json.JSONException;
@@ -48,8 +45,11 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
     private List<Product> list;
     private List<Product> listNew;
 
-    public FavouriteAdapter(Context context) {
+    private boolean isFav;
+
+    public FavouriteAdapter(Context context, boolean isFav) {
         this.context = context;
+        this.isFav = isFav;
     }
 
     public void setData(List<Product> list) {
@@ -85,50 +85,56 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
             holder.ln_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("Xóa sản phẩm \"" + product.getName() + "\" khỏi mục yêu thích?");
-                    builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Dialog dialog1 = TOOLS.createDialog(context);
-                            dialog1.show();
-                            JSONObject postData = new JSONObject();
-                            try {
-                                postData.put("id_product", product.getId());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            String jsonString = postData.toString();
-                            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
-                            ApiService.apiService.delToFavourite(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Favourite>() {
-                                @Override
-                                public void onResponse(Call<Favourite> call, Response<Favourite> response) {
-                                    if (response.isSuccessful()) {
-                                        LIST.listFavourite = response.body().getList_id_product();
+                    Dialog dialog1 = TOOLS.createDialog(context);
+                    dialog1.show();
+                    JSONObject postData = new JSONObject();
+                    try {
+                        postData.put("id_product", product.getId());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    String jsonString = postData.toString();
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
+                    if (!isFav) {
+
+                        ApiService.apiService.deleteRecently(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Integer>() {
+                            @Override
+                            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    if (response.body() == 1) {
                                         list.remove(holder.getAdapterPosition());
                                         notifyItemRemoved(holder.getAdapterPosition());
                                     }
-                                    dialog1.dismiss();
                                 }
+                                dialog1.dismiss();
+                            }
 
+                            @Override
+                            public void onFailure(Call<Integer> call, Throwable t) {
+                                dialog1.dismiss();
+                            }
+                        });
 
-                                @Override
-                                public void onFailure(Call<Favourite> call, Throwable t) {
-                                    Toast.makeText(context, "Xóa thất bại!", Toast.LENGTH_SHORT).show();
-                                    dialog1.dismiss();
+                    } else {
+                        ApiService.apiService.delToFavourite(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Favourite>() {
+                            @Override
+                            public void onResponse(Call<Favourite> call, Response<Favourite> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    list.remove(holder.getAdapterPosition());
+                                    notifyItemRemoved(holder.getAdapterPosition());
                                 }
-                            });
-                        }
-                    });
-                    builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                                dialog1.dismiss();
+                            }
 
-                        }
-                    });
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
 
+                            @Override
+                            public void onFailure(Call<Favourite> call, Throwable t) {
+                                Toast.makeText(context, "Xóa thất bại!", Toast.LENGTH_SHORT).show();
+                                dialog1.dismiss();
+                            }
+                        });
+
+                    }
                 }
             });
         }

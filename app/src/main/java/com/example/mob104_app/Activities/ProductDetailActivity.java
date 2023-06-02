@@ -97,6 +97,35 @@ public class ProductDetailActivity extends AppCompatActivity {
         buyNow();
         addToCart();
         gotoCart();
+        addRecently();
+    }
+
+    private void addRecently() {
+        if (ACCOUNT.user != null) {
+            JSONObject postData = new JSONObject();
+            try {
+                postData.put("id_product", product.getId());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String jsonString = postData.toString();
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
+            ApiService.apiService.addRecently(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Integer>() {
+                @Override
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body() == 1) {
+                            LIST.listRecently.add(product);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Integer> call, Throwable t) {
+
+                }
+            });
+        }
     }
 
     private void createDialog() {
@@ -254,7 +283,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<Favourite> call, Response<Favourite> response) {
                                 if (response.isSuccessful()) {
-                                    LIST.listFavourite.add(product.getId());
                                     LIST.getListProductByFavourite.add(product);
                                     imv_favourite.setImageResource(R.drawable.mark);
 
@@ -279,8 +307,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private boolean checkFavourite(String id) {
         boolean rs = false;
-        for (int i = 0; i < LIST.listFavourite.size(); i++) {
-            if (LIST.listFavourite.get(i).equals(id)) {
+        for (int i = 0; i < LIST.getListProductByFavourite.size(); i++) {
+            if (LIST.getListProductByFavourite.get(i).getId().equals(id)) {
                 rs = true;
                 break;
             }
