@@ -87,6 +87,7 @@ public class CreateBillActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (bill.getAddress() == null) {
                     Toast.makeText(CreateBillActivity.this, "Vui lòng chọn địa chỉ", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 Dialog dialog = TOOLS.createDialog(CreateBillActivity.this);
                 dialog.show();
