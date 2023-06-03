@@ -1,12 +1,18 @@
 package com.example.mob104_app.Activities;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -86,11 +92,27 @@ public class ExportBillActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
+        } else if (item.getItemId() == R.id.cancel_bill) {
+            Intent intent = new Intent(ExportBillActivity.this,CancelOrderActivity.class);
+            intent.putExtra("id_bill",bill.get_id());
+            startActivity(intent);
+            overridePendingTransition(R.anim.next_enter,R.anim.next_exit);
         }
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(bill.getStatus()==0) {
+            getMenuInflater().inflate(R.menu.menu_cancel_bill, menu);
+            MenuItem item = menu.getItem(0);
+            String name = item.toString();
+            SpannableString spannableString = new SpannableString(name);
+            spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, name.length(), 0);
+            item.setTitle(spannableString);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
 
     @Override
     public void onBackPressed() {

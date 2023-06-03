@@ -81,6 +81,8 @@ public class CreateBillActivity extends AppCompatActivity {
         buy();
     }
 
+
+
     private void buy() {
         btn_confirm_buy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -264,6 +266,8 @@ public class CreateBillActivity extends AppCompatActivity {
         if (requestCode == REQUESR_ADDRESS_CHOOSE) {
             if (resultCode == RESULT_OK) {
                 address = (Address) data.getSerializableExtra("address");
+                bill.setName(address.getFullname());
+                bill.setPhone(address.getNumberphone());
                 bill.setAddress(address.getAddress() + ", " + address.getWards() + ", " + address.getDistrict() + ", " + address.getProvince() + ".");
                 tv_name.setText(address.getFullname());
                 tv_numberphone.setText(address.getNumberphone());
