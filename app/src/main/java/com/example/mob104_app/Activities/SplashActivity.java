@@ -79,7 +79,7 @@ public class SplashActivity extends AppCompatActivity {
                         return;
                     }
                     index_error++;
-                    if (index_error < 6) {
+                    if (index_error < 10) {
                         getAddress();
                     } else {
                         ErrorLoadingData();
@@ -109,7 +109,7 @@ public class SplashActivity extends AppCompatActivity {
                         return;
                     }
                     index_error++;
-                    if (index_error < 6) {
+                    if (index_error < 10) {
                         getAddress();
                     } else {
                         ErrorLoadingData();
@@ -139,7 +139,7 @@ public class SplashActivity extends AppCompatActivity {
                         return;
                     }
                     index_error++;
-                    if (index_error < 6) {
+                    if (index_error < 10) {
                         getFavourite();
                     } else {
                         ErrorLoadingData();
@@ -170,7 +170,7 @@ public class SplashActivity extends AppCompatActivity {
                     return;
                 }
                 index_error++;
-                if (index_error < 6) {
+                if (index_error < 10) {
                     getAllCategory();
                 } else {
                     ErrorLoadingData();
@@ -201,7 +201,7 @@ public class SplashActivity extends AppCompatActivity {
                     return;
                 }
                 index_error++;
-                if (index_error < 6) {
+                if (index_error < 10) {
                     getAllProduct();
                 } else {
                     ErrorLoadingData();
@@ -226,7 +226,7 @@ public class SplashActivity extends AppCompatActivity {
                     return;
                 }
                 index_error++;
-                if (index_error < 6) {
+                if (index_error < 10) {
                     getAllBanner();
                 } else {
                     ErrorLoadingData();
