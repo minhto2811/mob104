@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,6 +20,7 @@
         android:layout_marginTop="5dp"
         android:textSize="17sp" />
 
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_back"
         android:layout_marginHorizontal="50dp"
@@ -26,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="Trở về trang chủ"
-        android:visibility="gone" />
+        android:textColor="@color/white"
+        android:visibility="visible" />
 
 </LinearLayout>

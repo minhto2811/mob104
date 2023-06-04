@@ -98,9 +98,9 @@ public class CreateBillActivity extends AppCompatActivity {
                     public void onResponse(Call<Bill> call, Response<Bill> response) {
                         dialog.dismiss();
                         if (response.isSuccessful()) {
-                            boolean rs = false;
+                            int rs = -1;
                             if (response.body() != null) {
-                                rs = true;
+                                rs = 0;
                             }
                             Intent intent = new Intent(CreateBillActivity.this, ResultActivity.class);
                             intent.putExtra("result",rs);

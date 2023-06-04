@@ -45,7 +45,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
                 s = "Chờ xác nhận";
                 break;
             case 1:
-                s = "Chờ lấy hàng";
+                s = "Chuẩn bị hàng";
                 break;
             case 2:
                 s = "Đang giao hàng";
