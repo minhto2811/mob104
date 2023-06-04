@@ -52,6 +52,7 @@ public class BillActivity extends AppCompatActivity {
         if (status > -1) {
             viewPager.setCurrentItem(status);
         }
+        viewPager.setOffscreenPageLimit(3);
     }
 
     private void setToolbar() {

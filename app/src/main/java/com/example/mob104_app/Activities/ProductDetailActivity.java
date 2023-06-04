@@ -117,7 +117,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 public void onResponse(Call<Integer> call, Response<Integer> response) {
                     if (response.isSuccessful()) {
                         if (response.body() == 1) {
-                            LIST.listRecently.add(product);
+                            LIST.listRecently.add(0,product);
                         }
                     }
                 }

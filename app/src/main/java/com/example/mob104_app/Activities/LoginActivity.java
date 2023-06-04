@@ -36,6 +36,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collections;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -183,6 +184,7 @@ public class LoginActivity extends AppCompatActivity {
                             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                                 if (response.isSuccessful()) {
                                     if (response.body() != null) {
+                                        Collections.reverse(response.body());
                                         LIST.listRecently = response.body();
                                     }
                                 }

@@ -68,6 +68,7 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                     if (response.isSuccessful() && response.body() != null) {
+                       Collections.reverse(response.body());
                         LIST.listRecently = response.body();
                     }
                     gotoMainActivity();

@@ -37,15 +37,29 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     private void show() {
-        boolean choose = getIntent().getBooleanExtra("result", false);
-        if (choose) {
-            imv_image.setImageResource(R.drawable.successful);
-            tv_result.setText("Đặt hàng thành công");
-            btn_back.setBackgroundResource(R.color.green);
-        } else {
-            imv_image.setImageResource(R.drawable.fail);
-            tv_result.setText("Đặt hàng thất bại");
-            btn_back.setBackgroundResource(R.color.red);
+        int choose = getIntent().getIntExtra("result", -1);
+        switch (choose) {
+            case -1:
+                imv_image.setImageResource(R.drawable.fail);
+                tv_result.setText("Đặt hàng thất bại");
+                btn_back.setBackgroundResource(R.color.red);
+                break;
+            case 0:
+                imv_image.setImageResource(R.drawable.successful);
+                tv_result.setText("Đặt hàng thành công");
+                btn_back.setBackgroundResource(R.color.green);
+                break;
+            case 4:
+                imv_image.setImageResource(R.drawable.successful);
+                tv_result.setText("Hủy đơn thành công");
+                btn_back.setBackgroundResource(R.color.green);
+                break;
+            case 5:
+                imv_image.setImageResource(R.drawable.fail);
+                tv_result.setText("Hủy đơn thất bại");
+                btn_back.setBackgroundResource(R.color.red);
+                break;
+            default:break;
         }
         new Handler().postDelayed(new Runnable() {
             @Override
