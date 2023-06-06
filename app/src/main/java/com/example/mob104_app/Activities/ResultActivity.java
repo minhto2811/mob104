@@ -28,6 +28,12 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     private void back() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                btn_back.setVisibility(View.VISIBLE);
+            }
+        }, 2000);
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,12 +67,6 @@ public class ResultActivity extends AppCompatActivity {
                 break;
             default:break;
         }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                btn_back.setVisibility(View.VISIBLE);
-            }
-        }, 2000);
     }
 
     private void mapping() {
