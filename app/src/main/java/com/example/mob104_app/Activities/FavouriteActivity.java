@@ -64,7 +64,7 @@ public class FavouriteActivity extends AppCompatActivity {
             ApiService.apiService.getListProductByFavourite(ACCOUNT.user.get_id()).enqueue(new Callback<List<Product>>() {
                 @Override
                 public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                    if (response.isSuccessful()) {
+                    if (response.isSuccessful()&& response.body()!=null) {
                         Collections.sort(response.body(), new Comparator<Product>() {
                             @Override
                             public int compare(Product o1, Product o2) {

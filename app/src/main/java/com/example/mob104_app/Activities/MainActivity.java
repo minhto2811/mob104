@@ -22,7 +22,6 @@ import com.example.mob104_app.Tools.TOOLS;
 import com.example.mob104_app.UI.BillFragment;
 import com.example.mob104_app.UI.CartFragment;
 import com.example.mob104_app.UI.HomeFragment;
-import com.example.mob104_app.UI.MessageFragment;
 import com.example.mob104_app.UI.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,10 +42,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
          bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.show(HOME, true);
+        bottomNavigationView.add(new MeowBottomNavigation.Model(3, R.drawable.widgets));
         bottomNavigationView.add(new MeowBottomNavigation.Model(1, R.drawable.shopping_cart));
         bottomNavigationView.add(new MeowBottomNavigation.Model(2, R.drawable.local_shipping));
-        bottomNavigationView.add(new MeowBottomNavigation.Model(3, R.drawable.widgets));
-        bottomNavigationView.add(new MeowBottomNavigation.Model(4, R.drawable.chat));
         bottomNavigationView.add(new MeowBottomNavigation.Model(5, R.drawable.settings));
 
         bottomNavigationView.setOnClickMenuListener(model -> {
@@ -64,9 +62,6 @@ public class MainActivity extends AppCompatActivity {
 
                     break;
 
-                case 4:
-                    replaceFragment(new MessageFragment(), MessageFragment.TAG, MESSAGE);
-                    break;
 
                 case 5:
                     replaceFragment(new SettingsFragment(), SettingsFragment.TAG, SETTINGS);
