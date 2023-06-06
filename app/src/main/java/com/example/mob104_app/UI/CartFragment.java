@@ -53,7 +53,7 @@ public class CartFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private CartAdapter adapter;
-    private LinearLayout ln_speed, ln_check_cart;
+    private LinearLayout ln_speed, ln_check_cart,ln_cart_emty;
     private static TextView tv_check_all, tv_price_pay;
     private static CheckBox cbox_check_all;
 
@@ -154,6 +154,7 @@ public class CartFragment extends Fragment {
                         adapter.setData(response.body());
                         ln_speed.setVisibility(View.VISIBLE);
                         recyclerView.setPadding(0, 0, 0, 140);
+                        ln_cart_emty.setVisibility(View.GONE);
                     }
                 }
 
@@ -167,6 +168,7 @@ public class CartFragment extends Fragment {
     }
 
     private void mapping(View view) {
+        ln_cart_emty = view.findViewById(R.id.ln_cart_emty);
         ln_check_cart = view.findViewById(R.id.ln_check_cart);
         btn_login_cart = view.findViewById(R.id.btn_login_cart);
         btn_pay = view.findViewById(R.id.btn_pay);
