@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private final int CART = 1;
     private final int BILL = 2;
     private final int HOME = 3;
-    private final int MESSAGE = 4;
     private final int SETTINGS = 5;
     private int EXIT = 0;
     private MeowBottomNavigation bottomNavigationView;
@@ -135,11 +134,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         int cart =  getIntent().getIntExtra("cart",-1);
+        int bill =  getIntent().getIntExtra("bill",-1);
         if(cart == CART){
             bottomNavigationView.show(CART, true);
             replaceFragment(new CartFragment(), CartFragment.TAG, CART);
+            getIntent().removeExtra("cart");
+        }else if(bill==BILL){
+            bottomNavigationView.show(BILL, true);
+            replaceFragment(new BillFragment(), BillFragment.TAG, BILL);
+            getIntent().removeExtra("bill");
         }
-        getIntent().removeExtra("cart");
+
 
     }
 }

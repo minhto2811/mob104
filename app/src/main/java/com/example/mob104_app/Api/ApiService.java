@@ -7,6 +7,7 @@ import com.example.mob104_app.Models.Cart;
 import com.example.mob104_app.Models.Category;
 import com.example.mob104_app.Models.District;
 import com.example.mob104_app.Models.Favourite;
+import com.example.mob104_app.Models.Notify;
 import com.example.mob104_app.Models.Product;
 import com.example.mob104_app.Models.Province;
 import com.example.mob104_app.Models.User;
@@ -140,4 +141,8 @@ public interface ApiService {
 
     @POST("recently/delete/{id_user}")
     Call<Integer> deleteRecently(@Path("id_user") String id_user, @Body RequestBody requestBody);
+
+
+    @GET("notify/{id_user}")
+    Call<List<Notify>> getNotify(@Path("id_user") String id_user);
 }
