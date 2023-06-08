@@ -100,8 +100,8 @@ public class SplashActivity extends AppCompatActivity {
                         if (response.body() != null) {
                             LIST.listAddress = response.body();
                         }
-                        gotoMainActivity();
                     }
+                    gotoMainActivity();
                 }
 
                 @Override
@@ -130,8 +130,8 @@ public class SplashActivity extends AppCompatActivity {
                         if(response.body()!=null){
                             LIST.getListProductByFavourite = response.body();
                         }
-                        gotoMainActivity();
                     }
+                    gotoMainActivity();
                 }
 
                 @Override
@@ -155,14 +155,13 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void getAllCategory() {
-        Log.e("getAllCategory: ", "");
         ApiService.apiService.getAllCategory().enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(@NonNull Call<List<Category>> call, @NonNull Response<List<Category>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     LIST.listCategory = response.body();
-                    gotoMainActivity();
                 }
+                gotoMainActivity();
             }
 
             @Override
@@ -192,8 +191,8 @@ public class SplashActivity extends AppCompatActivity {
                         }
                     });
                     LIST.listProduct = response.body();
-                    gotoMainActivity();
                 }
+                gotoMainActivity();
             }
 
             @Override
@@ -217,8 +216,8 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<List<Banner>> call, @NonNull Response<List<Banner>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     LIST.listBanner = response.body();
-                    gotoMainActivity();
                 }
+                gotoMainActivity();
             }
 
             @Override
