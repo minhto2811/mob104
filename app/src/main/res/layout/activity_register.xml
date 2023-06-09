@@ -52,7 +52,30 @@
                 android:textColor="@color/title"
                 android:textSize="35dp"
                 android:textStyle="bold" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_email"
+                android:layout_width="match_parent"
+                android:layout_marginVertical="8dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:hint="Nhập địa chỉ email"
+                android:background="@drawable/bg_edittext"
+                android:textColorHint="@color/title"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp">
 
+                <EditText
+                    android:id="@+id/edt_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="40"
+                    android:maxLines="1"
+                    android:textSize="20sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_fullname"
@@ -60,7 +83,7 @@
                 android:layout_marginVertical="8dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
-                android:hint="Nhập tên người dùng. . ."
+                android:hint="Nhập tên người dùng"
                 android:background="@drawable/bg_edittext"
                 android:textColorHint="@color/title"
                 app:boxStrokeWidth="0dp"
@@ -87,7 +110,7 @@
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginVertical="8dp"
                 android:background="@drawable/bg_edittext"
-                android:hint="Nhập tài khoản. . ."
+                android:hint="Nhập tài khoản"
                 android:textColorHint="@color/title"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
@@ -113,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
                 android:background="@drawable/bg_edittext"
-                android:hint="Nhập mật khẩu. . ."
+                android:hint="Nhập mật khẩu"
                 android:textColorHint="@color/title"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"

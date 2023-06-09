@@ -36,10 +36,9 @@ public class RegisterActivity extends AppCompatActivity {
     private ImageView imv_back;
     private TextView tv_signin;
 
-    private TextInputLayout til_fullname, til_username, til_password;
-    private EditText edt_fullname, edt_username, edt_password;
+    private TextInputLayout til_fullname, til_username, til_password, til_email;
+    private EditText edt_fullname, edt_username, edt_password, edt_email;
     private Button btn_signup;
-    private boolean name, user, pass, isShow = true, hasUppercase = false, hasLowercase = false, hasDigit = false;
 
 
     @Override
@@ -53,6 +52,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void mapping() {
+        til_email = findViewById(R.id.til_email);
+        edt_email = findViewById(R.id.edt_email);
         edt_fullname = findViewById(R.id.edt_fullname);
         edt_username = findViewById(R.id.edt_username);
         edt_password = findViewById(R.id.edt_password);
@@ -69,14 +70,14 @@ public class RegisterActivity extends AppCompatActivity {
     private void checkInputFiel() {
 
         btn_signup.setOnClickListener(v -> {
-            if (!checkFielEmty(edt_fullname, til_fullname) || !checkFielEmty(edt_username, til_username) || !checkFielEmty(edt_password, til_password)) {
+            if (!checkFielEmty(edt_email, til_email) || !checkFielEmty(edt_fullname, til_fullname) || !checkFielEmty(edt_username, til_username) || !checkFielEmty(edt_password, til_password)) {
                 return;
             }
-            if(!PasswordActivity.validatePass(edt_password,til_password,RegisterActivity.this)){
+            if (!PasswordActivity.validatePass(edt_password, til_password, RegisterActivity.this)) {
                 return;
             }
 
-            register(edt_fullname.getText().toString(), edt_username.getText().toString(), edt_password.getText().toString());
+            register(edt_email.getText().toString(),edt_fullname.getText().toString(), edt_username.getText().toString(), edt_password.getText().toString());
         });
     }
 
@@ -84,34 +85,44 @@ public class RegisterActivity extends AppCompatActivity {
         if (editText.getText().toString().length() < 8) {
             textInputLayout.setHintTextColor(ColorStateList.valueOf(getResources().getColor(R.color.red)));
             editText.requestFocus();
-            if (editText == edt_username) {
-                textInputLayout.setHint("Tài khoản phải nhiều hơn 7 kí tự!");
+            if (editText == edt_email) {
+                textInputLayout.setError("Email không hợp lệ!");
+            } else if (editText == edt_username) {
+                textInputLayout.setError("Tài khoản phải nhiều hơn 7 kí tự!");
             } else if (editText == edt_password) {
-                textInputLayout.setHint("Mật khẩu phải nhiều hơn 7 kí tự!");
-            } else{
-                textInputLayout.setHint("Tên người dùng không hợp lệ");
+                textInputLayout.setError("Mật khẩu phải nhiều hơn 7 kí tự!");
+            } else {
+                textInputLayout.setError("Tên người dùng không hợp lệ");
             }
             return false;
         }
-        if (editText == edt_username) {
-            textInputLayout.setHint("Nhập tài khoản. . .");
+        if (editText == edt_email) {
+            if(!TOOLS.isValidEmail(editText.getText().toString())){
+                textInputLayout.setError("Email không hợp lệ!");
+                return false;
+            }
+            textInputLayout.setHint("Nhập email");
+        } else if (editText == edt_username) {
+            textInputLayout.setHint("Nhập tài khoản");
         } else if (editText == edt_password) {
-            textInputLayout.setHint("Nhập mật khẩu. . .");
+            textInputLayout.setHint("Nhập mật khẩu");
         } else {
-            textInputLayout.setHint("Nhập tên người dùng. . .");
+            textInputLayout.setHint("Nhập tên người dùng");
         }
+        textInputLayout.setError(null);
         editText.clearFocus();
         return true;
     }
 
 
-    private void register(String fullname, String username, String password) {
+    private void register(String email, String fullname, String username, String password) {
         Dialog dialog = TOOLS.createDialog(RegisterActivity.this);
         dialog.show();
         User user = new User();
         user.setFullname(fullname);
         user.setUsername(username);
         user.setPassword(password);
+        user.setEmail(email);
         ApiService.apiService.createUser(user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
