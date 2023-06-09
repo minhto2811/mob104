@@ -30,8 +30,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Map<String,String> stringMap = message.getData();
         String title = stringMap.get("tilte");
         String body = stringMap.get("body");
-        int status = Integer.parseInt(stringMap.get("status"));
-        sendNotification(title,body,status);
+        String status = stringMap.get("status");
+        sendNotification(title,body,(status!=null)?Integer.parseInt(status):0);
     }
 
     private void sendNotification(String title, String body, int status) {
