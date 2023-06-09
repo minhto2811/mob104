@@ -143,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     User user1 = response.body();
-                    if (user1 != null) {
+                    if (user1.getUsername() != null) {
                         TOOLS.saveUser(LoginActivity.this, user1);
                         ACCOUNT.user = user1;
                         ApiService.apiService.getListProductByFavourite(user1.get_id()).enqueue(new Callback<List<Product>>() {

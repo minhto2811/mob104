@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mob104_app.Activities.BillActivity;
 import com.example.mob104_app.Activities.MainActivity;
 import com.example.mob104_app.Models.Notify;
 import com.example.mob104_app.R;
@@ -45,10 +46,11 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.NotifyView
             holder.ln_notify.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.putExtra("bill",2);
+                    Intent intent = new Intent(context, BillActivity.class);
+                    intent.putExtra("bill",notify.getStatus());
                     context.startActivity(intent);
-                    ((Activity)context).overridePendingTransition(R.anim.prev_enter,R.anim.prev_exit);
+                    ((Activity)context).overridePendingTransition(R.anim.next_enter,R.anim.next_exit);
+                    ((Activity)context).finish();
                 }
             });
             holder.tv_time.setText(String.valueOf(notify.getTime()));

@@ -23,4 +23,5 @@
     <color name="ms0">#40FF0000</color>
     <color name="ms1">#4000FF00</color>
     <color name="ms2">#40FF9900</color>
+    <color name="gray2">#626262</color>
 </resources>

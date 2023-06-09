@@ -80,6 +80,7 @@ public class AddAddressActivity extends AppCompatActivity {
                         ApiService.apiService.deleteAdsress(address1.get_id()).enqueue(new Callback<Integer>() {
                             @Override
                             public void onResponse(Call<Integer> call, Response<Integer> response) {
+                                dialog.dismiss();
                                 if (response.isSuccessful()) {
                                     if (response.body() == 1) {
                                         for (int i = 0; i < LIST.listAddress.size(); i++) {
@@ -92,7 +93,6 @@ public class AddAddressActivity extends AppCompatActivity {
                                             TOOLS.clearDefaulAddress(AddAddressActivity.this);
                                         }}
                                     clearAddress();
-                                    dialog.dismiss();
                                     onBackPressed();
                                 }
                             }

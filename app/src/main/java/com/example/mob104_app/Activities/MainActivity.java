@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private final int CART = 1;
     private final int BILL = 2;
     private final int HOME = 3;
-    private final int MESSAGE = 4;
     private final int SETTINGS = 5;
     private int EXIT = 0;
     private MeowBottomNavigation bottomNavigationView;
@@ -127,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, NotifyActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

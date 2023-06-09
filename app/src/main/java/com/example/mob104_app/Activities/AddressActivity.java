@@ -110,4 +110,10 @@ public class AddressActivity extends AppCompatActivity {
         finish();
         overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getIntent().removeExtra("choose");
+    }
 }

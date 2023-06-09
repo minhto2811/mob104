@@ -38,32 +38,30 @@ public class BillActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bill);
         mapping();
         setToolbar();
-        if(!LIST.listBill.isEmpty()){
-            setTablayout();
-        }else {
-            Dialog dialog = TOOLS.createDialog(BillActivity.this);
-            dialog.show();
-            ApiService.apiService.getBill(ACCOUNT.user.get_id()).enqueue(new Callback<List<Bill>>() {
-                @Override
-                public void onResponse(Call<List<Bill>> call, Response<List<Bill>> response) {
-                    dialog.dismiss();
-                    if (response.isSuccessful() && response.body() != null) {
-                        LIST.listBill.clear();
-                        LIST.listBill = response.body();
-                        setTablayout();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Bill>> call, Throwable t) {
-                    dialog.dismiss();
-                    Toast.makeText(BillActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
+        getData();
     }
 
+    private void getData() {
+        Dialog dialog = TOOLS.createDialog(BillActivity.this);
+        dialog.show();
+        ApiService.apiService.getBill(ACCOUNT.user.get_id()).enqueue(new Callback<List<Bill>>() {
+            @Override
+            public void onResponse(Call<List<Bill>> call, Response<List<Bill>> response) {
+                dialog.dismiss();
+                if (response.isSuccessful() && response.body() != null) {
+                    LIST.listBill.clear();
+                    LIST.listBill = response.body();
+                    setTablayout();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Bill>> call, Throwable t) {
+                dialog.dismiss();
+                Toast.makeText(BillActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 
     private void setTablayout() {

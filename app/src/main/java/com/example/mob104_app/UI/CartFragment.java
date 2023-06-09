@@ -115,7 +115,7 @@ public class CartFragment extends Fragment {
         price_pay = 0;
         for (int i = 0; i < list.size(); i++) {
             Cart cart = list.get(i);
-            price_pay += cart.getPrice_product() * cart.getQuantity();
+            price_pay += (cart.getPrice_product()*(100-cart.getSale())/100 )* cart.getQuantity();
         }
         tv_price_pay.setText(TOOLS.convertPrice(price_pay) + "VND");
     }
