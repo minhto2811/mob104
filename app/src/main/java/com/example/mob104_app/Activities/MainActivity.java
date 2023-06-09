@@ -138,8 +138,9 @@ public class MainActivity extends AppCompatActivity {
         if(cart == CART){
             bottomNavigationView.show(CART, true);
             replaceFragment(new CartFragment(), CartFragment.TAG, CART);
+            getIntent().removeExtra("cart");
         }
-        getIntent().removeExtra("cart");
+
 
     }
 }

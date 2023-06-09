@@ -30,6 +30,7 @@ import com.example.mob104_app.Tools.TOOLS;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -121,7 +122,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void getFavourite() {
-        Log.e("getFavourite: ", "");
+
         if (TOOLS.getUser(this) != null) {
             ApiService.apiService.getListProductByFavourite(TOOLS.getUser(this).get_id()).enqueue(new Callback<List<Product>>() {
                 @Override
@@ -152,6 +153,8 @@ public class SplashActivity extends AppCompatActivity {
 
     private void getUser() {
         ACCOUNT.user = TOOLS.getUser(SplashActivity.this);
+        String token = TOOLS.getToken(this);
+        Log.d("getUser: ",token+"");
     }
 
     private void getAllCategory() {

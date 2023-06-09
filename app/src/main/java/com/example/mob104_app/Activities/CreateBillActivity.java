@@ -32,6 +32,7 @@ import com.example.mob104_app.Models.Bill;
 import com.example.mob104_app.Models.MethodPayment;
 import com.example.mob104_app.Models.MethodShipping;
 import com.example.mob104_app.R;
+import com.example.mob104_app.Tools.ACCOUNT;
 import com.example.mob104_app.Tools.ADDRESS;
 import com.example.mob104_app.Tools.LIST;
 import com.example.mob104_app.Tools.TOOLS;
@@ -93,7 +94,7 @@ public class CreateBillActivity extends AppCompatActivity {
                 }
                 Dialog dialog = TOOLS.createDialog(CreateBillActivity.this);
                 dialog.show();
-                ApiService.apiService.createBill(bill).enqueue(new Callback<Bill>() {
+                ApiService.apiService.createBill(ACCOUNT.user.getTokenNotify(),bill).enqueue(new Callback<Bill>() {
                     @Override
                     public void onResponse(Call<Bill> call, Response<Bill> response) {
                         dialog.dismiss();

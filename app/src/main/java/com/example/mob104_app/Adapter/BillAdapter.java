@@ -43,6 +43,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder
     public void onBindViewHolder(@NonNull BillAdapter.BillViewHolder holder, int position) {
         Bill bill = list.get(position);
         if (bill != null) {
+            holder.tv_id_bill.setText("Mã đơn: "+bill.get_id().toUpperCase());
             holder.tv_fullname_bill.setText(bill.getName());
             holder.tv_numberphone_bill.setText(bill.getPhone());
             holder.tv_date_bill.setText("Thời gian đặt: " + bill.getDate());
@@ -75,11 +76,12 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder
 
     public class BillViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tv_fullname_bill, tv_numberphone_bill, tv_product_bill, tv_date_bill, tv_price_bill;
+        private TextView tv_fullname_bill,tv_id_bill, tv_numberphone_bill, tv_product_bill, tv_date_bill, tv_price_bill;
         private LinearLayout ln_item_bill;
 
         public BillViewHolder(@NonNull View itemView) {
             super(itemView);
+            tv_id_bill = itemView.findViewById(R.id.tv_id_bill);
             ln_item_bill = itemView.findViewById(R.id.ln_item_bill);
             tv_fullname_bill = itemView.findViewById(R.id.tv_fullname_bill);
             tv_numberphone_bill = itemView.findViewById(R.id.tv_numberphone_bill);
