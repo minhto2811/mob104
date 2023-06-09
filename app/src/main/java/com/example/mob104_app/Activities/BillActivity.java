@@ -38,7 +38,29 @@ public class BillActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bill);
         mapping();
         setToolbar();
-        setTablayout();
+        if(!LIST.listBill.isEmpty()){
+            setTablayout();
+        }else {
+            Dialog dialog = TOOLS.createDialog(BillActivity.this);
+            dialog.show();
+            ApiService.apiService.getBill(ACCOUNT.user.get_id()).enqueue(new Callback<List<Bill>>() {
+                @Override
+                public void onResponse(Call<List<Bill>> call, Response<List<Bill>> response) {
+                    dialog.dismiss();
+                    if (response.isSuccessful() && response.body() != null) {
+                        LIST.listBill.clear();
+                        LIST.listBill = response.body();
+                        setTablayout();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Bill>> call, Throwable t) {
+                    dialog.dismiss();
+                    Toast.makeText(BillActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
     }
 
@@ -48,10 +70,8 @@ public class BillActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         viewPager.setAdapter(adapter);
         tablayout.setupWithViewPager(viewPager);
-        int status = getIntent().getIntExtra("status", -1);
-        if (status > -1) {
-            viewPager.setCurrentItem(status);
-        }
+        int status = getIntent().getIntExtra("status", 0);
+        viewPager.setCurrentItem(status);
         viewPager.setOffscreenPageLimit(3);
     }
 
@@ -81,5 +101,11 @@ public class BillActivity extends AppCompatActivity {
         super.onBackPressed();
         finish();
         overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LIST.listBill.clear();
     }
 }

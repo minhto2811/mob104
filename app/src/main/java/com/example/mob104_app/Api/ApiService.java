@@ -7,6 +7,7 @@ import com.example.mob104_app.Models.Cart;
 import com.example.mob104_app.Models.Category;
 import com.example.mob104_app.Models.District;
 import com.example.mob104_app.Models.Favourite;
+import com.example.mob104_app.Models.Notify;
 import com.example.mob104_app.Models.Product;
 import com.example.mob104_app.Models.Province;
 import com.example.mob104_app.Models.User;
@@ -62,6 +63,9 @@ public interface ApiService {
 
     @POST("user/login")
     Call<User> loginUser(@Body RequestBody requestBody);
+
+    @POST("user/tokenNotify/{id_user}")
+    Call<Integer> tokenNotify(@Path("id_user") String id_user,@Body RequestBody requestBody);
 
     @POST("user/update/info")
     Call<Integer> updateInfo(@Body User user);
@@ -120,8 +124,8 @@ public interface ApiService {
     @GET("cart/delete/{id_cart}")
     Call<Integer> deleteCart(@Path("id_cart") String id_cart);
 
-    @POST("bill/add")
-    Call<Bill> createBill(@Body Bill bill);
+    @POST("bill/add/{token}")
+    Call<Bill> createBill(@Path("token") String token_device,@Body Bill bill);
 
     @GET("bill/{id_user}")
     Call<List<Bill>> getBill(@Path("id_user") String id_user);
@@ -140,4 +144,8 @@ public interface ApiService {
 
     @POST("recently/delete/{id_user}")
     Call<Integer> deleteRecently(@Path("id_user") String id_user, @Body RequestBody requestBody);
+
+
+    @GET("notify/{id_user}")
+    Call<List<Notify>> getNotify(@Path("id_user") String id_cart);
 }

@@ -12,6 +12,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -197,6 +198,35 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
 
+                        String token = TOOLS.getToken(LoginActivity.this);
+                        JSONObject postData = new JSONObject();
+                        try {
+                            postData.put("tokenNotify", token);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        String jsonString = postData.toString();
+                        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
+
+                        ApiService.apiService.tokenNotify(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Integer>() {
+                            @Override
+                            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                                if(response.isSuccessful()&&response.body()!=null){
+                                    if(response.body()==1){
+                                        user1.setTokenNotify(token);
+                                        TOOLS.saveUser(LoginActivity.this,user1);
+                                        ACCOUNT.user = user1;
+                                    }
+                                }
+                                gotoSettings();
+                            }
+
+                            @Override
+                            public void onFailure(Call<Integer> call, Throwable t) {
+                                gotoSettings();
+                            }
+                        });
+
                     } else {
                         Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác!", Toast.LENGTH_SHORT).show();
                     }
@@ -274,4 +304,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+
+
+
 }

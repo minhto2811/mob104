@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,9 @@ import com.example.mob104_app.Tools.LIST;
 import com.example.mob104_app.Tools.TOOLS;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -243,6 +247,7 @@ public class SettingsFragment extends Fragment {
             builder.setPositiveButton("Đăng xuất", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    updateTokenUser("");
                     TOOLS.clearUser(getContext());
                     TOOLS.clearDefaulAddress(getContext());
                     LIST.getListProductByFavourite.clear();
@@ -258,6 +263,31 @@ public class SettingsFragment extends Fragment {
             builder.setNegativeButton("Hủy", null);
             builder.create().show();
 
+        });
+    }
+
+    private void updateTokenUser(String token) {
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("tokenNotify", token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String jsonString = postData.toString();
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
+
+        ApiService.apiService.tokenNotify(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e("update token ", "successfully");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                Log.e("update token ", "faild");
+            }
         });
     }
 

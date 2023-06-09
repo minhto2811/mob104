@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -20,9 +21,10 @@ import java.util.regex.Pattern;
 
 public class TOOLS {
 
-    public static String doMainDevice = "http://10.0.2.2:3000";
-    public static String  USER= "USER";
-    public static String  DEFAULT_ADDRESS= "DEFAULT_ADDRESS";
+    public static final String doMainDevice = "http://10.0.2.2:3000";
+    public static final String  USER= "USER";
+    public static final String  DEFAULT_ADDRESS= "DEFAULT_ADDRESS";
+    public static final String  TOKEN= "TOKEN";
 
     private static  Gson gson = new Gson();
 
@@ -62,6 +64,14 @@ public class TOOLS {
         editor.apply();
     }
 
+
+
+    public static String getToken(Context context) {
+        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(TOKEN, Context.MODE_PRIVATE);
+        String string = sharedPreferences.getString(TOKEN,null);
+        return string;
+    }
+
     public static void clearDefaulAddress(Context context) {
         SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(DEFAULT_ADDRESS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -86,6 +96,8 @@ public class TOOLS {
         String emailPattern = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
         return !email.isEmpty() && email.matches(emailPattern);
     }
+
+
 
     public static JsonObject convertJson(String key, String value) {
         String token = "{\"" + key + "\": \"" + value + "\"}";

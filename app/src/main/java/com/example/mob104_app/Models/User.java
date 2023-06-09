@@ -16,13 +16,14 @@ public class User {
     private String image;
     private boolean sex;
     private String date;
+    private String tokenNotify;
 
 
     public User() {
     }
 
 
-    public User(String _id, String fullname, String username, String password, String numberphone, boolean role, String email,String image, boolean sex, String date) {
+    public User(String _id, String fullname, String username, String password, String numberphone, boolean role, String email,String image, boolean sex, String date,String tokenNotify) {
         this._id = _id;
         this.fullname = fullname;
         this.username = username;
@@ -33,6 +34,20 @@ public class User {
         this.image = image;
         this.sex = sex;
         this.date = date;
+        this.tokenNotify =tokenNotify;
+    }
+
+
+    public boolean isSex() {
+        return sex;
+    }
+
+    public String getTokenNotify() {
+        return tokenNotify;
+    }
+
+    public void setTokenNotify(String tokenNotify) {
+        this.tokenNotify = tokenNotify;
     }
 
     public String get_id() {
