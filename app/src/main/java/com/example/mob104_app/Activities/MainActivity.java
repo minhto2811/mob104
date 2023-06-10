@@ -1,5 +1,6 @@
 package com.example.mob104_app.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,13 +26,14 @@ import com.example.mob104_app.UI.HomeFragment;
 import com.example.mob104_app.UI.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private int INDEX = 0;
-    private final int CART = 1;
-    private final int BILL = 2;
-    private final int HOME = 3;
+    private static int INDEX = 0;
+    private static final int CART = 1;
+    private static final int BILL = 2;
+    public static final int HOME = 3;
     private final int SETTINGS = 5;
     private int EXIT = 0;
-    private MeowBottomNavigation bottomNavigationView;
+    public static MeowBottomNavigation bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,21 +51,21 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnClickMenuListener(model -> {
             switch (model.getId()) {
                 case 1:
-                    replaceFragment(new CartFragment(), CartFragment.TAG, CART);
+                    replaceFragment(new CartFragment(), CartFragment.TAG, CART, this);
                     break;
 
                 case 2:
-                    replaceFragment(new BillFragment(), BillFragment.TAG, BILL);
+                    replaceFragment(new BillFragment(), BillFragment.TAG, BILL, this);
                     break;
 
                 case 3:
-                    replaceFragment(new HomeFragment(), HomeFragment.TAG, HOME);
+                    replaceFragment(new HomeFragment(), HomeFragment.TAG, HOME, this);
 
                     break;
 
 
                 case 5:
-                    replaceFragment(new SettingsFragment(), SettingsFragment.TAG, SETTINGS);
+                    replaceFragment(new SettingsFragment(), SettingsFragment.TAG, SETTINGS, this);
                     break;
                 default:
                     break;
@@ -71,20 +73,20 @@ public class MainActivity extends AppCompatActivity {
             return null;
         });
 
-        replaceFragment(new HomeFragment(), HomeFragment.TAG, 3);
+        replaceFragment(new HomeFragment(), HomeFragment.TAG, 3, this);
     }
 
-    private void replaceFragment(Fragment fragment, String name, int ID) {
-        if(INDEX != ID) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
+    public static void replaceFragment(Fragment fragment, String name, int ID, Context context) {
+        if (INDEX != ID) {
+            FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             if (INDEX < ID) {
                 fragmentTransaction.setCustomAnimations(R.anim.next_enter, R.anim.next_exit);
             } else {
                 fragmentTransaction.setCustomAnimations(R.anim.prev_enter, R.anim.prev_exit);
             }
-            Fragment existingFragment = fragmentManager.findFragmentByTag(name);
-            if (existingFragment != null && (ID!=CART || ID!=BILL)) {
+            Fragment existingFragment = fragmentManager.findFragmentByTag((ID != CART && ID != BILL)?name:null);
+            if (existingFragment != null ) {
                 fragmentTransaction.replace(R.id.container_content, existingFragment,name);
             } else {
                 TOOLS.checkAllCarts = false;
@@ -137,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         int cart =  getIntent().getIntExtra("cart",-1);
         if(cart == CART){
             bottomNavigationView.show(CART, true);
-            replaceFragment(new CartFragment(), CartFragment.TAG, CART);
+            replaceFragment(new CartFragment(), CartFragment.TAG, CART, this);
             getIntent().removeExtra("cart");
         }
 

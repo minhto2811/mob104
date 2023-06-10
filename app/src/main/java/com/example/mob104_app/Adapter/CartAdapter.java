@@ -183,7 +183,17 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             public void onResponse(Call<Integer> call, Response<Integer> response) {
                 if (response.isSuccessful()) {
                     if (response.body() == 1) {
+                        for (int i = 0; i <  LIST.listBuyCart.size(); i++) {
+                            if(LIST.listBuyCart.get(i).get_id().equals(id)){
+                                LIST.listBuyCart.remove(holder.getAdapterPosition());
+                                CartFragment.showLayoutPay(LIST.listBuyCart);
+                                break;
+                            }
+                        }
                         list.remove(holder.getAdapterPosition());
+                        if(list.size()==0){
+                            CartFragment.ln_cart_emty.setVisibility(View.VISIBLE);
+                        }
                         notifyItemRemoved(holder.getAdapterPosition());
                     } else {
                         Toast.makeText(context, "Lỗi", Toast.LENGTH_SHORT).show();

@@ -64,7 +64,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void getRecently() {
-        if (TOOLS.getUser(this) != null) {
+        if (ACCOUNT.user!=null) {
             ApiService.apiService.getRecently(ACCOUNT.user.get_id()).enqueue(new Callback<List<Product>>() {
                 @Override
                 public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
@@ -93,8 +93,8 @@ public class SplashActivity extends AppCompatActivity {
 
 
     public void getAddress() {
-        if (TOOLS.getUser(this) != null) {
-            ApiService.apiService.getAddress(TOOLS.getUser(this).get_id()).enqueue(new Callback<List<Address>>() {
+        if (ACCOUNT.user!=null) {
+            ApiService.apiService.getAddress(ACCOUNT.user.get_id()).enqueue(new Callback<List<Address>>() {
                 @Override
                 public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
                     if (response.isSuccessful()) {
@@ -123,8 +123,8 @@ public class SplashActivity extends AppCompatActivity {
 
     private void getFavourite() {
 
-        if (TOOLS.getUser(this) != null) {
-            ApiService.apiService.getListProductByFavourite(TOOLS.getUser(this).get_id()).enqueue(new Callback<List<Product>>() {
+        if (ACCOUNT.user != null) {
+            ApiService.apiService.getListProductByFavourite(ACCOUNT.user.get_id()).enqueue(new Callback<List<Product>>() {
                 @Override
                 public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                     if (response.isSuccessful()) {
@@ -153,8 +153,6 @@ public class SplashActivity extends AppCompatActivity {
 
     private void getUser() {
         ACCOUNT.user = TOOLS.getUser(SplashActivity.this);
-        String token = TOOLS.getToken(this);
-        Log.d("getUser: ",token+"");
     }
 
     private void getAllCategory() {
@@ -240,8 +238,8 @@ public class SplashActivity extends AppCompatActivity {
 
     private void gotoMainActivity() {
         index_watting++;
-        if (TOOLS.getUser(SplashActivity.this) != null) {
-            index_max = 5;
+        if (ACCOUNT.user != null) {
+            index_max = 6;
         }else {
             index_max = 3;
         }
