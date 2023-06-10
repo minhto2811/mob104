@@ -185,7 +185,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     if (response.body() == 1) {
                         for (int i = 0; i <  LIST.listBuyCart.size(); i++) {
                             if(LIST.listBuyCart.get(i).get_id().equals(id)){
-                                LIST.listBuyCart.remove(holder.getAdapterPosition());
+                                LIST.listBuyCart.remove(i);
                                 CartFragment.showLayoutPay(LIST.listBuyCart);
                                 break;
                             }
