@@ -117,6 +117,14 @@ public class NotifyActivity extends AppCompatActivity {
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(ACCOUNT.user!=null){
+            showListNotify();
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == android.R.id.home){
             onBackPressed();
@@ -132,4 +140,5 @@ public class NotifyActivity extends AppCompatActivity {
         finish();
         overridePendingTransition(R.anim.prev_enter,R.anim.prev_exit);
     }
+
 }
