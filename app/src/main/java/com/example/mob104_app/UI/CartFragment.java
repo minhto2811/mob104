@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mob104_app.Activities.CreateBillActivity;
 import com.example.mob104_app.Activities.LoginActivity;
+import com.example.mob104_app.Activities.MainActivity;
 import com.example.mob104_app.Adapter.CartAdapter;
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.Models.Bill;
@@ -53,12 +54,13 @@ public class CartFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private CartAdapter adapter;
-    private LinearLayout ln_speed, ln_check_cart,ln_cart_emty;
+    private LinearLayout ln_speed, ln_check_cart;
+    public static LinearLayout ln_cart_emty;
     private static TextView tv_check_all, tv_price_pay;
     private static CheckBox cbox_check_all;
 
     private static LinearLayout ln_pay;
-    private Button btn_pay, btn_login_cart;
+    private Button btn_pay, btn_login_cart,btn_buy_cart;
     private static int price_pay;
     private List<Cart> cartList;
 
@@ -74,35 +76,37 @@ public class CartFragment extends Fragment {
         showCarts();
         checkAll();
         pay();
+        home();
+    }
+
+    private void home() {
+        btn_buy_cart.setOnClickListener(v -> {
+            MainActivity.bottomNavigationView.show(MainActivity.HOME, true);
+            MainActivity.replaceFragment(new HomeFragment(),HomeFragment.TAG,MainActivity.HOME,requireContext());
+        });
     }
 
     private void login() {
-        btn_login_cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(requireContext(), LoginActivity.class);
-                startActivity(intent);
-                requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
-                requireActivity().finish();
-            }
+        btn_login_cart.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), LoginActivity.class);
+            startActivity(intent);
+            requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+            requireActivity().finish();
         });
     }
 
     private void pay() {
-        btn_pay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bill bill = new Bill();
-                bill.setStatus(0);
-                bill.setId_user(ACCOUNT.user.get_id());
-                bill.setTotal(price_pay);
-                bill.setList(LIST.listBuyCart);
-                Intent intent = new Intent(requireContext(), CreateBillActivity.class);
-                intent.putExtra("bill", bill);
-                startActivity(intent);
-                requireActivity().finish();
-                requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
-            }
+        btn_pay.setOnClickListener(v -> {
+            Bill bill = new Bill();
+            bill.setStatus(0);
+            bill.setId_user(ACCOUNT.user.get_id());
+            bill.setTotal(price_pay);
+            bill.setList(LIST.listBuyCart);
+            Intent intent = new Intent(requireContext(), CreateBillActivity.class);
+            intent.putExtra("bill", bill);
+            startActivity(intent);
+            requireActivity().finish();
+            requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
         });
     }
 
@@ -117,7 +121,7 @@ public class CartFragment extends Fragment {
             Cart cart = list.get(i);
             price_pay += (cart.getPrice_product()*(100-cart.getSale())/100 )* cart.getQuantity();
         }
-        tv_price_pay.setText(TOOLS.convertPrice(price_pay) + "VND");
+        tv_price_pay.setText(TOOLS.convertPrice(price_pay));
     }
 
     private void checkAll() {
@@ -168,6 +172,7 @@ public class CartFragment extends Fragment {
     }
 
     private void mapping(View view) {
+        btn_buy_cart = view.findViewById(R.id.btn_buy_cart);
         ln_cart_emty = view.findViewById(R.id.ln_cart_emty);
         ln_check_cart = view.findViewById(R.id.ln_check_cart);
         btn_login_cart = view.findViewById(R.id.btn_login_cart);
@@ -178,7 +183,6 @@ public class CartFragment extends Fragment {
         tv_check_all = view.findViewById(R.id.tv_check_all);
         ln_speed = view.findViewById(R.id.ln_speed);
         recyclerView = view.findViewById(R.id.rcv_cart);
-
     }
 
     public static void setCheckByItem(){
@@ -194,4 +198,5 @@ public class CartFragment extends Fragment {
             }
         }
     }
+
 }
