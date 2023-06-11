@@ -97,6 +97,7 @@ public class AddressActivity extends AppCompatActivity {
     }
 
     public static void chooseAddress(Address address) {
+        Toast.makeText(activity, "Chọn địa chỉ thành công", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent();
         intent.putExtra("address", address);
         activity.setResult(RESULT_OK, intent);
