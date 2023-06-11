@@ -26,24 +26,31 @@ import com.example.mob104_app.UI.HomeFragment;
 import com.example.mob104_app.UI.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private static int INDEX = 0;
+    public static int INDEX = 0;
     public static final int CART = 2;
     public static final int BILL = 3;
     public static final int HOME = 1;
     private final int SETTINGS = 4;
     private int EXIT = 0;
     public static MeowBottomNavigation bottomNavigationView;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        mapping();
+        setBottomNavigationView();
+    }
+
+    private void mapping() {
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.show(HOME, true);
+    }
 
+    private void setBottomNavigationView(){
+        bottomNavigationView.show(HOME, true);
         bottomNavigationView.add(new MeowBottomNavigation.Model(HOME, R.drawable.widgets));
         bottomNavigationView.add(new MeowBottomNavigation.Model(CART, R.drawable.shopping_cart));
         bottomNavigationView.add(new MeowBottomNavigation.Model(BILL, R.drawable.local_shipping));
@@ -59,21 +66,19 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new BillFragment(), BillFragment.TAG, BILL, this);
                     break;
 
-                case HOME:
-                    replaceFragment(new HomeFragment(), HomeFragment.TAG, HOME, this);
-
-                    break;
-
 
                 case SETTINGS:
                     replaceFragment(new SettingsFragment(), SettingsFragment.TAG, SETTINGS, this);
                     break;
+
+                case HOME:
                 default:
+                    replaceFragment(new HomeFragment(), HomeFragment.TAG, HOME, this);
                     break;
             }
             return null;
         });
-        replaceFragment(new HomeFragment(), HomeFragment.TAG,  HOME, this);
+        replaceFragment(new HomeFragment(), HomeFragment.TAG, HOME, this);
     }
 
     public static void replaceFragment(Fragment fragment, String name, int ID, Context context) {
@@ -85,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 fragmentTransaction.setCustomAnimations(R.anim.prev_enter, R.anim.prev_exit);
             }
+
             Fragment existingFragment = fragmentManager.findFragmentByTag((ID != CART && ID != BILL)?name:null);
             if (existingFragment != null ) {
                 fragmentTransaction.replace(R.id.container_content, existingFragment,name);
@@ -115,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_extend, menu);
@@ -136,20 +141,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        int cart =  getIntent().getIntExtra("cart",-1);
-        if(cart == CART){
+        if (getIntent().getIntExtra("cart", -1) == CART) {
             bottomNavigationView.show(CART, true);
             replaceFragment(new CartFragment(), CartFragment.TAG, CART, this);
             getIntent().removeExtra("cart");
-        }else {
-            int bill =  getIntent().getIntExtra("bill",-1);
-            if(bill == BILL){
-                bottomNavigationView.show(BILL, true);
-                replaceFragment(new BillFragment(), BillFragment.TAG, BILL, this);
-                getIntent().removeExtra("bill");
-            }
+        } else if (getIntent().getIntExtra("bill", -1) == BILL) {
+            bottomNavigationView.show(BILL, true);
+            replaceFragment(new BillFragment(), BillFragment.TAG, BILL, this);
+            getIntent().removeExtra("bill");
         }
-
-
     }
+
+
 }
