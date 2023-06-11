@@ -27,10 +27,10 @@ import com.example.mob104_app.UI.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private static int INDEX = 0;
-    private static final int CART = 1;
-    private static final int BILL = 2;
-    public static final int HOME = 3;
-    private final int SETTINGS = 5;
+    public static final int CART = 2;
+    public static final int BILL = 3;
+    public static final int HOME = 1;
+    private final int SETTINGS = 4;
     private int EXIT = 0;
     public static MeowBottomNavigation bottomNavigationView;
 
@@ -41,30 +41,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-         bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.show(HOME, true);
-        bottomNavigationView.add(new MeowBottomNavigation.Model(3, R.drawable.widgets));
-        bottomNavigationView.add(new MeowBottomNavigation.Model(1, R.drawable.shopping_cart));
-        bottomNavigationView.add(new MeowBottomNavigation.Model(2, R.drawable.local_shipping));
-        bottomNavigationView.add(new MeowBottomNavigation.Model(5, R.drawable.settings));
+
+        bottomNavigationView.add(new MeowBottomNavigation.Model(HOME, R.drawable.widgets));
+        bottomNavigationView.add(new MeowBottomNavigation.Model(CART, R.drawable.shopping_cart));
+        bottomNavigationView.add(new MeowBottomNavigation.Model(BILL, R.drawable.local_shipping));
+        bottomNavigationView.add(new MeowBottomNavigation.Model(SETTINGS, R.drawable.settings));
 
         bottomNavigationView.setOnClickMenuListener(model -> {
             switch (model.getId()) {
-                case 1:
+                case CART:
                     replaceFragment(new CartFragment(), CartFragment.TAG, CART, this);
                     break;
 
-                case 2:
+                case BILL:
                     replaceFragment(new BillFragment(), BillFragment.TAG, BILL, this);
                     break;
 
-                case 3:
+                case HOME:
                     replaceFragment(new HomeFragment(), HomeFragment.TAG, HOME, this);
 
                     break;
 
 
-                case 5:
+                case SETTINGS:
                     replaceFragment(new SettingsFragment(), SettingsFragment.TAG, SETTINGS, this);
                     break;
                 default:
@@ -72,8 +73,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return null;
         });
-
-        replaceFragment(new HomeFragment(), HomeFragment.TAG, 3, this);
+        replaceFragment(new HomeFragment(), HomeFragment.TAG,  HOME, this);
     }
 
     public static void replaceFragment(Fragment fragment, String name, int ID, Context context) {
@@ -141,6 +141,13 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.show(CART, true);
             replaceFragment(new CartFragment(), CartFragment.TAG, CART, this);
             getIntent().removeExtra("cart");
+        }else {
+            int bill =  getIntent().getIntExtra("bill",-1);
+            if(bill == BILL){
+                bottomNavigationView.show(BILL, true);
+                replaceFragment(new BillFragment(), BillFragment.TAG, BILL, this);
+                getIntent().removeExtra("bill");
+            }
         }
 
 

@@ -1,7 +1,9 @@
 package com.example.mob104_app.Activities;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -42,6 +44,9 @@ public class BillActivity extends AppCompatActivity {
     }
 
     private void getData() {
+        if(ACCOUNT.user.get_id()==null){
+            return;
+        }
         Dialog dialog = TOOLS.createDialog(BillActivity.this);
         dialog.show();
         ApiService.apiService.getBill(ACCOUNT.user.get_id()).enqueue(new Callback<List<Bill>>() {
@@ -97,6 +102,12 @@ public class BillActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        boolean ibf = getIntent().getBooleanExtra("ibf",false);
+        if(!ibf){
+            Intent intent = new Intent(BillActivity.this,MainActivity.class);
+            intent.putExtra("bill",MainActivity.BILL);
+            startActivity(intent);
+        }
         finish();
         overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
     }
