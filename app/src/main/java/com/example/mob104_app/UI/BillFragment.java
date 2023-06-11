@@ -158,6 +158,7 @@ public class BillFragment extends Fragment {
         linearLayout.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), BillActivity.class);
             intent.putExtra("status", status);
+            intent.putExtra("ibf",true);
             startActivity(intent);
             requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
         });

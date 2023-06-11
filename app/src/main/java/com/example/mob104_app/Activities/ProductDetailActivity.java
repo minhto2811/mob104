@@ -139,7 +139,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProductDetailActivity.this, MainActivity.class);
-                intent.putExtra("cart", 1);
+                intent.putExtra("cart", MainActivity.CART);
                 startActivity(intent);
                 overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
             }
