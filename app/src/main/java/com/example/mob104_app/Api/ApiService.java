@@ -130,8 +130,8 @@ public interface ApiService {
     @GET("bill/{id_user}")
     Call<List<Bill>> getBill(@Path("id_user") String id_user);
 
-    @POST("bill/cancel/{id_bill}")
-    Call<Integer> cancelBill(@Path("id_bill") String id_bill);
+    @POST("bill/cancel/{id_bill}/{token}")
+    Call<Integer> cancelBill(@Path("id_bill") String id_bill,@Path("token") String token);
 
     @POST("recently/add/{id_user}")
     Call<Integer> addRecently(@Path("id_user") String id_user, @Body RequestBody requestBody);

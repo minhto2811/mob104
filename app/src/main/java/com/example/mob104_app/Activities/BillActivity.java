@@ -30,6 +30,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BillActivity extends AppCompatActivity {
+
+    private static  final String TAG = BillActivity.class.getName();
     private Toolbar toolbar;
     private TabLayout tablayout;
     private ViewPager viewPager;
@@ -44,9 +46,12 @@ public class BillActivity extends AppCompatActivity {
     }
 
     private void getData() {
+
         if(ACCOUNT.user.get_id()==null){
+            Log.e(TAG, "onResume: ACCOUNT.user==null");
             return;
         }
+        Log.e(TAG, "onResume: ACCOUNT.user!=null");
         Dialog dialog = TOOLS.createDialog(BillActivity.this);
         dialog.show();
         ApiService.apiService.getBill(ACCOUNT.user.get_id()).enqueue(new Callback<List<Bill>>() {
@@ -54,6 +59,7 @@ public class BillActivity extends AppCompatActivity {
             public void onResponse(Call<List<Bill>> call, Response<List<Bill>> response) {
                 dialog.dismiss();
                 if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "onResume: response.isSuccessful()");
                     LIST.listBill.clear();
                     LIST.listBill = response.body();
                     setTablayout();
@@ -63,6 +69,7 @@ public class BillActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Bill>> call, Throwable t) {
                 dialog.dismiss();
+                Log.e(TAG, "onResume: onFailure");
                 Toast.makeText(BillActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -70,10 +77,12 @@ public class BillActivity extends AppCompatActivity {
 
 
     private void setTablayout() {
+        Log.e(TAG, "onResume: setTablayout");
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         viewPager.setAdapter(adapter);
         tablayout.setupWithViewPager(viewPager);
         int status = getIntent().getIntExtra("status", 0);
+        Log.e(TAG, "onResume: status = "+status);
         viewPager.setCurrentItem(status);
         viewPager.setOffscreenPageLimit(3);
     }
@@ -112,9 +121,21 @@ public class BillActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
     }
 
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+       if(ACCOUNT.user!=null){
+           Log.e(TAG, "onResume: getData");
+           getData();
+       }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.e(TAG, "onDestroy: " );
         LIST.listBill.clear();
     }
 }

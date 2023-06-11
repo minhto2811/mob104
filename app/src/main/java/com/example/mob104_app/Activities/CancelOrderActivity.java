@@ -17,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.R;
+import com.example.mob104_app.Tools.ACCOUNT;
 import com.example.mob104_app.Tools.TOOLS;
 
 import java.util.Objects;
@@ -59,7 +60,7 @@ public class CancelOrderActivity extends AppCompatActivity {
                 if (id_bill != null) {
                     Dialog dialog = TOOLS.createDialog(CancelOrderActivity.this);
                     dialog.show();
-                    ApiService.apiService.cancelBill(id_bill).enqueue(new Callback<Integer>() {
+                    ApiService.apiService.cancelBill(id_bill, ACCOUNT.user.getTokenNotify()).enqueue(new Callback<Integer>() {
                         @Override
                         public void onResponse(Call<Integer> call, Response<Integer> response) {
                             dialog.dismiss();

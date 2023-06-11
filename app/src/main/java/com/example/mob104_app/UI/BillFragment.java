@@ -191,4 +191,12 @@ public class BillFragment extends Fragment {
         ln_bill_successful = view.findViewById(R.id.ln_bill_successful);
         recyclerView = view.findViewById(R.id.rcv_recently);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(ACCOUNT.user!=null){
+            getBill();
+        }
+    }
 }
