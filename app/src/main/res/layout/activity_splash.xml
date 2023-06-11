@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.SplashActivity">
+
+
     <ImageView
         android:id="@+id/bg_splash"
         android:scaleType="centerCrop"
@@ -14,18 +16,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom | center_horizontal"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical"
-        android:paddingBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="UseCompoundDrawables">
+
 
         <ImageView
             android:id="@+id/imv_splash"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/todo" />
+            android:contentDescription="@string/todo"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/tv_loading"

@@ -80,8 +80,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder1, int position) {
         Cart cart = list.get(position);
         if (cart != null) {
-            int lastPrice = cart.getPrice_product()*(100-cart.getSale())/100;
-            Log.e( "onBindViewHolder: ",lastPrice+"" );
+            int lastPrice = (cart.getPrice_product()*(100-cart.getSale())/100)*cart.getQuantity();
             if (holder1 instanceof CartHolderView) {
                 CartHolderView holder = (CartHolderView) holder1;
 
@@ -146,7 +145,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         cart.setQuantity(cart.getQuantity() - 1);
                         holder.tv_quantity.setText(String.valueOf(cart.getQuantity()));
                         holder.tv_price.setText("Tổng tiền: " + TOOLS.convertPrice(cart.getQuantity() * lastPrice));
-                        CartFragment.showLayoutPay(LIST.listBuyCart);
+                        replaceCartItem(cart);
                     }
                 });
                 holder.imv_add.setOnClickListener(new View.OnClickListener() {
@@ -155,7 +154,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         cart.setQuantity(cart.getQuantity() + 1);
                         holder.tv_quantity.setText(String.valueOf(cart.getQuantity()));
                         holder.tv_price.setText("Tổng tiền: " + TOOLS.convertPrice(cart.getQuantity() * lastPrice));
-                        CartFragment.showLayoutPay(LIST.listBuyCart);
+                        replaceCartItem(cart);
                     }
                 });
                 holder.ln_delete.setOnClickListener(new View.OnClickListener() {
@@ -173,6 +172,16 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         }
 
+    }
+
+    private void replaceCartItem(Cart cart) {
+        for (int i = 0; i < LIST.listBuyCart.size(); i++) {
+            if(LIST.listBuyCart.get(i).get_id().equals(cart.get_id())){
+                LIST.listBuyCart.get(i).setQuantity(cart.getQuantity());
+                break;
+            }
+        }
+        CartFragment.showLayoutPay(LIST.listBuyCart);
     }
 
     private void deleteCart(CartHolderView holder, String id) {

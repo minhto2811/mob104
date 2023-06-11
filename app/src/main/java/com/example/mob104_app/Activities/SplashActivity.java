@@ -52,7 +52,7 @@ public class SplashActivity extends AppCompatActivity {
         tv_loading = findViewById(R.id.tv_loading);
         imv_splash = findViewById(R.id.imv_splash);
         Glide.with(this).asGif().load(R.drawable.spin).into(imv_splash);
-        Glide.with(this).asGif().load(R.drawable.splash).into((ImageView) findViewById(R.id.bg_splash));
+        Glide.with(this).asGif().load(R.drawable.woman_shopping_online).into((ImageView) findViewById(R.id.bg_splash));
         //load data
         getUser();
         getAllBanner();
