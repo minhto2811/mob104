@@ -218,15 +218,15 @@ public class ProductDetailActivity extends AppCompatActivity {
                         public void onResponse(Call<Cart> call, Response<Cart> response) {
                             if (response.isSuccessful()) {
                                 Toast.makeText(ProductDetailActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
-                                dialog1.hide();
+                                dialog1.dismiss();
                             }
-                            dialog.cancel();
+                            dialog.dismiss();
                         }
 
                         @Override
                         public void onFailure(Call<Cart> call, Throwable t) {
                             Toast.makeText(ProductDetailActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
-                            dialog1.hide();
+                            dialog1.dismiss();
                         }
                     });
                 } else {
@@ -245,6 +245,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     intent.putExtra("bill", bill);
                     startActivity(intent);
                     overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+                    dialog.dismiss();
                 }
             }
         });

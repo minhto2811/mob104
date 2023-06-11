@@ -115,6 +115,7 @@ public class BillActivity extends AppCompatActivity {
         if(!ibf){
             Intent intent = new Intent(BillActivity.this,MainActivity.class);
             intent.putExtra("bill",MainActivity.BILL);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
         finish();
@@ -127,15 +128,8 @@ public class BillActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
        if(ACCOUNT.user!=null){
-           Log.e(TAG, "onResume: getData");
            getData();
        }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.e(TAG, "onDestroy: " );
-        LIST.listBill.clear();
-    }
 }
