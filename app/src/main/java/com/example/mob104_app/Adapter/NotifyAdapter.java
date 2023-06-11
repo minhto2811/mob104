@@ -47,7 +47,7 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.NotifyView
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, BillActivity.class);
-                    intent.putExtra("bill",notify.getStatus());
+                    intent.putExtra("status",notify.getStatus());
                     context.startActivity(intent);
                     ((Activity)context).overridePendingTransition(R.anim.next_enter,R.anim.next_exit);
                     ((Activity)context).finish();
