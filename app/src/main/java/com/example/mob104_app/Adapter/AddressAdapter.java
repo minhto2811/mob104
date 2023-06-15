@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +27,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.Addressv
     private Context context;
     private List<Address> list;
     private boolean choose;
+
 
     public AddressAdapter(Context context, boolean choose) {
         this.context = context;
@@ -81,7 +84,12 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.Addressv
         holder.btn_choose_address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddressActivity.chooseAddress(address);
+                Toast.makeText(context, "Chọn địa chỉ thành công", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.putExtra("address", address);
+                ((Activity)context).setResult(((Activity)context).RESULT_OK, intent);
+                ((Activity)context).finish();
+                ((Activity)context).overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
             }
         });
     }

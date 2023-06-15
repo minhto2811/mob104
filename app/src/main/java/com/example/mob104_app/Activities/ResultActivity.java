@@ -82,7 +82,6 @@ public class ResultActivity extends AppCompatActivity {
         super.onBackPressed();
         MainActivity.INDEX = 0;
         Intent intent = new Intent(ResultActivity.this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finishAffinity();
         overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
