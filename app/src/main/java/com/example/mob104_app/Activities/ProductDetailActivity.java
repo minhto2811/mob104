@@ -233,6 +233,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 bill.setTotal(cart.getQuantity() * (cart.getPrice_product() * (100 - cart.getSale()) / 100));
                 Intent intent = new Intent(ProductDetailActivity.this, CreateBillActivity.class);
                 intent.putExtra("bill", bill);
+                intent.putExtra("buy",true);
                 startActivity(intent);
                 overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
                 dialog.dismiss();

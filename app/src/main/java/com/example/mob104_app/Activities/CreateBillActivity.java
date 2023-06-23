@@ -1,7 +1,9 @@
 package com.example.mob104_app.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -97,33 +99,27 @@ public class CreateBillActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<Bill> call, @NonNull Response<Bill> response) {
                     dialog.dismiss();
-                    if (response.isSuccessful()) {
-                        if(LIST.listBuyCart.size() ==  CartFragment.cartList.size()){
-                            CartFragment.cartList.clear();
-                        }else {
-                            for (int i = 0; i < CartFragment.cartList.size(); i++) {
-                                for (int j = 0; j < LIST.listBuyCart.size(); j++) {
-                                    if(CartFragment.cartList.get(i).get_id().equals(LIST.listBuyCart.get(j))){
-                                        CartFragment.cartList.remove(i);
-                                        break;
+                    if (response.isSuccessful() && response.body() != null) {
+                        if (!getIntent().getBooleanExtra("buy", false)) {
+                            if (LIST.listBuyCart.size() != CartFragment.cartList.size()) {
+                                for (int i = 0; i < CartFragment.cartList.size(); i++) {
+                                    for (int j = 0; j < LIST.listBuyCart.size(); j++) {
+                                        if (CartFragment.cartList.get(i).get_id().equals(LIST.listBuyCart.get(j).get_id())) {
+                                            CartFragment.cartList.remove(i);
+                                            break;
+                                        }
                                     }
                                 }
                             }
+                            LIST.listBuyCart.clear();
+                            TOOLS.checkAllCarts = false;
                         }
-                        LIST.listBuyCart.clear();
-                        TOOLS.checkAllCarts = false;
-                        int rs = -1;
-                        if (response.body() != null) {
-                            rs = 0;
-                        }
-                        Intent intent = new Intent(CreateBillActivity.this, ResultActivity.class);
-                        intent.putExtra("result",rs);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
-                        finish();
+                        goResult(CreateBillActivity.this,0);
+                    }else {
+                        goResult(CreateBillActivity.this,-1);
                     }
-
                 }
+
 
                 @Override
                 public void onFailure(@NonNull Call<Bill> call, @NonNull Throwable t) {
@@ -132,6 +128,14 @@ public class CreateBillActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    public static void goResult(Context context, int index){
+        Intent intent = new Intent(context, ResultActivity.class);
+        intent.putExtra("result", index);
+        context.startActivity(intent);
+        ((Activity)context).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+        ((Activity)context).finish();
     }
 
     private void rules() {

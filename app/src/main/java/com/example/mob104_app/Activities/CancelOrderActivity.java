@@ -1,7 +1,6 @@
 package com.example.mob104_app.Activities;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,11 +68,7 @@ public class CancelOrderActivity extends AppCompatActivity {
                             } else {
                                value = 5;
                             }
-                            Intent intent = new Intent(CancelOrderActivity.this, ResultActivity.class);
-                            intent.putExtra("result", value);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
-                            finish();
+                        CreateBillActivity.goResult(CancelOrderActivity.this, value);
                         }
                     }
 
