@@ -1,12 +1,12 @@
 package com.example.mob104_app.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int HOME = 1;
     private final int SETTINGS = 4;
     private int EXIT = 0;
+    @SuppressLint("StaticFieldLeak")
     public static MeowBottomNavigation bottomNavigationView;
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void mapping() {
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
     }

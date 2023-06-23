@@ -1,23 +1,19 @@
 package com.example.mob104_app.Activities;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
-import com.bumptech.glide.Glide;
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.ACCOUNT;
@@ -64,56 +60,53 @@ public class PasswordActivity extends AppCompatActivity {
     }
 
     private void changePassword() {
-        btn_change_password_now.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!checkInputFiel(edt_pass_old, til_pass_old,PasswordActivity.this) || !checkInputFiel(edt_pass_new_1, til_pass_new_1,PasswordActivity.this) || !checkInputFiel(edt_pass_new_2, til_pass_new_2,PasswordActivity.this)) {
-                    return;
-                }
-                if (!checkPasswordNew(edt_pass_new_1, edt_pass_new_2, til_pass_new_2)) {
-                    return;
-                }
-                if (!validatePass(edt_pass_new_1, til_pass_new_1,PasswordActivity.this) || !validatePass(edt_pass_new_2, til_pass_new_2,PasswordActivity.this)) {
-                    return;
-                }
+        btn_change_password_now.setOnClickListener(v -> {
+            if (checkInputFiel(edt_pass_old, til_pass_old, PasswordActivity.this) || checkInputFiel(edt_pass_new_1, til_pass_new_1, PasswordActivity.this) || checkInputFiel(edt_pass_new_2, til_pass_new_2, PasswordActivity.this)) {
+                return;
+            }
+            if (!checkPasswordNew(edt_pass_new_1, edt_pass_new_2, til_pass_new_2)) {
+                return;
+            }
+            if (validatePass(edt_pass_new_1, til_pass_new_1, PasswordActivity.this) || validatePass(edt_pass_new_2, til_pass_new_2, PasswordActivity.this)) {
+                return;
+            }
 
-                Dialog dialog = TOOLS.createDialog(PasswordActivity.this);
+            Dialog dialog = TOOLS.createDialog(PasswordActivity.this);
 
-                dialog.show();
+            dialog.show();
 
-                JSONObject postData = new JSONObject();
-                try {
-                    postData.put("username", ACCOUNT.user.getUsername());
-                    postData.put("password", edt_pass_old.getText().toString().trim());
-                    postData.put("passwordnew", edt_pass_new_2.getText().toString().trim());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                String jsonString = postData.toString();
-                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
+            JSONObject postData = new JSONObject();
+            try {
+                postData.put("username", ACCOUNT.user.getUsername());
+                postData.put("password", edt_pass_old.getText().toString().trim());
+                postData.put("passwordnew", edt_pass_new_2.getText().toString().trim());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String jsonString = postData.toString();
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
 
 
-                ApiService.apiService.changePassword(requestBody).enqueue(new Callback<Integer>() {
-                    @Override
-                    public void onResponse(Call<Integer> call, Response<Integer> response) {
-                        if (response.isSuccessful()&&response.body()==1) {
-                                ACCOUNT.user.setPassword(edt_pass_new_1.getText().toString().trim());
-                                TOOLS.saveUser(PasswordActivity.this, ACCOUNT.user);
-                                Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu thành công ", Toast.LENGTH_SHORT).show();
-                                onBackPressed();
-                        }else {
-                            Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
-                        }
-                        dialog.dismiss();
-                    }
-
-                    @Override
-                    public void onFailure(Call<Integer> call, Throwable t) {
-                        dialog.dismiss();
+            ApiService.apiService.changePassword(requestBody).enqueue(new Callback<Integer>() {
+                @Override
+                public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                    if (response.isSuccessful() && response.body() != null && response.body() == 1) {
+                        ACCOUNT.user.setPassword(edt_pass_new_1.getText().toString().trim());
+                        TOOLS.saveUser(PasswordActivity.this, ACCOUNT.user);
+                        Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu thành công ", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    } else {
                         Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
                     }
-                });
-            }
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
+                    dialog.dismiss();
+                    Toast.makeText(PasswordActivity.this, "Thay đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
     }
 
@@ -121,18 +114,18 @@ public class PasswordActivity extends AppCompatActivity {
         String hint = "Nhập mật khẩu mới";
         if (editText.getText().toString().length() < 8) {
             editText.requestFocus();
-            textInputLayout.setHintTextColor(ColorStateList.valueOf(context.getResources().getColor(R.color.red)));
+            textInputLayout.setHintTextColor(ColorStateList.valueOf(ContextCompat.getColor(context,R.color.red)));
             textInputLayout.setHint("Mật khẩu phải nhiều hơn 7 kí tự");
-            return false;
+            return true;
         }
         textInputLayout.setHint(hint);
         editText.clearFocus();
-        return true;
+        return false;
 
     }
 
     public static boolean validatePass(EditText editText, TextInputLayout textInputLayout, Context context) {
-        String hint = textInputLayout.getHint().toString();
+        String hint = Objects.requireNonNull(textInputLayout.getHint()).toString();
         boolean a = false, b = false, c = false;
         for (char ch : editText.getText().toString().toCharArray()) {
             if (Character.isUpperCase(ch)) {
@@ -145,20 +138,20 @@ public class PasswordActivity extends AppCompatActivity {
         }
         if (!a || !b || !c) {
             editText.requestFocus();
-            textInputLayout.setHintTextColor(ColorStateList.valueOf(context.getResources().getColor(R.color.red)));
+            textInputLayout.setHintTextColor(ColorStateList.valueOf(ContextCompat.getColor(context,R.color.red)));
             textInputLayout.setHint("Mật khẩu >= 8 kí tự chứa A-Z,a-z,0-9.");
-            return false;
+            return true;
         }
         textInputLayout.setHint(hint);
         editText.clearFocus();
-        return true;
+        return false;
     }
 
     private boolean checkPasswordNew(EditText pass1, EditText pass2, TextInputLayout til2) {
         String hint = "Nhập mật khẩu mới. . .";
         if (!pass1.getText().toString().trim().equals(pass2.getText().toString().trim())) {
             til2.setHint("Mật khẩu không trùng khớp!");
-            til2.setHintTextColor(ColorStateList.valueOf(getResources().getColor(R.color.red)));
+            til2.setHintTextColor(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.red)));
             pass2.requestFocus();
             return false;
         }

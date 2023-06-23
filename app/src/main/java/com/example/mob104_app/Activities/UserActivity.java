@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -54,75 +53,66 @@ public class UserActivity extends AppCompatActivity {
     }
 
     private void selectDate() {
-        edt_select_date_user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                DatePickerDialog datePickerDialog = new DatePickerDialog(UserActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                calendar.set(Calendar.YEAR, year);
-                                calendar.set(Calendar.MONTH, monthOfYear);
-                                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                edt_select_date_user.setText(dateFormat.format(calendar.getTime()));
-                            }
-                        },
-                        (ACCOUNT.user.getDate() != null) ? Integer.valueOf(ACCOUNT.user.getDate().substring(6, 10)) : calendar.get(Calendar.YEAR),
-                        (ACCOUNT.user.getDate() != null) ? Integer.valueOf(ACCOUNT.user.getDate().substring(3, 5)) : calendar.get(Calendar.MONTH),
-                        (ACCOUNT.user.getDate() != null) ? Integer.valueOf(ACCOUNT.user.getDate().substring(0, 2)) : calendar.get(Calendar.DAY_OF_MONTH));
+        edt_select_date_user.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            DatePickerDialog datePickerDialog = new DatePickerDialog(UserActivity.this,
+                    (view, year, monthOfYear, dayOfMonth) -> {
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, monthOfYear);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        edt_select_date_user.setText(dateFormat.format(calendar.getTime()));
+                    },
+                    (ACCOUNT.user.getDate() != null) ? Integer.parseInt(ACCOUNT.user.getDate().substring(6, 10)) : calendar.get(Calendar.YEAR),
+                    (ACCOUNT.user.getDate() != null) ? Integer.parseInt(ACCOUNT.user.getDate().substring(3, 5)) : calendar.get(Calendar.MONTH),
+                    (ACCOUNT.user.getDate() != null) ? Integer.parseInt(ACCOUNT.user.getDate().substring(0, 2)) : calendar.get(Calendar.DAY_OF_MONTH));
 
-                datePickerDialog.show();
-            }
+            datePickerDialog.show();
         });
     }
 
     private void update() {
-        btn_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!checkFiel(edt_fullname_user, tv_err_fullname_user)
-                        || !checkFiel(edt_numberphone_user, tv_err_numberphone_user)
-                        || !checkFiel(edt_email_user, tv_err_email_user)
-                        || !checkFiel(edt_select_date_user, tv_err_select_date_user)) {
-                    return;
-                }
-                if (!cbox_confirm.isChecked()) {
-                    Toast.makeText(UserActivity.this, "Vui lòng xác nhận thông tin cập nhật!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Dialog dialog = TOOLS.createDialog(UserActivity.this);
-                dialog.show();
-                User user = ACCOUNT.user;
-                user.setFullname(edt_fullname_user.getText().toString().trim());
-                user.setNumberphone(edt_numberphone_user.getText().toString().trim());
-                user.setEmail(edt_email_user.getText().toString().trim());
-                user.setSex(rbtn_male.isChecked() ? true : false);
-                user.setDate(edt_select_date_user.getText().toString().trim());
-                ApiService.apiService.updateInfo(user).enqueue(new Callback<Integer>() {
-                    @Override
-                    public void onResponse(Call<Integer> call, Response<Integer> response) {
-                        if (response.isSuccessful()) {
-                            if (response.body() == 1) {
-                                ACCOUNT.user = user;
-                                TOOLS.saveUser(UserActivity.this, user);
-                                Toast.makeText(UserActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                                onBackPressed();
-                            } else {
-                                Toast.makeText(UserActivity.this, "Không có sự thay đổi thông tin", Toast.LENGTH_SHORT).show();
-                            }
-                            dialog.dismiss();
+        btn_confirm.setOnClickListener(v -> {
+            if (checkFiel(edt_fullname_user, tv_err_fullname_user)
+                    || checkFiel(edt_numberphone_user, tv_err_numberphone_user)
+                    || checkFiel(edt_email_user, tv_err_email_user)
+                    || checkFiel(edt_select_date_user, tv_err_select_date_user)) {
+                return;
+            }
+            if (!cbox_confirm.isChecked()) {
+                Toast.makeText(UserActivity.this, "Vui lòng xác nhận thông tin cập nhật!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Dialog dialog = TOOLS.createDialog(UserActivity.this);
+            dialog.show();
+            User user = ACCOUNT.user;
+            user.setFullname(edt_fullname_user.getText().toString().trim());
+            user.setNumberphone(edt_numberphone_user.getText().toString().trim());
+            user.setEmail(edt_email_user.getText().toString().trim());
+            user.setSex(rbtn_male.isChecked());
+            user.setDate(edt_select_date_user.getText().toString().trim());
+            ApiService.apiService.updateInfo(user).enqueue(new Callback<Integer>() {
+                @Override
+                public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                    if (response.isSuccessful()&&response.body()!=null) {
+                        if (response.body() == 1) {
+                            ACCOUNT.user = user;
+                            TOOLS.saveUser(UserActivity.this, user);
+                            Toast.makeText(UserActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+                        } else {
+                            Toast.makeText(UserActivity.this, "Không có sự thay đổi thông tin", Toast.LENGTH_SHORT).show();
                         }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Integer> call, Throwable t) {
-                        Toast.makeText(UserActivity.this, "Email hoặc số điện thoại đã được sử dụng!", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
-                });
-            }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
+                    Toast.makeText(UserActivity.this, "Email hoặc số điện thoại đã được sử dụng!", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });
         });
 
     }
@@ -131,25 +121,25 @@ public class UserActivity extends AppCompatActivity {
         if (editText.getText().toString().length() == 0) {
             editText.requestFocus();
             textView.setVisibility(View.VISIBLE);
-            return false;
+            return true;
         }
 
         if (editText == edt_numberphone_user) {
-            if (!TOOLS.isValidPhoneNumber(editText.getText().toString().trim())) {
+            if (TOOLS.isValidPhoneNumber(editText.getText().toString().trim())) {
                 textView.setVisibility(View.VISIBLE);
                 editText.requestFocus();
-                return false;
+                return true;
             }
         } else if (editText == edt_email_user) {
-            if (!TOOLS.isValidEmail(editText.getText().toString().trim())) {
+            if (TOOLS.isValidEmail(editText.getText().toString().trim())) {
                 textView.setVisibility(View.VISIBLE);
                 editText.requestFocus();
-                return false;
+                return true;
             }
         }
         textView.setVisibility(View.GONE);
         editText.clearFocus();
-        return true;
+        return false;
     }
 
 

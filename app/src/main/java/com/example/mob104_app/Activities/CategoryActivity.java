@@ -19,11 +19,8 @@ import com.example.mob104_app.Models.Product;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.LIST;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,13 +60,8 @@ public class CategoryActivity extends AppCompatActivity {
             ApiService.apiService.getListProductByCategory(category).enqueue(new Callback<List<Product>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<Product>> call, @NonNull Response<List<Product>> response) {
-                    if (response.isSuccessful()) {
-                        Collections.sort(response.body(), new Comparator<Product>() {
-                            @Override
-                            public int compare(Product o1, Product o2) {
-                                return o1.getStatus().compareToIgnoreCase(o2.getStatus());
-                            }
-                        });
+                    if (response.isSuccessful()&&response.body()!=null) {
+                        response.body().sort((o1, o2) -> o1.getStatus().compareToIgnoreCase(o2.getStatus()));
                         LIST.listProductByCategory = response.body();
                         productAdapter.setData(LIST.listProductByCategory);
                     }

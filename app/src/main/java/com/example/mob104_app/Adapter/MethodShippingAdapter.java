@@ -1,6 +1,6 @@
 package com.example.mob104_app.Adapter;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,16 +19,15 @@ import java.util.List;
 
 
 public class MethodShippingAdapter extends RecyclerView.Adapter<MethodShippingAdapter.MethodShippingViewHolder> {
-    private Context context;
     private List<MethodShipping> list;
 
-    private MethodShippingOnClick methodShippingOnClick;
+    private final MethodShippingOnClick methodShippingOnClick;
 
-    public MethodShippingAdapter(Context context, MethodShippingOnClick methodShippingOnClick) {
-        this.context = context;
+    public MethodShippingAdapter(MethodShippingOnClick methodShippingOnClick) {
         this.methodShippingOnClick = methodShippingOnClick;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(List<MethodShipping> list) {
         this.list = list;
         notifyDataSetChanged();
@@ -49,12 +48,7 @@ public class MethodShippingAdapter extends RecyclerView.Adapter<MethodShippingAd
             holder.tv_type_ms.setText(shipping.getName());
             holder.tv_price_ms.setText(TOOLS.convertPrice(shipping.getPrice()));
             holder.tv_time_ms.setText(shipping.getTime());
-            holder.ln_ms.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    methodShippingOnClick.ItemClick(shipping);
-                }
-            });
+            holder.ln_ms.setOnClickListener(v -> methodShippingOnClick.ItemClick(shipping));
         }
 
     }
@@ -64,9 +58,9 @@ public class MethodShippingAdapter extends RecyclerView.Adapter<MethodShippingAd
         return (list != null) ? list.size() : 0;
     }
 
-    public class MethodShippingViewHolder extends RecyclerView.ViewHolder {
-        private TextView tv_type_ms, tv_price_ms, tv_time_ms;
-        private LinearLayout ln_ms;
+    public static class MethodShippingViewHolder extends RecyclerView.ViewHolder {
+        private final TextView tv_type_ms, tv_price_ms, tv_time_ms;
+        private final LinearLayout ln_ms;
 
         public MethodShippingViewHolder(@NonNull View itemView) {
             super(itemView);

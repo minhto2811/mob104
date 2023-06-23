@@ -1,5 +1,6 @@
 package com.example.mob104_app.UI;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -65,6 +66,7 @@ public class HomeFragment extends Fragment {
     private ImageView imv_arrow;
 
     private boolean arrow = true;
+    @SuppressLint("StaticFieldLeak")
     public static SearchView searchView;
 
 

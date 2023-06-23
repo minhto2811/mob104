@@ -1,8 +1,8 @@
 package com.example.mob104_app.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,6 +21,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,8 +45,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import io.github.glailton.expandabletextview.ExpandableTextView;
@@ -66,8 +65,8 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ExpandableTextView expand_tv;
 
     private RatingBar ratingbar_default;
-    private Handler handler = new Handler();
-    private Runnable runnable = new Runnable() {
+    private final Handler handler = new Handler();
+    private final Runnable runnable = new Runnable() {
         @Override
         public void run() {
             if (viewPager_product.getCurrentItem() == listImage.size() - 1) {
@@ -77,7 +76,11 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         }
     };
-    private ImageView imv_back, imv_icon_sale, imv_banner, imv_sale, imv_favourite, imv_cart;
+    private ImageView imv_icon_sale;
+    private ImageView imv_banner;
+    private ImageView imv_sale;
+    private ImageView imv_favourite;
+    private ImageView imv_cart;
     private Product product;
 
     private RecyclerView rcv_product_related;
@@ -114,8 +117,8 @@ public class ProductDetailActivity extends AppCompatActivity {
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
             ApiService.apiService.addRecently(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Integer>() {
                 @Override
-                public void onResponse(Call<Integer> call, Response<Integer> response) {
-                    if (response.isSuccessful()) {
+                public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                    if (response.isSuccessful()&&response.body()!=null) {
                         if (response.body() == 1) {
                             LIST.listRecently.add(0,product);
                         }
@@ -123,7 +126,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<Integer> call, Throwable t) {
+                public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
 
                 }
             });
@@ -135,34 +138,29 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void gotoCart() {
-        imv_cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProductDetailActivity.this, MainActivity.class);
-                intent.putExtra("cart", MainActivity.CART);
-                startActivity(intent);
-                overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
-            }
+        imv_cart.setOnClickListener(v -> {
+            Intent intent = new Intent(ProductDetailActivity.this, MainActivity.class);
+            intent.putExtra("cart", MainActivity.CART);
+            startActivity(intent);
+            overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
         });
     }
 
 
     private void addToCart() {
-        btn_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ACCOUNT.user == null) {
-                    showDialogLogin();
-                    return;
-                }
-                showBottomSheet(false);
+        btn_add.setOnClickListener(v -> {
+            if (ACCOUNT.user == null) {
+                showDialogLogin();
+                return;
             }
+            showBottomSheet(false);
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void showBottomSheet(boolean buyNow) {
         final BottomSheetDialog dialog = new BottomSheetDialog(ProductDetailActivity.this, R.style.AppBottomSheetDialogTheme);
-        View view1 = LayoutInflater.from(ProductDetailActivity.this).inflate(R.layout.add_layout, null);
+        @SuppressLint("InflateParams") View view1 = LayoutInflater.from(ProductDetailActivity.this).inflate(R.layout.add_layout, null);
         ImageView imv_product_add = view1.findViewById(R.id.imv_product_add);
         ImageButton imb_mines_add = view1.findViewById(R.id.imb_mines_add);
         ImageButton imb_pluss_add = view1.findViewById(R.id.imb_pluss_add);
@@ -180,73 +178,64 @@ public class ProductDetailActivity extends AppCompatActivity {
             tv_price_add.setText(TOOLS.convertPrice(product.getPrice() * quan) + "VND");
         }
         tv_quantity_add.setText(String.valueOf(quan));
-        imb_mines_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (quan <= 1) {
-                    Toast.makeText(ProductDetailActivity.this, "Số lượng không được nhỏ hơn 1", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                quan--;
-                refreshPrice(product.getPrice() - product.getPrice() * product.getSale() / 100, tv_price_add, tv_quantity_add);
+        imb_mines_add.setOnClickListener(v -> {
+            if (quan <= 1) {
+                Toast.makeText(ProductDetailActivity.this, "Số lượng không được nhỏ hơn 1", Toast.LENGTH_SHORT).show();
+                return;
             }
+            quan--;
+            refreshPrice(product.getPrice() - product.getPrice() * product.getSale() / 100, tv_price_add, tv_quantity_add);
         });
-        imb_pluss_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (quan > 1000) {
-                    Toast.makeText(ProductDetailActivity.this, "Số lượng không được lớn hơn 1000", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                quan++;
-                refreshPrice(product.getPrice() - product.getPrice() * product.getSale() / 100, tv_price_add, tv_quantity_add);
+        imb_pluss_add.setOnClickListener(v -> {
+            if (quan > 1000) {
+                Toast.makeText(ProductDetailActivity.this, "Số lượng không được lớn hơn 1000", Toast.LENGTH_SHORT).show();
+                return;
             }
+            quan++;
+            refreshPrice(product.getPrice() - product.getPrice() * product.getSale() / 100, tv_price_add, tv_quantity_add);
         });
 
 
-        btn_add_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Cart cart = new Cart();
-                cart.setId_user(ACCOUNT.user.get_id());
-                cart.setId_product(product.getId());
-                cart.setQuantity(quan);
-                if (!buyNow) {
-                    dialog1.show();
-                    ApiService.apiService.addCart(cart).enqueue(new Callback<Cart>() {
-                        @Override
-                        public void onResponse(Call<Cart> call, Response<Cart> response) {
-                            if (response.isSuccessful()) {
-                                Toast.makeText(ProductDetailActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
-                                dialog1.dismiss();
-                            }
-                            dialog.dismiss();
-                        }
-
-                        @Override
-                        public void onFailure(Call<Cart> call, Throwable t) {
-                            Toast.makeText(ProductDetailActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
+        btn_add_add.setOnClickListener(v -> {
+            Cart cart = new Cart();
+            cart.setId_user(ACCOUNT.user.get_id());
+            cart.setId_product(product.getId());
+            cart.setQuantity(quan);
+            if (!buyNow) {
+                dialog1.show();
+                ApiService.apiService.addCart(cart).enqueue(new Callback<Cart>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Cart> call, @NonNull Response<Cart> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(ProductDetailActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
                             dialog1.dismiss();
                         }
-                    });
-                } else {
-                    Bill bill = new Bill();
-                    bill.setId_user(ACCOUNT.user.get_id());
-                    cart.setName_product(product.getName());
-                    cart.setPrice_product(product.getPrice());
-                    cart.setImage(product.getImage().get(0));
-                    cart.setSale(product.getSale());
-                    List<Cart> list = new ArrayList<>();
-                    list.add(cart);
-                    bill.setList(list);
-                    bill.setStatus(0);
-                    bill.setTotal(cart.getQuantity() * (cart.getPrice_product() * (100 - cart.getSale()) / 100));
-                    Intent intent = new Intent(ProductDetailActivity.this, CreateBillActivity.class);
-                    intent.putExtra("bill", bill);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
-                    dialog.dismiss();
-                }
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Cart> call, @NonNull Throwable t) {
+                        Toast.makeText(ProductDetailActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
+                        dialog1.dismiss();
+                    }
+                });
+            } else {
+                Bill bill = new Bill();
+                bill.setId_user(ACCOUNT.user.get_id());
+                cart.setName_product(product.getName());
+                cart.setPrice_product(product.getPrice());
+                cart.setImage(product.getImage().get(0));
+                cart.setSale(product.getSale());
+                List<Cart> list = new ArrayList<>();
+                list.add(cart);
+                bill.setList(list);
+                bill.setStatus(0);
+                bill.setTotal(cart.getQuantity() * (cart.getPrice_product() * (100 - cart.getSale()) / 100));
+                Intent intent = new Intent(ProductDetailActivity.this, CreateBillActivity.class);
+                intent.putExtra("bill", bill);
+                startActivity(intent);
+                overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+                dialog.dismiss();
             }
         });
         dialog.setContentView(view1);
@@ -254,28 +243,22 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void buyNow() {
-        btn_buy_now.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ACCOUNT.user == null) {
-                    showDialogLogin();
-                    return;
-                }
-                showBottomSheet(true);
+        btn_buy_now.setOnClickListener(v -> {
+            if (ACCOUNT.user == null) {
+                showDialogLogin();
+                return;
             }
+            showBottomSheet(true);
         });
     }
 
     private void showDialogLogin() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ProductDetailActivity.this);
         builder.setTitle("Đăng nhập để tiếp tục");
-        builder.setPositiveButton("Đăng nhập", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(ProductDetailActivity.this, LoginActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
-            }
+        builder.setPositiveButton("Đăng nhập", (dialog, which) -> {
+            Intent intent = new Intent(ProductDetailActivity.this, LoginActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
         });
         builder.setNegativeButton("Hủy", null);
         AlertDialog alertDialog = builder.create();
@@ -287,45 +270,41 @@ public class ProductDetailActivity extends AppCompatActivity {
             imv_favourite.setImageResource(R.drawable.mark);
         }
 
-        imv_favourite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ACCOUNT.user == null) {
-                    showDialogLogin();
-                } else {
-                    if (!checkFavourite(product.getId())) {
-                        dialog1.show();
-                        JSONObject postData = new JSONObject();
-                        try {
-                            postData.put("id_product", product.getId());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        String jsonString = postData.toString();
-                        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
-                        ApiService.apiService.addToFavourite(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Favourite>() {
-                            @Override
-                            public void onResponse(Call<Favourite> call, Response<Favourite> response) {
-                                if (response.isSuccessful()) {
-                                    LIST.getListProductByFavourite.add(product);
-                                    imv_favourite.setImageResource(R.drawable.mark);
-
-                                }
-                                dialog1.hide();
-                            }
-
-                            @Override
-                            public void onFailure(Call<Favourite> call, Throwable t) {
-                                Toast.makeText(ProductDetailActivity.this, "Thêm thất bại", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } else {
-                        Toast.makeText(ProductDetailActivity.this, "Sản phẩm đã được thêm vào mục yêu thích", Toast.LENGTH_SHORT).show();
-                        dialog1.hide();
+        imv_favourite.setOnClickListener(v -> {
+            if (ACCOUNT.user == null) {
+                showDialogLogin();
+            } else {
+                if (!checkFavourite(product.getId())) {
+                    dialog1.show();
+                    JSONObject postData = new JSONObject();
+                    try {
+                        postData.put("id_product", product.getId());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
+                    String jsonString = postData.toString();
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
+                    ApiService.apiService.addToFavourite(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Favourite>() {
+                        @Override
+                        public void onResponse(@NonNull Call<Favourite> call, @NonNull Response<Favourite> response) {
+                            if (response.isSuccessful()) {
+                                LIST.getListProductByFavourite.add(product);
+                                imv_favourite.setImageResource(R.drawable.mark);
+
+                            }
+                            dialog1.hide();
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<Favourite> call, @NonNull Throwable t) {
+                            Toast.makeText(ProductDetailActivity.this, "Thêm thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(ProductDetailActivity.this, "Sản phẩm đã được thêm vào mục yêu thích", Toast.LENGTH_SHORT).show();
+                    dialog1.hide();
                 }
             }
-
         });
     }
 
@@ -347,30 +326,26 @@ public class ProductDetailActivity extends AppCompatActivity {
         rcv_product_related.setAdapter(productAdapter);
         ApiService.apiService.getListProductRelated(product.getCategory()).enqueue(new Callback<List<Product>>() {
             @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                if (response.isSuccessful()) {
+            public void onResponse(@NonNull Call<List<Product>> call, @NonNull Response<List<Product>> response) {
+                if (response.isSuccessful()&&response.body()!=null) {
                     for (int i = 0; i < response.body().size(); i++) {
                         if (response.body().get(i).getId().equals(product.getId())) {
                             response.body().remove(i);
                             break;
                         }
                     }
-                    Collections.sort(response.body(), new Comparator<Product>() {
-                        @Override
-                        public int compare(Product o1, Product o2) {
-                            return o1.getStatus().compareToIgnoreCase(o2.getStatus());
-                        }
-                    });
+                    response.body().sort((o1, o2) -> o1.getStatus().compareToIgnoreCase(o2.getStatus()));
                     productAdapter.setData(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Product>> call, @NonNull Throwable t) {
                 Log.e( "ProductDetailActivity","onFailure");
             }
         });
     }
+    @SuppressLint("SetTextI18n")
     private void sale() {
         if (product.getSale() > 0) {
             tv_sale.setText("-" + product.getSale() + "%");
@@ -426,11 +401,12 @@ public class ProductDetailActivity extends AppCompatActivity {
         tv_price_new_detail = findViewById(R.id.tv_price_new_detail);
         btn_add = findViewById(R.id.btn_add_detail);
         ratingbar_default = findViewById(R.id.ratingbar_default);
-        imageAdapter = new ImageAdapter(this);
+        imageAdapter = new ImageAdapter();
         viewPager_product.setAdapter(imageAdapter);
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void showDetailProduct() {
         product = (Product) getIntent().getSerializableExtra("product");
         if (product == null) {
@@ -501,17 +477,12 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void refreshPrice(int price, TextView tv_price, TextView tv_quantity) {
         tv_quantity.setText(String.valueOf(quan));
-        tv_price.setText(TOOLS.convertPrice(price * quan) + "VND");
+        tv_price.setText(TOOLS.convertPrice(price * quan));
     }
 
     private void back() {
-        imv_back = findViewById(R.id.imv_back);
-        imv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        ImageView imv_back = findViewById(R.id.imv_back);
+        imv_back.setOnClickListener(v -> onBackPressed());
     }
 
     @Override

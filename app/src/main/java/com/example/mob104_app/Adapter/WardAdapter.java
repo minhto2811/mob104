@@ -1,5 +1,6 @@
 package com.example.mob104_app.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mob104_app.Interface.DistrictOnClick;
 import com.example.mob104_app.Interface.WardOnClick;
-import com.example.mob104_app.Models.District;
 import com.example.mob104_app.Models.Ward;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.ADDRESS;
@@ -19,16 +18,17 @@ import com.example.mob104_app.Tools.ADDRESS;
 import java.util.List;
 
 public class WardAdapter extends RecyclerView.Adapter<WardAdapter.WardViewHolder> {
-    private Context context;
+    private final Context context;
     private List<Ward> list;
 
-    private WardOnClick wardOnClick;
+    private final WardOnClick wardOnClick;
 
     public WardAdapter(Context context, WardOnClick wardOnClick) {
         this.context = context;
         this.wardOnClick = wardOnClick;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(List<Ward> list) {
         this.list = list;
         notifyDataSetChanged();
@@ -45,23 +45,13 @@ public class WardAdapter extends RecyclerView.Adapter<WardAdapter.WardViewHolder
     public void onBindViewHolder(@NonNull WardAdapter.WardViewHolder holder, int position) {
         if (ADDRESS.ward != null) {
             holder.btn_choose.setText(ADDRESS.ward.getName());
-            holder.btn_choose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    wardOnClick.ItemClick(ADDRESS.ward);
-                }
-            });
+            holder.btn_choose.setOnClickListener(v -> wardOnClick.ItemClick(ADDRESS.ward));
             return;
         }
         Ward ward = list.get(position);
         if (ward != null) {
             holder.btn_choose.setText(ward.getName());
-            holder.btn_choose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    wardOnClick.ItemClick(ward);
-                }
-            });
+            holder.btn_choose.setOnClickListener(v -> wardOnClick.ItemClick(ward));
         }
 
     }
@@ -77,9 +67,9 @@ public class WardAdapter extends RecyclerView.Adapter<WardAdapter.WardViewHolder
         return 0;
     }
 
-    public class WardViewHolder extends RecyclerView.ViewHolder {
+    public static class WardViewHolder extends RecyclerView.ViewHolder {
 
-        private Button btn_choose;
+        private final Button btn_choose;
 
         public WardViewHolder(@NonNull View itemView) {
             super(itemView);

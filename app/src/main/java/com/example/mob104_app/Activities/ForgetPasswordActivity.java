@@ -1,6 +1,7 @@
 package com.example.mob104_app.Activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -12,7 +13,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.R;
@@ -59,36 +62,33 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     }
 
     private void phone() {
-        fbtn_phone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PermissionListener permissionlistener = new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted() {
-                        String phoneNumber = "0981999666";
-                        Uri dialUri = Uri.parse("tel:" + phoneNumber);
-                        Intent intent = new Intent(Intent.ACTION_VIEW, dialUri);
-                        startActivity(intent);
-                    }
+        fbtn_phone.setOnClickListener(v -> {
+            PermissionListener permissionlistener = new PermissionListener() {
+                @Override
+                public void onPermissionGranted() {
+                    String phoneNumber = "0981999666";
+                    Uri dialUri = Uri.parse("tel:" + phoneNumber);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, dialUri);
+                    startActivity(intent);
+                }
 
-                    @Override
-                    public void onPermissionDenied(List<String> deniedPermissions) {
-                        Toast.makeText(ForgetPasswordActivity.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                };
-                TedPermission.create()
-                        .setPermissionListener(permissionlistener)
-                        .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                        .setPermissions(Manifest.permission.CALL_PHONE)
-                        .check();
+                @Override
+                public void onPermissionDenied(List<String> deniedPermissions) {
+                    Toast.makeText(ForgetPasswordActivity.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                }
+            };
+            TedPermission.create()
+                    .setPermissionListener(permissionlistener)
+                    .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                    .setPermissions(Manifest.permission.CALL_PHONE)
+                    .check();
 
-            }
         });
     }
 
     private boolean checkInputFiel(EditText editText, TextInputLayout textInputLayout) {
         if (editText.getText().toString().length() < 8) {
-            textInputLayout.setHintTextColor(ColorStateList.valueOf(getResources().getColor(R.color.red)));
+            textInputLayout.setHintTextColor(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.red)));
             editText.requestFocus();
             if (editText == edt_username) {
                 textInputLayout.setHint("Tài khoản phải nhiều hơn 7 kí tự!");
@@ -97,7 +97,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
             } else {
                 textInputLayout.setHint("Mã xác minh không hợp lệ");
             }
-            return false;
+            return true;
         }
         if (editText == edt_username) {
             textInputLayout.setHint("Nhập tài tên tài khoản");
@@ -107,91 +107,89 @@ public class ForgetPasswordActivity extends AppCompatActivity {
             textInputLayout.setHint("Nhập mã xác minh");
         }
         editText.clearFocus();
-        return true;
+        return false;
     }
 
     private void resetPassword() {
-        btn_forgot_password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!checkInputFiel(edt_username, til_username)) {
+        btn_forgot_password.setOnClickListener(v -> {
+            if (checkInputFiel(edt_username, til_username)) {
+                return;
+            }
+            if (!OK) {
+                dialog.show();
+
+                ApiService.apiService.getCodeConfirmPassword(edt_username.getText().toString().trim()).enqueue(new Callback<Integer>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                        if (response.isSuccessful()&&response.body()!=null) {
+                            if (response.body() == 1) {
+                                Toast.makeText(ForgetPasswordActivity.this, "Kiểm tra email được liên kết với tài khoản", Toast.LENGTH_SHORT).show();
+                                OK = true;
+                                showInput();
+                            } else if (response.body() == -1) {
+                                Toast.makeText(ForgetPasswordActivity.this, "Tài khoản chưa được liên kết với email nào, hãy gọi cho chúng tôi để đặt mật khẩu mới", Toast.LENGTH_SHORT).show();
+                            } else if (response.body() == 0) {
+                                Toast.makeText(ForgetPasswordActivity.this, "Không tìm thấy tài khoản", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ForgetPasswordActivity.this, "Lỗi khi gửi email xác thực", Toast.LENGTH_SHORT).show();
+                            }
+                            dialog.hide();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
+                        Toast.makeText(ForgetPasswordActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
+                        dialog.hide();
+                    }
+                });
+            } else {
+                if (checkInputFiel(edt_code, til_code)
+                        || checkInputFiel(edt_password_new, til_password_new)
+                        || PasswordActivity.validatePass(edt_password_new, til_password_new, ForgetPasswordActivity.this)) {
                     return;
                 }
-                if (!OK) {
-                    dialog.show();
-
-                    ApiService.apiService.getCodeConfirmPassword(edt_username.getText().toString().trim()).enqueue(new Callback<Integer>() {
-                        @Override
-                        public void onResponse(Call<Integer> call, Response<Integer> response) {
-                            if (response.isSuccessful()) {
-                                if (response.body() == 1) {
-                                    Toast.makeText(ForgetPasswordActivity.this, "Kiểm tra email được liên kết với tài khoản", Toast.LENGTH_SHORT).show();
-                                    OK = true;
-                                    showInput();
-                                } else if (response.body() == -1) {
-                                    Toast.makeText(ForgetPasswordActivity.this, "Tài khoản chưa được liên kết với email nào, hãy gọi cho chúng tôi để đặt mật khẩu mới", Toast.LENGTH_SHORT).show();
-                                } else if (response.body() == 0) {
-                                    Toast.makeText(ForgetPasswordActivity.this, "Không tìm thấy tài khoản", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(ForgetPasswordActivity.this, "Lỗi khi gửi email xác thực", Toast.LENGTH_SHORT).show();
-                                }
-                                dialog.hide();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Integer> call, Throwable t) {
-                            Toast.makeText(ForgetPasswordActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
-                            dialog.hide();
-                        }
-                    });
-                } else {
-                    if (!checkInputFiel(edt_code, til_code)
-                            || !checkInputFiel(edt_password_new, til_password_new)
-                            || !PasswordActivity.validatePass(edt_password_new, til_password_new, ForgetPasswordActivity.this)) {
-                        return;
-                    }
-                    dialog.show();
-                    JSONObject postData = new JSONObject();
-                    try {
-                        postData.put("password", edt_password_new.getText().toString().trim());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    String jsonString = postData.toString();
-                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
-                    ApiService.apiService.changePasswordNew(edt_code.getText().toString().trim(), requestBody).enqueue(new Callback<Integer>() {
-                        @Override
-                        public void onResponse(Call<Integer> call, Response<Integer> response) {
-                            if (response.isSuccessful()) {
-                                if (response.body() == 1) {
-                                    Toast.makeText(ForgetPasswordActivity.this, "Thay đổi mật khẩu mới thành công", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent();
-                                    intent.putExtra("username", edt_username.getText().toString().trim());
-                                    intent.putExtra("password", edt_password_new.getText().toString().trim());
-                                    setResult(RESULT_OK, intent);
-                                    onBackPressed();
-                                } else {
-                                    Toast.makeText(ForgetPasswordActivity.this, "Mã thông báo không hợp lệ hoặc đã hết hạn", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                            dialog.hide();
-                        }
-
-                        @Override
-                        public void onFailure(Call<Integer> call, Throwable t) {
-                            Toast.makeText(ForgetPasswordActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
-                            dialog.hide();
-                        }
-                    });
-
-
+                dialog.show();
+                JSONObject postData = new JSONObject();
+                try {
+                    postData.put("password", edt_password_new.getText().toString().trim());
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                String jsonString = postData.toString();
+                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
+                ApiService.apiService.changePasswordNew(edt_code.getText().toString().trim(), requestBody).enqueue(new Callback<Integer>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                        if (response.isSuccessful()&& response.body()!=null) {
+                            if (response.body() == 1) {
+                                Toast.makeText(ForgetPasswordActivity.this, "Thay đổi mật khẩu mới thành công", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent();
+                                intent.putExtra("username", edt_username.getText().toString().trim());
+                                intent.putExtra("password", edt_password_new.getText().toString().trim());
+                                setResult(RESULT_OK, intent);
+                                onBackPressed();
+                            } else {
+                                Toast.makeText(ForgetPasswordActivity.this, "Mã thông báo không hợp lệ hoặc đã hết hạn", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        dialog.hide();
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
+                        Toast.makeText(ForgetPasswordActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
+                        dialog.hide();
+                    }
+                });
+
+
             }
         });
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void showInput() {
         til_code.setVisibility(View.VISIBLE);
         til_password_new.setVisibility(View.VISIBLE);
@@ -199,12 +197,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     }
 
     private void back() {
-        imv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        imv_back.setOnClickListener(v -> onBackPressed());
     }
 
     private void mapping() {

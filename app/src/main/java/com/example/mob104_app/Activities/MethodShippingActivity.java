@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mob104_app.Adapter.MethodShippingAdapter;
-import com.example.mob104_app.Interface.MethodShippingOnClick;
-import com.example.mob104_app.Models.MethodShipping;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.LIST;
 
@@ -23,7 +21,6 @@ public class MethodShippingActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private MethodShippingAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +36,12 @@ public class MethodShippingActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(manager);
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(MethodShippingActivity.this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
-        adapter = new MethodShippingAdapter(MethodShippingActivity.this, new MethodShippingOnClick() {
-            @Override
-            public void ItemClick(MethodShipping methodShipping) {
-                Intent intent = new Intent();
-                intent.putExtra("method_shipping",methodShipping);
-                setResult(RESULT_OK,intent);
-                finish();
-                overridePendingTransition(R.anim.prev_enter,R.anim.prev_exit);
-            }
+        MethodShippingAdapter adapter = new MethodShippingAdapter(methodShipping -> {
+            Intent intent = new Intent();
+            intent.putExtra("method_shipping", methodShipping);
+            setResult(RESULT_OK, intent);
+            finish();
+            overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
         });
         recyclerView.setAdapter(adapter);
         adapter.setData(LIST.listMethodShipping());

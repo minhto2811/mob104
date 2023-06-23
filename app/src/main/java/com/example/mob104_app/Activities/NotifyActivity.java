@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -50,7 +49,6 @@ public class NotifyActivity extends AppCompatActivity {
         mapping();
         setToolbar();
         if(ACCOUNT.user==null){
-            Log.e( "onCreate: ", ACCOUNT.user.toString());
             ln_check_notify.setVisibility(View.VISIBLE);
             return;
         }
@@ -59,13 +57,10 @@ public class NotifyActivity extends AppCompatActivity {
     }
 
     private void login() {
-        btn_login_notify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(NotifyActivity.this,LoginActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.next_enter,R.anim.next_exit);
-            }
+        btn_login_notify.setOnClickListener(v -> {
+            Intent intent = new Intent(NotifyActivity.this,LoginActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.next_enter,R.anim.next_exit);
         });
 
     }
@@ -85,7 +80,7 @@ public class NotifyActivity extends AppCompatActivity {
         dialog.show();
         ApiService.apiService.getNotify(ACCOUNT.user.get_id()).enqueue(new Callback<List<Notify>>() {
             @Override
-            public void onResponse(Call<List<Notify>> call, Response<List<Notify>> response) {
+            public void onResponse(@NonNull Call<List<Notify>> call, @NonNull Response<List<Notify>> response) {
                 if(response.isSuccessful()&&response.body()!=null){
                     Collections.reverse(response.body());
                     adapter.setData(response.body());
@@ -94,7 +89,7 @@ public class NotifyActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Notify>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Notify>> call, @NonNull Throwable t) {
                 dialog.dismiss();
                 Toast.makeText(NotifyActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
             }

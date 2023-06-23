@@ -19,8 +19,6 @@ import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.ACCOUNT;
 import com.example.mob104_app.Tools.LIST;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -63,21 +61,16 @@ public class FavouriteActivity extends AppCompatActivity {
         if (LIST.getListProductByFavourite.isEmpty()) {
             ApiService.apiService.getListProductByFavourite(ACCOUNT.user.get_id()).enqueue(new Callback<List<Product>>() {
                 @Override
-                public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                public void onResponse(@NonNull Call<List<Product>> call, @NonNull Response<List<Product>> response) {
                     if (response.isSuccessful()&& response.body()!=null) {
-                        Collections.sort(response.body(), new Comparator<Product>() {
-                            @Override
-                            public int compare(Product o1, Product o2) {
-                                return o1.getStatus().compareToIgnoreCase(o2.getStatus());
-                            }
-                        });
+                        response.body().sort((o1, o2) -> o1.getStatus().compareToIgnoreCase(o2.getStatus()));
                         LIST.getListProductByFavourite = response.body();
                         adapter.setData(LIST.getListProductByFavourite);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<List<Product>> call, Throwable t) {
+                public void onFailure(@NonNull Call<List<Product>> call, @NonNull Throwable t) {
 
                 }
             });

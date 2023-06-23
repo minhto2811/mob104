@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.Models.User;
@@ -70,10 +71,10 @@ public class RegisterActivity extends AppCompatActivity {
     private void checkInputFiel() {
 
         btn_signup.setOnClickListener(v -> {
-            if (!checkFielEmty(edt_email, til_email) || !checkFielEmty(edt_fullname, til_fullname) || !checkFielEmty(edt_username, til_username) || !checkFielEmty(edt_password, til_password)) {
+            if (checkFielEmty(edt_email, til_email) || checkFielEmty(edt_fullname, til_fullname) || checkFielEmty(edt_username, til_username) || checkFielEmty(edt_password, til_password)) {
                 return;
             }
-            if (!PasswordActivity.validatePass(edt_password, til_password, RegisterActivity.this)) {
+            if (PasswordActivity.validatePass(edt_password, til_password, RegisterActivity.this)) {
                 return;
             }
 
@@ -83,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean checkFielEmty(EditText editText, TextInputLayout textInputLayout) {
         if (editText.getText().toString().length() < 8) {
-            textInputLayout.setHintTextColor(ColorStateList.valueOf(getResources().getColor(R.color.red)));
+            textInputLayout.setHintTextColor(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.red)));
             editText.requestFocus();
             if (editText == edt_email) {
                 textInputLayout.setError("Email không hợp lệ!");
@@ -94,12 +95,12 @@ public class RegisterActivity extends AppCompatActivity {
             } else {
                 textInputLayout.setError("Tên người dùng không hợp lệ");
             }
-            return false;
+            return true;
         }
         if (editText == edt_email) {
-            if(!TOOLS.isValidEmail(editText.getText().toString())){
+            if(TOOLS.isValidEmail(editText.getText().toString())){
                 textInputLayout.setError("Email không hợp lệ!");
-                return false;
+                return true;
             }
             textInputLayout.setHint("Nhập email");
         } else if (editText == edt_username) {
@@ -111,7 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
         textInputLayout.setError(null);
         editText.clearFocus();
-        return true;
+        return false;
     }
 
 

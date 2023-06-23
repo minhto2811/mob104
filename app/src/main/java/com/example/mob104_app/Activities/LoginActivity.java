@@ -12,7 +12,6 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.mob104_app.Api.ApiService;
 import com.example.mob104_app.Models.Address;
@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
 
         btn_login.setOnClickListener(v -> {
-            if (!checkFielEmty(edt_username, til_username) || !checkFielEmty(edt_password, til_password)) {
+            if (checkFielEmty(edt_username, til_username) || checkFielEmty(edt_password, til_password)) {
                 return;
             }
             checkAccount(edt_username.getText().toString(), edt_password.getText().toString());
@@ -101,14 +101,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean checkFielEmty(EditText editText, TextInputLayout textInputLayout) {
         if (editText.getText().toString().trim().isEmpty()) {
-            textInputLayout.setHintTextColor(ColorStateList.valueOf(getResources().getColor(R.color.red)));
+            textInputLayout.setHintTextColor(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.red)));
             if (editText == edt_username) {
                 textInputLayout.setHint("Tài khoản không được để trống!");
             } else {
                 textInputLayout.setHint("Mật khẩu không được để trống!");
             }
             editText.requestFocus();
-            return false;
+            return true;
         }
         if (editText == edt_username) {
             textInputLayout.setHint("Nhập tài khoản. . .");
@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
             textInputLayout.setHint("Nhập mật khẩu. . .");
         }
         editText.clearFocus();
-        return true;
+        return false;
     }
 
     private void back() {
@@ -140,17 +140,18 @@ public class LoginActivity extends AppCompatActivity {
 
         ApiService.apiService.loginUser(requestBody).enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 if (response.isSuccessful()) {
                     User user1 = response.body();
+                    assert user1 != null;
                     if (user1.getUsername() != null) {
                         TOOLS.saveUser(LoginActivity.this, user1);
                         ACCOUNT.user = user1;
                         ApiService.apiService.getListProductByFavourite(user1.get_id()).enqueue(new Callback<List<Product>>() {
                             @Override
-                            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                            public void onResponse(@NonNull Call<List<Product>> call, @NonNull Response<List<Product>> response) {
                                 if (response.isSuccessful()) {
-                                    if(response.body()!=null){
+                                    if (response.body() != null) {
                                         LIST.getListProductByFavourite = response.body();
                                     }
                                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
@@ -159,15 +160,15 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onFailure(Call<List<Product>> call, Throwable t) {
+                            public void onFailure(@NonNull Call<List<Product>> call, @NonNull Throwable t) {
                                 gotoSettings();
                             }
                         });
                         ApiService.apiService.getAddress(user1.get_id()).enqueue(new Callback<List<Address>>() {
                             @Override
-                            public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
+                            public void onResponse(@NonNull Call<List<Address>> call, @NonNull Response<List<Address>> response) {
                                 if (response.isSuccessful()) {
-                                    if(response.body()!=null){
+                                    if (response.body() != null) {
                                         LIST.listAddress = response.body();
                                     }
                                 }
@@ -175,14 +176,14 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onFailure(Call<List<Address>> call, Throwable t) {
+                            public void onFailure(@NonNull Call<List<Address>> call, @NonNull Throwable t) {
                                 gotoSettings();
                             }
                         });
 
                         ApiService.apiService.getRecently(ACCOUNT.user.get_id()).enqueue(new Callback<List<Product>>() {
                             @Override
-                            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                            public void onResponse(@NonNull Call<List<Product>> call, @NonNull Response<List<Product>> response) {
                                 if (response.isSuccessful()) {
                                     if (response.body() != null) {
                                         Collections.reverse(response.body());
@@ -193,7 +194,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onFailure(Call<List<Product>> call, Throwable t) {
+                            public void onFailure(@NonNull Call<List<Product>> call, @NonNull Throwable t) {
                                 gotoSettings();
                             }
                         });
@@ -210,11 +211,11 @@ public class LoginActivity extends AppCompatActivity {
 
                         ApiService.apiService.tokenNotify(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Integer>() {
                             @Override
-                            public void onResponse(Call<Integer> call, Response<Integer> response) {
-                                if(response.isSuccessful()&&response.body()!=null){
-                                    if(response.body()==1){
+                            public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    if (response.body() == 1) {
                                         user1.setTokenNotify(token);
-                                        TOOLS.saveUser(LoginActivity.this,user1);
+                                        TOOLS.saveUser(LoginActivity.this, user1);
                                         ACCOUNT.user = user1;
                                     }
                                 }
@@ -222,7 +223,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onFailure(Call<Integer> call, Throwable t) {
+                            public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
                                 gotoSettings();
                             }
                         });
@@ -235,7 +236,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                 Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác!", Toast.LENGTH_SHORT).show();
                 dialog.cancel();
             }
@@ -293,7 +294,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode == REQUEST_CODE_NEXT || requestCode == REQUEST_CODE_FORGET) && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_NEXT && resultCode == RESULT_OK) {
             assert data != null;
             edt_username.setText(data.getStringExtra("username"));
             edt_password.setText(data.getStringExtra("password"));

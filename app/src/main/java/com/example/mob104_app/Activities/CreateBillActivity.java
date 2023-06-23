@@ -1,5 +1,6 @@
 package com.example.mob104_app.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -47,7 +48,6 @@ public class CreateBillActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Bill bill;
     private RecyclerView recyclerView;
-    private CartAdapter adapter;
 
     private TextView tv_name, tv_rules, tv_total_price, tv_total_shipping, tv_total_all, tv_method_payment, tv_numberphone, tv_more, tv_address, tv_tilte_address, tv_type_ms, tv_price_ms, tv_time_ms;
     private Address address;
@@ -85,40 +85,37 @@ public class CreateBillActivity extends AppCompatActivity {
 
 
     private void buy() {
-        btn_confirm_buy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bill.getAddress() == null) {
-                    Toast.makeText(CreateBillActivity.this, "Vui lòng chọn địa chỉ", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Dialog dialog = TOOLS.createDialog(CreateBillActivity.this);
-                dialog.show();
-                ApiService.apiService.createBill(ACCOUNT.user.getTokenNotify(),bill).enqueue(new Callback<Bill>() {
-                    @Override
-                    public void onResponse(Call<Bill> call, Response<Bill> response) {
-                        dialog.dismiss();
-                        if (response.isSuccessful()) {
-                            int rs = -1;
-                            if (response.body() != null) {
-                                rs = 0;
-                            }
-                            Intent intent = new Intent(CreateBillActivity.this, ResultActivity.class);
-                            intent.putExtra("result",rs);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
-                            finish();
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<Bill> call, Throwable t) {
-                        Toast.makeText(CreateBillActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                    }
-                });
+        btn_confirm_buy.setOnClickListener(v -> {
+            if (bill.getAddress() == null) {
+                Toast.makeText(CreateBillActivity.this, "Vui lòng chọn địa chỉ", Toast.LENGTH_SHORT).show();
+                return;
             }
+            Dialog dialog = TOOLS.createDialog(CreateBillActivity.this);
+            dialog.show();
+            ApiService.apiService.createBill(ACCOUNT.user.getTokenNotify(),bill).enqueue(new Callback<Bill>() {
+                @Override
+                public void onResponse(@NonNull Call<Bill> call, @NonNull Response<Bill> response) {
+                    dialog.dismiss();
+                    if (response.isSuccessful()) {
+                        int rs = -1;
+                        if (response.body() != null) {
+                            rs = 0;
+                        }
+                        Intent intent = new Intent(CreateBillActivity.this, ResultActivity.class);
+                        intent.putExtra("result",rs);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+                        finish();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<Bill> call, @NonNull Throwable t) {
+                    Toast.makeText(CreateBillActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });
         });
     }
 
@@ -150,15 +147,10 @@ public class CreateBillActivity extends AppCompatActivity {
     }
 
     private void methodPayment() {
-        ln_method_payment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gotoActivityForResult(REQUESR_METHOD_PAYMENT, MethodPaymentActivity.class);
-            }
-        });
+        ln_method_payment.setOnClickListener(v -> gotoActivityForResult(REQUESR_METHOD_PAYMENT, MethodPaymentActivity.class));
     }
 
-    private void gotoActivityForResult(int code, Class aClass) {
+    private void gotoActivityForResult(int code, Class<?> aClass) {
         Intent intent = new Intent(CreateBillActivity.this, aClass);
         startActivityForResult(intent, code);
         overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
@@ -178,27 +170,20 @@ public class CreateBillActivity extends AppCompatActivity {
     }
 
     private void methodShipping() {
-        ln_method_shipping.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gotoActivityForResult(REQUESR_METHOD_SHIPPING, MethodShippingActivity.class);
-            }
-        });
+        ln_method_shipping.setOnClickListener(v -> gotoActivityForResult(REQUESR_METHOD_SHIPPING, MethodShippingActivity.class));
     }
 
     private void chooseAddress() {
-        ln_address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CreateBillActivity.this, AddressActivity.class);
-                intent.putExtra("choose", true);
-                startActivityForResult(intent, REQUESR_ADDRESS_CHOOSE);
-                overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
-            }
+        ln_address.setOnClickListener(v -> {
+            Intent intent = new Intent(CreateBillActivity.this, AddressActivity.class);
+            intent.putExtra("choose", true);
+            startActivityForResult(intent, REQUESR_ADDRESS_CHOOSE);
+            overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
         });
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void showAddress() {
         address = ADDRESS.aDefault(CreateBillActivity.this);
         if (address != null) {
@@ -244,7 +229,7 @@ public class CreateBillActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(manager);
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(CreateBillActivity.this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
-        adapter = new CartAdapter(CreateBillActivity.this, true);
+        CartAdapter adapter = new CartAdapter(CreateBillActivity.this, true);
         recyclerView.setAdapter(adapter);
         adapter.setData(bill.getList());
     }
@@ -261,11 +246,13 @@ public class CreateBillActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUESR_ADDRESS_CHOOSE) {
             if (resultCode == RESULT_OK) {
+                assert data != null;
                 address = (Address) data.getSerializableExtra("address");
                 bill.setName(address.getFullname());
                 bill.setPhone(address.getNumberphone());
@@ -278,12 +265,14 @@ public class CreateBillActivity extends AppCompatActivity {
             }
         } else if (requestCode == REQUESR_METHOD_SHIPPING) {
             if (resultCode == RESULT_OK) {
+                assert data != null;
                 methodShipping = (MethodShipping) data.getSerializableExtra("method_shipping");
                 showMethodShipping(methodShipping);
                 showDetailPayment(total_product, methodShipping.getPrice());
             }
         } else if (requestCode == REQUESR_METHOD_PAYMENT) {
             if (resultCode == RESULT_OK) {
+                assert data != null;
                 MethodPayment payment = (MethodPayment) data.getSerializableExtra("method_payment");
                 showMethodPayment(payment);
             }

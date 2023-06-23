@@ -1,11 +1,10 @@
 package com.example.mob104_app.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +36,8 @@ import retrofit2.Response;
 public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Cart> list;
-    private Context context;
-    private boolean type1;
+    private final Context context;
+    private final boolean type1;
     private static final int VIEW_TYPE_TYPE = 0;
     private static final int VIEW_TYPE_TYPE1 = 1;
 
@@ -48,6 +47,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.type1 = type1;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(List<Cart> list) {
         this.list = list;
         notifyDataSetChanged();
@@ -76,6 +76,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder1, int position) {
         Cart cart = list.get(position);
@@ -86,83 +87,61 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 Glide.with(context).load(TOOLS.doMainDevice + cart.getImage()).into(holder.imv_image);
                 holder.tv_name.setText(cart.getName_product());
-                holder.tv_price.setText("Tổng tiền: " + TOOLS.convertPrice(cart.getQuantity() * lastPrice) );
+                holder.tv_price.setText("Tổng tiền: " + TOOLS.convertPrice(cart.getQuantity() * lastPrice));
                 holder.tv_quantity.setText(String.valueOf(cart.getQuantity()));
                 holder.cbox_add.setChecked(TOOLS.checkAllCarts);
                 if (TOOLS.checkAllCarts) {
                     LIST.listBuyCart.add(cart);
                 }
 
-                holder.imv_image.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(context, ProductDetailActivity.class);
-                        intent.putExtra("id_product",cart.getId_product());
-                        context.startActivity(intent);
-                        ((Activity)context).overridePendingTransition(R.anim.next_enter,R.anim.next_exit);
-                    }
+                holder.imv_image.setOnClickListener(v -> {
+                    Intent intent = new Intent(context, ProductDetailActivity.class);
+                    intent.putExtra("id_product", cart.getId_product());
+                    context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
                 });
-                holder.cbox_add.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (holder.cbox_add.isChecked()) {
-                            LIST.listBuyCart.add(cart);
-                            if (LIST.listBuyCart.size() == list.size()) {
-                                TOOLS.checkAllCarts = true;
-                                CartFragment.setCheckByItem();
-                            }
-                        } else {
-                            for (int i = 0; i < LIST.listBuyCart.size(); i++) {
-                                if (LIST.listBuyCart.get(i).get_id().equals(cart.get_id())) {
-                                    LIST.listBuyCart.remove(i);
-                                    break;
-                                }
-                            }
-                            if (LIST.listBuyCart.size() < list.size()) {
-                                TOOLS.checkAllCarts = false;
-                                CartFragment.setCheckByItem();
+                holder.cbox_add.setOnClickListener(v -> {
+                    if (holder.cbox_add.isChecked()) {
+                        LIST.listBuyCart.add(cart);
+                        if (LIST.listBuyCart.size() == list.size()) {
+                            TOOLS.checkAllCarts = true;
+                            CartFragment.setCheckByItem();
+                        }
+                    } else {
+                        for (int i = 0; i < LIST.listBuyCart.size(); i++) {
+                            if (LIST.listBuyCart.get(i).get_id().equals(cart.get_id())) {
+                                LIST.listBuyCart.remove(i);
+                                break;
                             }
                         }
-                        CartFragment.showLayoutPay(LIST.listBuyCart);
-                    }
-                });
-                holder.imv_subtract.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (cart.getQuantity() == 1) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                            builder.setTitle("Xóa sản phẩm " + cart.getName_product() + " khỏi giỏ hàng?");
-                            builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    deleteCart(holder, cart.get_id());
-                                }
-                            });
-                            builder.setNegativeButton("Hủy", null);
-                            builder.create().show();
-                            return;
+                        if (LIST.listBuyCart.size() < list.size()) {
+                            TOOLS.checkAllCarts = false;
+                            CartFragment.setCheckByItem();
                         }
-                        cart.setQuantity(cart.getQuantity() - 1);
-                        holder.tv_quantity.setText(String.valueOf(cart.getQuantity()));
-                        holder.tv_price.setText("Tổng tiền: " + TOOLS.convertPrice(cart.getQuantity() * lastPrice));
-                        replaceCartItem(cart);
                     }
+                    CartFragment.showLayoutPay(LIST.listBuyCart);
                 });
-                holder.imv_add.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cart.setQuantity(cart.getQuantity() + 1);
-                        holder.tv_quantity.setText(String.valueOf(cart.getQuantity()));
-                        holder.tv_price.setText("Tổng tiền: " + TOOLS.convertPrice(cart.getQuantity() * lastPrice));
-                        replaceCartItem(cart);
+                holder.imv_subtract.setOnClickListener(v -> {
+                    if (cart.getQuantity() == 1) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle("Xóa sản phẩm " + cart.getName_product() + " khỏi giỏ hàng?");
+                        builder.setPositiveButton("Xóa", (dialog, which) -> deleteCart(holder, cart.get_id()));
+                        builder.setNegativeButton("Hủy", null);
+                        builder.create().show();
+                        return;
                     }
+                    cart.setQuantity(cart.getQuantity() - 1);
+                    holder.tv_quantity.setText(String.valueOf(cart.getQuantity()));
+                    holder.tv_price.setText("Tổng tiền: " + TOOLS.convertPrice(cart.getQuantity() * lastPrice));
+                    replaceCartItem(cart);
                 });
-                holder.ln_delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        deleteCart(holder, cart.get_id());
-                    }
+                holder.imv_add.setOnClickListener(v -> {
+                    cart.setQuantity(cart.getQuantity() + 1);
+                    holder.tv_quantity.setText(String.valueOf(cart.getQuantity()));
+                    holder.tv_price.setText("Tổng tiền: " + TOOLS.convertPrice(cart.getQuantity() * lastPrice));
+                    replaceCartItem(cart);
                 });
+                holder.ln_delete.setOnClickListener(v -> deleteCart(holder, cart.get_id()));
             } else if (holder1 instanceof CartHolderView1) {
                 CartHolderView1 holder = (CartHolderView1) holder1;
                 Glide.with(context).load(TOOLS.doMainDevice + cart.getImage()).into(holder.imv_image);
@@ -189,18 +168,18 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         dialog.show();
         ApiService.apiService.deleteCart(id).enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<Integer> call, Response<Integer> response) {
-                if (response.isSuccessful()) {
+            public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                if (response.isSuccessful() && response.body() != null) {
                     if (response.body() == 1) {
-                        for (int i = 0; i <  LIST.listBuyCart.size(); i++) {
-                            if(LIST.listBuyCart.get(i).get_id().equals(id)){
+                        for (int i = 0; i < LIST.listBuyCart.size(); i++) {
+                            if (LIST.listBuyCart.get(i).get_id().equals(id)) {
                                 LIST.listBuyCart.remove(i);
                                 CartFragment.showLayoutPay(LIST.listBuyCart);
                                 break;
                             }
                         }
                         list.remove(holder.getAdapterPosition());
-                        if(list.size()==0){
+                        if (list.size() == 0) {
                             CartFragment.ln_cart_emty.setVisibility(View.VISIBLE);
                         }
                         notifyItemRemoved(holder.getAdapterPosition());
@@ -212,7 +191,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
 
             @Override
-            public void onFailure(Call<Integer> call, Throwable t) {
+            public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
                 Toast.makeText(context, "Lỗi", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
@@ -225,11 +204,15 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return (list != null) ? list.size() : 0;
     }
 
-    public class CartHolderView extends RecyclerView.ViewHolder {
-        private TextView tv_name, tv_quantity, tv_price;
-        private ImageView imv_image, imv_add, imv_subtract;
-        private CheckBox cbox_add;
-        private LinearLayout ln_delete;
+    public static class CartHolderView extends RecyclerView.ViewHolder {
+        private final TextView tv_name;
+        private final TextView tv_quantity;
+        private final TextView tv_price;
+        private final ImageView imv_image;
+        private final ImageView imv_add;
+        private final ImageView imv_subtract;
+        private final CheckBox cbox_add;
+        private final LinearLayout ln_delete;
 
 
         public CartHolderView(@NonNull View itemView) {
@@ -245,9 +228,11 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public class CartHolderView1 extends RecyclerView.ViewHolder {
-        private TextView tv_name, tv_quantity, tv_price;
-        private ImageView imv_image;
+    public static class CartHolderView1 extends RecyclerView.ViewHolder {
+        private final TextView tv_name;
+        private final TextView tv_quantity;
+        private final TextView tv_price;
+        private final ImageView imv_image;
 
 
         public CartHolderView1(@NonNull View itemView) {

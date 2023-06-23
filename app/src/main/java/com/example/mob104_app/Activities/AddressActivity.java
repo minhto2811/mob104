@@ -1,12 +1,10 @@
 package com.example.mob104_app.Activities;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,9 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mob104_app.Adapter.AddressAdapter;
-import com.example.mob104_app.Models.Address;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.LIST;
+
+import java.util.Objects;
 
 public class AddressActivity extends AppCompatActivity {
 
@@ -27,14 +26,11 @@ public class AddressActivity extends AppCompatActivity {
     private AddressAdapter adapter;
     private LinearLayout ln_add_address;
 
-    private static Activity activity;
-    private boolean choose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
-        activity = this;
         mapping();
         setToolbar();
         getListAddress();
@@ -46,9 +42,9 @@ public class AddressActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(AddressActivity.this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
-        choose = getIntent().getBooleanExtra("choose", false);
+        boolean choose = getIntent().getBooleanExtra("choose", false);
         if (choose) {
-            getSupportActionBar().setTitle(R.string.title_choose_address_pay);
+            Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.title_choose_address_pay);
             adapter = new AddressAdapter(AddressActivity.this, true);
         } else {
             adapter = new AddressAdapter(AddressActivity.this, false);
@@ -65,19 +61,16 @@ public class AddressActivity extends AppCompatActivity {
     }
 
     private void addAddress() {
-        ln_add_address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AddressActivity.this, AddAddressActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
-            }
+        ln_add_address.setOnClickListener(v -> {
+            Intent intent = new Intent(AddressActivity.this, AddAddressActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
         });
     }
 
     private void setToolbar() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.title_address);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.title_address);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -90,6 +83,7 @@ public class AddressActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onResume() {
         super.onResume();

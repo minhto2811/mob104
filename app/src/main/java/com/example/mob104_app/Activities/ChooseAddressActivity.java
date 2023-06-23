@@ -1,6 +1,6 @@
 package com.example.mob104_app.Activities;
 
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -21,9 +21,6 @@ import com.example.mob104_app.Adapter.DistrictAdapter;
 import com.example.mob104_app.Adapter.ProvinceAdapter;
 import com.example.mob104_app.Adapter.WardAdapter;
 import com.example.mob104_app.Api.ApiService;
-import com.example.mob104_app.Interface.DistrictOnClick;
-import com.example.mob104_app.Interface.ProvinceOnClick;
-import com.example.mob104_app.Interface.WardOnClick;
 import com.example.mob104_app.Models.District;
 import com.example.mob104_app.Models.Province;
 import com.example.mob104_app.Models.Ward;
@@ -31,6 +28,7 @@ import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.ADDRESS;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,14 +69,11 @@ public class ChooseAddressActivity extends AppCompatActivity {
     }
 
     private void submit() {
-        btn_submit_select_address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra("data", ADDRESS.ward.getPath_with_type());
-                setResult(RESULT_OK, intent);
-                back();
-            }
+        btn_submit_select_address.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.putExtra("data", ADDRESS.ward.getPath_with_type());
+            setResult(RESULT_OK, intent);
+            back();
         });
     }
 
@@ -92,22 +87,20 @@ public class ChooseAddressActivity extends AppCompatActivity {
         btn_submit_select_address = findViewById(R.id.btn_submit_select_address);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void setProvices() {
         setLayout(rcv_province);
-        provinceAdapter = new ProvinceAdapter(ChooseAddressActivity.this, new ProvinceOnClick() {
-            @Override
-            public void ItemClick(Province province) {
-                if (ADDRESS.province != null) {
-                    ADDRESS.province = null;
-                    ADDRESS.district = null;
-                    ADDRESS.ward = null;
-                } else {
-                    ADDRESS.province = province;
-                }
-                setDistrict((ADDRESS.province != null) ? true : false);
-                setSubmit(((ADDRESS.province != null) && (ADDRESS.district != null) && (ADDRESS.ward != null)) ? true : false);
-                provinceAdapter.notifyDataSetChanged();
+        provinceAdapter = new ProvinceAdapter(ChooseAddressActivity.this, province -> {
+            if (ADDRESS.province != null) {
+                ADDRESS.province = null;
+                ADDRESS.district = null;
+                ADDRESS.ward = null;
+            } else {
+                ADDRESS.province = province;
             }
+            setDistrict(ADDRESS.province != null);
+            setSubmit((ADDRESS.province != null) && (ADDRESS.district != null) && (ADDRESS.ward != null));
+            provinceAdapter.notifyDataSetChanged();
         });
         rcv_province.setAdapter(provinceAdapter);
         getListProvince();
@@ -116,8 +109,8 @@ public class ChooseAddressActivity extends AppCompatActivity {
     private void getListProvince() {
         ApiService.apiService.getProvinces().enqueue(new Callback<List<Province>>() {
             @Override
-            public void onResponse(Call<List<Province>> call, Response<List<Province>> response) {
-                if (response.isSuccessful()) {
+            public void onResponse(@NonNull Call<List<Province>> call, @NonNull Response<List<Province>> response) {
+                if (response.isSuccessful()&&response.body()!=null) {
                     provinceAdapter.setData(response.body());
                     if (AddAddressActivity.address1 == null) {
                         return;
@@ -133,13 +126,14 @@ public class ChooseAddressActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Province>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Province>> call, @NonNull Throwable t) {
                 Toast.makeText(ChooseAddressActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private void setDistrict(boolean show) {
         if (!show) {
             tv_ward.setVisibility(View.GONE);
@@ -151,24 +145,22 @@ public class ChooseAddressActivity extends AppCompatActivity {
         tv_district.setVisibility(View.VISIBLE);
         rcv_district.setVisibility(View.VISIBLE);
         setLayout(rcv_district);
-        districtAdapter = new DistrictAdapter(ChooseAddressActivity.this, new DistrictOnClick() {
-            @Override
-            public void ItemClick(District district) {
-                if (ADDRESS.district != null) {
-                    ADDRESS.district = null;
-                    ADDRESS.ward = null;
-                } else {
-                    ADDRESS.district = district;
-                }
-                setWard((ADDRESS.district != null) ? true : false);
-                setSubmit(((ADDRESS.province != null) && (ADDRESS.district != null) && (ADDRESS.ward != null)) ? true : false);
-                districtAdapter.notifyDataSetChanged();
+        districtAdapter = new DistrictAdapter(ChooseAddressActivity.this, district -> {
+            if (ADDRESS.district != null) {
+                ADDRESS.district = null;
+                ADDRESS.ward = null;
+            } else {
+                ADDRESS.district = district;
             }
+            setWard(ADDRESS.district != null);
+            setSubmit((ADDRESS.province != null) && (ADDRESS.district != null) && (ADDRESS.ward != null));
+            districtAdapter.notifyDataSetChanged();
         });
         rcv_district.setAdapter(districtAdapter);
         getListDistrict();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void setWard(boolean show) {
         if (!show) {
             tv_ward.setVisibility(View.GONE);
@@ -178,17 +170,14 @@ public class ChooseAddressActivity extends AppCompatActivity {
         tv_ward.setVisibility(View.VISIBLE);
         rcv_ward.setVisibility(View.VISIBLE);
         setLayout(rcv_ward);
-        wardAdapter = new WardAdapter(ChooseAddressActivity.this, new WardOnClick() {
-            @Override
-            public void ItemClick(Ward ward) {
-                if (ADDRESS.ward != null) {
-                    ADDRESS.ward = null;
-                } else {
-                    ADDRESS.ward = ward;
-                }
-                setSubmit(((ADDRESS.province != null) && (ADDRESS.district != null) && (ADDRESS.ward != null)) ? true : false);
-                wardAdapter.notifyDataSetChanged();
+        wardAdapter = new WardAdapter(ChooseAddressActivity.this, ward -> {
+            if (ADDRESS.ward != null) {
+                ADDRESS.ward = null;
+            } else {
+                ADDRESS.ward = ward;
             }
+            setSubmit((ADDRESS.province != null) && (ADDRESS.district != null) && (ADDRESS.ward != null));
+            wardAdapter.notifyDataSetChanged();
         });
         rcv_ward.setAdapter(wardAdapter);
 
@@ -198,8 +187,8 @@ public class ChooseAddressActivity extends AppCompatActivity {
     private void getListWard() {
         ApiService.apiService.getWards(ADDRESS.district.getCode()).enqueue(new Callback<List<Ward>>() {
             @Override
-            public void onResponse(Call<List<Ward>> call, Response<List<Ward>> response) {
-                if (response.isSuccessful()) {
+            public void onResponse(@NonNull Call<List<Ward>> call, @NonNull Response<List<Ward>> response) {
+                if (response.isSuccessful()&&response.body()!=null) {
                     wardAdapter.setData(response.body());
                     if (AddAddressActivity.address1 == null) {
                         return;
@@ -214,7 +203,7 @@ public class ChooseAddressActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Ward>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Ward>> call, @NonNull Throwable t) {
                 Toast.makeText(ChooseAddressActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
             }
         });
@@ -231,8 +220,8 @@ public class ChooseAddressActivity extends AppCompatActivity {
     private void getListDistrict() {
         ApiService.apiService.getDistricts(ADDRESS.province.getCode()).enqueue(new Callback<List<District>>() {
             @Override
-            public void onResponse(Call<List<District>> call, Response<List<District>> response) {
-                if (response.isSuccessful()) {
+            public void onResponse(@NonNull Call<List<District>> call, @NonNull Response<List<District>> response) {
+                if (response.isSuccessful()&&response.body()!=null) {
                     districtAdapter.setData(response.body());
                     if (AddAddressActivity.address1 == null) {
                         return;
@@ -247,7 +236,7 @@ public class ChooseAddressActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<District>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<District>> call, @NonNull Throwable t) {
                 Toast.makeText(ChooseAddressActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
             }
         });
@@ -262,7 +251,7 @@ public class ChooseAddressActivity extends AppCompatActivity {
 
     private void setToolbar() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.title_choose_address);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.title_choose_address);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -285,21 +274,15 @@ public class ChooseAddressActivity extends AppCompatActivity {
         if (ADDRESS.province == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(ChooseAddressActivity.this);
             builder.setTitle("Nếu bạn thoát, vị trí được chọn sẽ không được lưu lại.");
-            builder.setPositiveButton("Xác nhận thoát", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ADDRESS.ward = null;
-                    ADDRESS.district = null;
-                    ADDRESS.province = null;
-                    exit = true;
-                }
+            builder.setPositiveButton("Xác nhận thoát", (dialog, which) -> {
+                ADDRESS.ward = null;
+                ADDRESS.district = null;
+                ADDRESS.province = null;
+                exit = true;
             });
 
-            builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+            builder.setNegativeButton("Hủy", (dialog, which) -> {
 
-                }
             });
             builder.create().show();
             if (exit) {
