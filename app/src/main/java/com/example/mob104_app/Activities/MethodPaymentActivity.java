@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mob104_app.Adapter.MethodPaymentAdapter;
-import com.example.mob104_app.Interface.MethodPaymentOnClick;
-import com.example.mob104_app.Models.MethodPayment;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.LIST;
 
@@ -23,7 +21,6 @@ public class MethodPaymentActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private MethodPaymentAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +36,12 @@ public class MethodPaymentActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(MethodPaymentActivity.this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
-        adapter = new MethodPaymentAdapter(MethodPaymentActivity.this, new MethodPaymentOnClick() {
-            @Override
-            public void ItemClick(MethodPayment methodPayment) {
-                Intent intent = new Intent();
-                intent.putExtra("method_payment", methodPayment);
-                setResult(RESULT_OK, intent);
-                finish();
-                overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
-            }
+        MethodPaymentAdapter adapter = new MethodPaymentAdapter(methodPayment -> {
+            Intent intent = new Intent();
+            intent.putExtra("method_payment", methodPayment);
+            setResult(RESULT_OK, intent);
+            finish();
+            overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
         });
         recyclerView.setAdapter(adapter);
         adapter.setData(LIST.listMethodPayment());

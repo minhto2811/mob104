@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -13,7 +12,6 @@ import com.bumptech.glide.Glide;
 import com.example.mob104_app.Models.User;
 import com.example.mob104_app.R;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import java.text.DecimalFormat;
 import java.text.Normalizer;
@@ -26,7 +24,7 @@ public class TOOLS {
     public static final String  DEFAULT_ADDRESS= "DEFAULT_ADDRESS";
     public static final String  TOKEN= "TOKEN";
 
-    private static  Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
 
 
@@ -36,7 +34,7 @@ public class TOOLS {
     }
 
     public static void saveUser(Context context, User user) {
-        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(USER, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USER, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String json = gson.toJson(user);
         editor.putString(USER, json);
@@ -44,21 +42,20 @@ public class TOOLS {
     }
 
     public static void clearUser(Context context) {
-        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(USER, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USER, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
     }
 
     public static User getUser(Context context) {
-        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(USER, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USER, Context.MODE_PRIVATE);
         String string = sharedPreferences.getString(USER,null);
-        User user = gson.fromJson(string, User.class);
-        return user;
+        return gson.fromJson(string, User.class);
     }
 
     public static void saveDefaulAddress(Context context,String id_address){
-        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(DEFAULT_ADDRESS, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(DEFAULT_ADDRESS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(DEFAULT_ADDRESS, id_address);
         editor.apply();
@@ -67,44 +64,34 @@ public class TOOLS {
 
 
     public static String getToken(Context context) {
-        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(TOKEN, Context.MODE_PRIVATE);
-        String string = sharedPreferences.getString(TOKEN,null);
-        return string;
+        SharedPreferences sharedPreferences = context.getSharedPreferences(TOKEN, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(TOKEN,null);
     }
 
     public static void clearDefaulAddress(Context context) {
-        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(DEFAULT_ADDRESS, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(DEFAULT_ADDRESS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
     }
 
     public static String getDefaulAddress(Context context) {
-        SharedPreferences sharedPreferences = ((Activity) context).getSharedPreferences(DEFAULT_ADDRESS, Context.MODE_PRIVATE);
-        String string = sharedPreferences.getString(DEFAULT_ADDRESS,null);
-        return string;
+        SharedPreferences sharedPreferences = context.getSharedPreferences(DEFAULT_ADDRESS, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(DEFAULT_ADDRESS,null);
     }
 
 
 
     public static boolean isValidPhoneNumber(String phoneNumber) {
         String regex = "\\d{10}";
-        return phoneNumber.matches(regex);
+        return !phoneNumber.matches(regex);
     }
 
     public static boolean isValidEmail(String email) {
-        String emailPattern = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-        return !email.isEmpty() && email.matches(emailPattern);
+        String emailPattern = "^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+        return email.isEmpty() || !email.matches(emailPattern);
     }
 
-
-
-    public static JsonObject convertJson(String key, String value) {
-        String token = "{\"" + key + "\": \"" + value + "\"}";
-        Gson gson = new Gson();
-        JsonObject jsonObject = gson.fromJson(token, JsonObject.class);
-        return jsonObject;
-    }
 
     public static String covertToString(String value) {
         try {

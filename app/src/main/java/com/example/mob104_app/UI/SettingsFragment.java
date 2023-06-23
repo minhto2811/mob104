@@ -3,7 +3,6 @@ package com.example.mob104_app.UI;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -110,48 +109,23 @@ public class SettingsFragment extends Fragment {
     }
 
     private void user() {
-        btn_user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gotoActivity(UserActivity.class);
-            }
-        });
+        btn_user.setOnClickListener(v -> gotoActivity(UserActivity.class));
     }
 
     private void address() {
-        btn_address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gotoActivity(AddressActivity.class);
-            }
-        });
+        btn_address.setOnClickListener(v -> gotoActivity(AddressActivity.class));
     }
 
     private void password() {
-        btn_password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gotoActivity(PasswordActivity.class);
-            }
-        });
+        btn_password.setOnClickListener(v -> gotoActivity(PasswordActivity.class));
     }
 
     private void favourite() {
-        btn_favourite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gotoActivity(FavouriteActivity.class);
-            }
-        });
+        btn_favourite.setOnClickListener(v -> gotoActivity(FavouriteActivity.class));
     }
 
     private void changeAvatar() {
-        imv_change_avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requestPermission();
-            }
-        });
+        imv_change_avatar.setOnClickListener(v -> requestPermission());
     }
 
 
@@ -183,8 +157,8 @@ public class SettingsFragment extends Fragment {
 
             ApiService.apiService.changeAvatar(imagePart,ACCOUNT.user.getUsername()).enqueue(new Callback<User>() {
                 @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    if (response.isSuccessful()) {
+                public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                    if (response.isSuccessful()&&response.body()!=null) {
                         TOOLS.saveUser(requireContext(),response.body());
                         ACCOUNT.user = response.body();
                         Glide.with(requireContext()).load(TOOLS.doMainDevice + response.body().getImage()).into(civ_avatar);
@@ -192,7 +166,7 @@ public class SettingsFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<User> call, Throwable t) {
+                public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                     Toast.makeText(requireContext(), "Tải ảnh thất bại!", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -226,11 +200,11 @@ public class SettingsFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void setAvatar() {
-        Glide.with((Activity) getContext()).load(TOOLS.doMainDevice + ACCOUNT.user.getImage()).into(civ_avatar);
+        Glide.with((Activity) requireContext()).load(TOOLS.doMainDevice + ACCOUNT.user.getImage()).into(civ_avatar);
         tv_fullname.setText("Hi, " + ACCOUNT.user.getFullname());
     }
 
-    private void gotoActivity(Class aClass) {
+    private void gotoActivity(Class<?> aClass) {
         Intent intent = new Intent(getContext(), aClass);
         startActivity(intent);
         if (aClass != LoginActivity.class) {
@@ -244,21 +218,18 @@ public class SettingsFragment extends Fragment {
         btn_logout.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
             builder.setTitle("Xác nhận đăng xuất");
-            builder.setPositiveButton("Đăng xuất", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    updateTokenUser("");
-                    TOOLS.clearUser(getContext());
-                    TOOLS.clearDefaulAddress(getContext());
-                    LIST.getListProductByFavourite.clear();
-                    ACCOUNT.user = null;
-                    ADDRESS.province = null;
-                    ADDRESS.district = null;
-                    ADDRESS.ward = null;
-                    LIST.listAddress.clear();
-                    LIST.listRecently.clear();
-                    gotoActivity(LoginActivity.class);
-                }
+            builder.setPositiveButton("Đăng xuất", (dialog, which) -> {
+                updateTokenUser("");
+                TOOLS.clearUser(getContext());
+                TOOLS.clearDefaulAddress(getContext());
+                LIST.getListProductByFavourite.clear();
+                ACCOUNT.user = null;
+                ADDRESS.province = null;
+                ADDRESS.district = null;
+                ADDRESS.ward = null;
+                LIST.listAddress.clear();
+                LIST.listRecently.clear();
+                gotoActivity(LoginActivity.class);
             });
             builder.setNegativeButton("Hủy", null);
             builder.create().show();
@@ -278,14 +249,14 @@ public class SettingsFragment extends Fragment {
 
         ApiService.apiService.tokenNotify(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<Integer> call, Response<Integer> response) {
+            public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.e("update token ", "successfully");
                 }
             }
 
             @Override
-            public void onFailure(Call<Integer> call, Throwable t) {
+            public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
                 Log.e("update token ", "faild");
             }
         });

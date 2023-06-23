@@ -27,7 +27,7 @@ public class LIST {
     public static List<Address> listAddress = new ArrayList<>();
     public static List<Cart> listBuyCart = new ArrayList<>();
 
-    public static final List<MethodShipping> listMethodShipping() {
+    public static List<MethodShipping> listMethodShipping() {
         List<MethodShipping> list = new ArrayList<>();
         list.add(new MethodShipping("Giao hàng hỏa tốc", 32000, R.color.ms0, "Nhận hàng từ 1 đến 2 ngày"));
         list.add(new MethodShipping("Giao hàng nhanh", 16500, R.color.ms1, "Nhận hàng từ 3 đến 5 ngày"));
@@ -35,7 +35,7 @@ public class LIST {
         return list;
     }
 
-    public static final List<MethodPayment> listMethodPayment() {
+    public static List<MethodPayment> listMethodPayment() {
         List<MethodPayment> list = new ArrayList<>();
         list.add(new MethodPayment("Thanh toán tiền mặt khi nhận hàng", true));
         list.add(new MethodPayment("Thanh toán bằng ví điện tử", false));

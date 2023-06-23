@@ -1,5 +1,6 @@
 package com.example.mob104_app.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +18,17 @@ import com.example.mob104_app.Tools.ADDRESS;
 import java.util.List;
 
 public class ProvinceAdapter extends RecyclerView.Adapter<ProvinceAdapter.ProvinceViewHolder> {
-    private Context context;
+    private final Context context;
     private List<Province> list;
 
-    private ProvinceOnClick provinceOnClick;
+    private final ProvinceOnClick provinceOnClick;
 
     public ProvinceAdapter(Context context, ProvinceOnClick provinceOnClick) {
         this.context = context;
         this.provinceOnClick = provinceOnClick;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(List<Province> list) {
         this.list = list;
         notifyDataSetChanged();
@@ -43,23 +45,13 @@ public class ProvinceAdapter extends RecyclerView.Adapter<ProvinceAdapter.Provin
     public void onBindViewHolder(@NonNull ProvinceAdapter.ProvinceViewHolder holder, int position) {
         if (ADDRESS.province != null) {
             holder.btn_choose.setText(ADDRESS.province.getName());
-            holder.btn_choose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    provinceOnClick.ItemClick(ADDRESS.province);
-                }
-            });
+            holder.btn_choose.setOnClickListener(v -> provinceOnClick.ItemClick(ADDRESS.province));
             return;
         }
         Province province = list.get(position);
         if (province != null) {
             holder.btn_choose.setText(province.getName());
-            holder.btn_choose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    provinceOnClick.ItemClick(province);
-                }
-            });
+            holder.btn_choose.setOnClickListener(v -> provinceOnClick.ItemClick(province));
         }
 
     }
@@ -75,9 +67,9 @@ public class ProvinceAdapter extends RecyclerView.Adapter<ProvinceAdapter.Provin
         return 0;
     }
 
-    public class ProvinceViewHolder extends RecyclerView.ViewHolder {
+    public static class ProvinceViewHolder extends RecyclerView.ViewHolder {
 
-        private Button btn_choose;
+        private final Button btn_choose;
 
         public ProvinceViewHolder(@NonNull View itemView) {
             super(itemView);

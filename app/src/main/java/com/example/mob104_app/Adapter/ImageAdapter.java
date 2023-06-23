@@ -1,7 +1,6 @@
 package com.example.mob104_app.Adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +21,8 @@ import java.util.List;
 public class ImageAdapter extends PagerAdapter {
 
     private  List<String> list;
-    private Context context;
 
-    public ImageAdapter(Context context) {
-        this.context = context;
+    public ImageAdapter() {
     }
 
     public void setData(List<String> list){

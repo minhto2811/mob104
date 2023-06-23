@@ -1,18 +1,16 @@
 package com.example.mob104_app.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -44,6 +42,7 @@ public class ExportBillActivity extends AppCompatActivity {
         showDetailBill();
     }
 
+    @SuppressLint("SetTextI18n")
     private void showDetailBill() {
         bill = (Bill) getIntent().getSerializableExtra("bill");
         if (bill != null) {

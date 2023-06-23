@@ -27,10 +27,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
                 return new BOneFragment();
             case 2:
                 return new BTwoFragment();
-            case 3:
-                return new BThreeFragment();
             case 4:
                 return new BFourFragment();
+            case 3:
             default:
                 return new BThreeFragment();
         }
@@ -39,7 +38,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        String s = "";
+        String s;
         switch (position) {
             case 0:
                 s = "Chờ xác nhận";
@@ -50,12 +49,10 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             case 2:
                 s = "Đang giao hàng";
                 break;
-            case 3:
-                s = "Đã giao";
-                break;
             case 4:
                 s = "Đã hủy";
                 break;
+            case 3:
             default:
                 s = "Đã giao";
                 break;

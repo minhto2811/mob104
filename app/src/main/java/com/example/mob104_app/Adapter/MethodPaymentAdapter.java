@@ -1,6 +1,6 @@
 package com.example.mob104_app.Adapter;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -20,15 +20,14 @@ import com.example.mob104_app.R;
 import java.util.List;
 
 public class MethodPaymentAdapter extends RecyclerView.Adapter<MethodPaymentAdapter.MethodPaymentViewHolder> {
-    private Context context;
     private List<MethodPayment> list;
-    private MethodPaymentOnClick methodPaymentOnClick;
+    private final MethodPaymentOnClick methodPaymentOnClick;
 
-    public MethodPaymentAdapter(Context context, MethodPaymentOnClick methodPaymentOnClick) {
-        this.context = context;
+    public MethodPaymentAdapter(MethodPaymentOnClick methodPaymentOnClick) {
         this.methodPaymentOnClick = methodPaymentOnClick;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(List<MethodPayment> list) {
         this.list = list;
         notifyDataSetChanged();
@@ -59,12 +58,7 @@ public class MethodPaymentAdapter extends RecyclerView.Adapter<MethodPaymentAdap
                 spannableString.setSpan(new ForegroundColorSpan(Color.GREEN),payment.getName().length(),string.length(),0);
                 holder.tv_name_mp.setText(spannableString);
             }
-            holder.ln_mp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    methodPaymentOnClick.ItemClick(payment);
-                }
-            });
+            holder.ln_mp.setOnClickListener(v -> methodPaymentOnClick.ItemClick(payment));
         }
 
     }
@@ -74,9 +68,9 @@ public class MethodPaymentAdapter extends RecyclerView.Adapter<MethodPaymentAdap
         return (list != null) ? list.size() : 0;
     }
 
-    public class MethodPaymentViewHolder extends RecyclerView.ViewHolder {
-        private TextView tv_name_mp;
-        private LinearLayout ln_mp;
+    public static class MethodPaymentViewHolder extends RecyclerView.ViewHolder {
+        private final TextView tv_name_mp;
+        private final LinearLayout ln_mp;
 
         public MethodPaymentViewHolder(@NonNull View itemView) {
             super(itemView);

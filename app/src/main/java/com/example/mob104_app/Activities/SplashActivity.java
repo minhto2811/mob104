@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -28,21 +27,18 @@ import com.example.mob104_app.Tools.LIST;
 import com.example.mob104_app.Tools.TOOLS;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
     private int index_watting = 0;
-    private int index_error = 0;
     private TextView tv_loading;
     private ImageView imv_splash;
     private boolean isLoadingData = true;
-    private int index_max = 0;
     private AlertDialog alertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +63,7 @@ public class SplashActivity extends AppCompatActivity {
         if (ACCOUNT.user!=null) {
             ApiService.apiService.getRecently(ACCOUNT.user.get_id()).enqueue(new Callback<List<Product>>() {
                 @Override
-                public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                public void onResponse(@NonNull Call<List<Product>> call, @NonNull Response<List<Product>> response) {
                     if (response.isSuccessful() && response.body() != null) {
                        Collections.reverse(response.body());
                         LIST.listRecently = response.body();
@@ -76,16 +72,11 @@ public class SplashActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<List<Product>> call, Throwable t) {
+                public void onFailure(@NonNull Call<List<Product>> call, @NonNull Throwable t) {
                     if (!isLoadingData) {
                         return;
                     }
-                    index_error++;
-                    if (index_error < 10) {
-                        getAddress();
-                    } else {
-                        ErrorLoadingData();
-                    }
+                    ErrorLoadingData();
                 }
             });
         }
@@ -96,7 +87,7 @@ public class SplashActivity extends AppCompatActivity {
         if (ACCOUNT.user!=null) {
             ApiService.apiService.getAddress(ACCOUNT.user.get_id()).enqueue(new Callback<List<Address>>() {
                 @Override
-                public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
+                public void onResponse(@NonNull Call<List<Address>> call, @NonNull Response<List<Address>> response) {
                     if (response.isSuccessful()) {
                         if (response.body() != null) {
                             LIST.listAddress = response.body();
@@ -106,16 +97,11 @@ public class SplashActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<List<Address>> call, Throwable t) {
+                public void onFailure(@NonNull Call<List<Address>> call, @NonNull Throwable t) {
                     if (!isLoadingData) {
                         return;
                     }
-                    index_error++;
-                    if (index_error < 10) {
-                        getAddress();
-                    } else {
-                        ErrorLoadingData();
-                    }
+                    ErrorLoadingData();
                 }
             });
         }
@@ -126,7 +112,7 @@ public class SplashActivity extends AppCompatActivity {
         if (ACCOUNT.user != null) {
             ApiService.apiService.getListProductByFavourite(ACCOUNT.user.get_id()).enqueue(new Callback<List<Product>>() {
                 @Override
-                public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                public void onResponse(@NonNull Call<List<Product>> call, @NonNull Response<List<Product>> response) {
                     if (response.isSuccessful()) {
                         if(response.body()!=null){
                             LIST.getListProductByFavourite = response.body();
@@ -136,16 +122,12 @@ public class SplashActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<List<Product>> call, Throwable t) {
+                public void onFailure(@NonNull Call<List<Product>> call, @NonNull Throwable t) {
                     if (!isLoadingData) {
                         return;
                     }
-                    index_error++;
-                    if (index_error < 10) {
-                        getFavourite();
-                    } else {
-                        ErrorLoadingData();
-                    }
+
+                    ErrorLoadingData();
                 }
             });
         }
@@ -170,12 +152,7 @@ public class SplashActivity extends AppCompatActivity {
                 if(!isLoadingData){
                     return;
                 }
-                index_error++;
-                if (index_error < 10) {
-                    getAllCategory();
-                } else {
-                    ErrorLoadingData();
-                }
+                ErrorLoadingData();
             }
         });
     }
@@ -185,12 +162,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<List<Product>> call, @NonNull Response<List<Product>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Collections.sort(response.body(), new Comparator<Product>() {
-                        @Override
-                        public int compare(Product o1, Product o2) {
-                            return o1.getStatus().compareToIgnoreCase(o2.getStatus());
-                        }
-                    });
+                    response.body().sort((o1, o2) -> o1.getStatus().compareToIgnoreCase(o2.getStatus()));
                     LIST.listProduct = response.body();
                 }
                 gotoMainActivity();
@@ -201,12 +173,7 @@ public class SplashActivity extends AppCompatActivity {
                 if(!isLoadingData){
                     return;
                 }
-                index_error++;
-                if (index_error < 10) {
-                    getAllProduct();
-                } else {
-                    ErrorLoadingData();
-                }
+                ErrorLoadingData();
             }
         });
     }
@@ -226,31 +193,24 @@ public class SplashActivity extends AppCompatActivity {
                 if(!isLoadingData){
                     return;
                 }
-                index_error++;
-                if (index_error < 10) {
-                    getAllBanner();
-                } else {
-                    ErrorLoadingData();
-                }
+                ErrorLoadingData();
             }
         });
     }
 
     private void gotoMainActivity() {
         index_watting++;
+        int index_max;
         if (ACCOUNT.user != null) {
             index_max = 6;
         }else {
             index_max = 3;
         }
         if (index_watting == index_max) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finishAffinity();
-                }
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(intent);
+                finishAffinity();
             }, 2000);
 
         }
@@ -265,13 +225,10 @@ public class SplashActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
         View view = getLayoutInflater().inflate(R.layout.layout_message_error, null);
         Button button = view.findViewById(R.id.btn_exit);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SplashActivity.this,SplashActivity.class);
-                startActivity(intent);
-                finishAffinity();
-            }
+        button.setOnClickListener(v -> {
+            Intent intent = new Intent(SplashActivity.this,SplashActivity.class);
+            startActivity(intent);
+            finishAffinity();
         });
         builder.setView(view);
         builder.setCancelable(false);

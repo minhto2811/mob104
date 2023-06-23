@@ -1,7 +1,7 @@
 package com.example.mob104_app.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -28,6 +28,8 @@ import com.example.mob104_app.Tools.ACCOUNT;
 import com.example.mob104_app.Tools.ADDRESS;
 import com.example.mob104_app.Tools.LIST;
 import com.example.mob104_app.Tools.TOOLS;
+
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,59 +65,53 @@ public class AddAddressActivity extends AppCompatActivity {
     }
 
     private void deleteAddress() {
-        btn_del_address_adr.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if(LIST.listAddress.size()<=1){
-                    Toast.makeText(AddAddressActivity.this, "Cần ít nhất một địa chỉ", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddAddressActivity.this);
-                builder.setTitle("Xác nhận xóa địa chỉ này?");
-                builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+        btn_del_address_adr.setOnClickListener(v -> {
+            if(LIST.listAddress.size()<=1){
+                Toast.makeText(AddAddressActivity.this, "Cần ít nhất một địa chỉ", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(AddAddressActivity.this);
+            builder.setTitle("Xác nhận xóa địa chỉ này?");
+            builder.setPositiveButton("Xóa", (dialog1, which) -> {
+                dialog.show();
+                ApiService.apiService.deleteAdsress(address1.get_id()).enqueue(new Callback<Integer>() {
                     @Override
-                    public void onClick(DialogInterface dialog1, int which) {
-                        dialog.show();
-                        ApiService.apiService.deleteAdsress(address1.get_id()).enqueue(new Callback<Integer>() {
-                            @Override
-                            public void onResponse(Call<Integer> call, Response<Integer> response) {
-                                dialog.dismiss();
-                                if (response.isSuccessful()) {
-                                    if (response.body() == 1) {
-                                        for (int i = 0; i < LIST.listAddress.size(); i++) {
-                                            if (LIST.listAddress.get(i).get_id().equals(address1.get_id())) {
-                                                LIST.listAddress.remove(i);
-                                                break;
-                                            }
-                                        }
-                                        if (TOOLS.getDefaulAddress(AddAddressActivity.this).equals(address1.get_id())) {
-                                            TOOLS.clearDefaulAddress(AddAddressActivity.this);
-                                        }}
-                                    clearAddress();
-                                    onBackPressed();
+                    public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()&&response.body()!=null) {
+                            if (response.body() == 1) {
+                                for (int i = 0; i < LIST.listAddress.size(); i++) {
+                                    if (LIST.listAddress.get(i).get_id().equals(address1.get_id())) {
+                                        LIST.listAddress.remove(i);
+                                        break;
+                                    }
                                 }
-                            }
+                                if (TOOLS.getDefaulAddress(AddAddressActivity.this).equals(address1.get_id())) {
+                                    TOOLS.clearDefaulAddress(AddAddressActivity.this);
+                                }}
+                            clearAddress();
+                            onBackPressed();
+                        }
+                    }
 
-                            @Override
-                            public void onFailure(Call<Integer> call, Throwable t) {
-                                Toast.makeText(AddAddressActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                            }
-                        });
+                    @Override
+                    public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
+                        Toast.makeText(AddAddressActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                     }
                 });
-                builder.setNegativeButton("Hủy",null);
-                builder.create().show();
+            });
+            builder.setNegativeButton("Hủy",null);
+            builder.create().show();
 
-            }
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void editAddress() {
         address1 = (Address) getIntent().getSerializableExtra("address");
         if (address1 != null) {
-            getSupportActionBar().setTitle(R.string.title_uppdate_address);
+            Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.title_uppdate_address);
             btn_del_address_adr.setVisibility(View.VISIBLE);
             edt_fullname_adr.setText(address1.getFullname());
             edt_numberphone_adr.setText(address1.getNumberphone());
@@ -142,98 +138,94 @@ public class AddAddressActivity extends AppCompatActivity {
     }
 
     private void addNewAddress() {
-        btn_add_new_address_adr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!checkFielEmty(edt_fullname_adr) || !checkFielEmty(edt_numberphone_adr) || !checkFielEmty(edt_select_address_adr) || !checkFielEmty(edt_name_address_adr)) {
-                    return;
+        btn_add_new_address_adr.setOnClickListener(v -> {
+            if (checkFielEmty(edt_fullname_adr) || checkFielEmty(edt_numberphone_adr) || checkFielEmty(edt_select_address_adr) || checkFielEmty(edt_name_address_adr)) {
+                return;
+            }
+            dialog.show();
+            if (address1 != null) {
+                address1.setFullname(edt_fullname_adr.getText().toString().trim());
+                address1.setNumberphone(edt_numberphone_adr.getText().toString().trim());
+                if (ADDRESS.province != null) {
+                    address1.setProvince(ADDRESS.province.getName());
                 }
-                dialog.show();
-                if (address1 != null) {
-                    address1.setFullname(edt_fullname_adr.getText().toString().trim());
-                    address1.setNumberphone(edt_numberphone_adr.getText().toString().trim());
-                    if (ADDRESS.province != null) {
-                        address1.setProvince(ADDRESS.province.getName());
-                    }
-                    if (ADDRESS.district != null) {
-                        address1.setDistrict(ADDRESS.district.getName());
-                    }
-                    if (ADDRESS.ward != null) {
-                        address1.setWards(ADDRESS.ward.getName());
-                    }
-                    address1.setAddress(edt_name_address_adr.getText().toString());
-                    ApiService.apiService.updateAddress(address1).enqueue(new Callback<Address>() {
-                        @Override
-                        public void onResponse(Call<Address> call, Response<Address> response) {
-                            if (response.isSuccessful()) {
-                                for (int i = 0; i < LIST.listAddress.size(); i++) {
-                                    if (LIST.listAddress.get(i).get_id().equals(response.body().get_id())) {
-                                        LIST.listAddress.set(i, response.body());
-                                        break;
-                                    }
-                                }
-                                if (sw_select_adr.isChecked()) {
-                                    TOOLS.saveDefaulAddress(AddAddressActivity.this, response.body().get_id());
-                                } else {
-                                    if (TOOLS.getDefaulAddress(AddAddressActivity.this).equals(response.body().get_id())) {
-                                        TOOLS.clearDefaulAddress(AddAddressActivity.this);
-                                    }else if(LIST.listAddress.isEmpty()){
-                                        TOOLS.saveDefaulAddress(AddAddressActivity.this, response.body().get_id());
-                                    }
-                                }
-                                clearAddress();
-                                dialog.dismiss();
-                                onBackPressed();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Address> call, Throwable t) {
-                            Toast.makeText(AddAddressActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        }
-                    });
-                    return;
+                if (ADDRESS.district != null) {
+                    address1.setDistrict(ADDRESS.district.getName());
                 }
-                Address address = new Address();
-                address.setId_user(ACCOUNT.user.get_id());
-                address.setFullname(edt_fullname_adr.getText().toString().trim());
-                address.setNumberphone(edt_numberphone_adr.getText().toString().trim());
-                address.setProvince(ADDRESS.province.getName());
-                address.setDistrict(ADDRESS.district.getName());
-                address.setWards(ADDRESS.ward.getName());
-                address.setAddress(edt_name_address_adr.getText().toString());
-                ApiService.apiService.saveNewAddress(ACCOUNT.user.get_id(), address).enqueue(new Callback<Address>() {
+                if (ADDRESS.ward != null) {
+                    address1.setWards(ADDRESS.ward.getName());
+                }
+                address1.setAddress(edt_name_address_adr.getText().toString());
+                ApiService.apiService.updateAddress(address1).enqueue(new Callback<Address>() {
                     @Override
-                    public void onResponse(Call<Address> call, Response<Address> response) {
-                        if (response.isSuccessful()) {
-                            LIST.listAddress.add(response.body());
+                    public void onResponse(@NonNull Call<Address> call, @NonNull Response<Address> response) {
+                        if (response.isSuccessful()&&response.body()!=null) {
+                            for (int i = 0; i < LIST.listAddress.size(); i++) {
+                                if (LIST.listAddress.get(i).get_id().equals(response.body().get_id())) {
+                                    LIST.listAddress.set(i, response.body());
+                                    break;
+                                }
+                            }
                             if (sw_select_adr.isChecked()) {
                                 TOOLS.saveDefaulAddress(AddAddressActivity.this, response.body().get_id());
+                            } else {
+                                if (TOOLS.getDefaulAddress(AddAddressActivity.this).equals(response.body().get_id())) {
+                                    TOOLS.clearDefaulAddress(AddAddressActivity.this);
+                                }else if(LIST.listAddress.isEmpty()){
+                                    TOOLS.saveDefaulAddress(AddAddressActivity.this, response.body().get_id());
+                                }
                             }
                             clearAddress();
+                            dialog.dismiss();
                             onBackPressed();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Address> call, Throwable t) {
+                    public void onFailure(@NonNull Call<Address> call, @NonNull Throwable t) {
                         Toast.makeText(AddAddressActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                     }
                 });
+                return;
             }
+            Address address = new Address();
+            address.setId_user(ACCOUNT.user.get_id());
+            address.setFullname(edt_fullname_adr.getText().toString().trim());
+            address.setNumberphone(edt_numberphone_adr.getText().toString().trim());
+            address.setProvince(ADDRESS.province.getName());
+            address.setDistrict(ADDRESS.district.getName());
+            address.setWards(ADDRESS.ward.getName());
+            address.setAddress(edt_name_address_adr.getText().toString());
+            ApiService.apiService.saveNewAddress(ACCOUNT.user.get_id(), address).enqueue(new Callback<Address>() {
+                @Override
+                public void onResponse(@NonNull Call<Address> call, @NonNull Response<Address> response) {
+                    if (response.isSuccessful()) {
+                        LIST.listAddress.add(response.body());
+                        if (sw_select_adr.isChecked()) {
+                            assert response.body() != null;
+                            TOOLS.saveDefaulAddress(AddAddressActivity.this, response.body().get_id());
+                        }
+                        clearAddress();
+                        onBackPressed();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<Address> call, @NonNull Throwable t) {
+                    Toast.makeText(AddAddressActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void selectAddress() {
-        edt_select_address_adr.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    onClickEditText();
-                }
-                return false;
+        edt_select_address_adr.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                onClickEditText();
             }
+            return false;
         });
     }
 
@@ -251,7 +243,7 @@ public class AddAddressActivity extends AppCompatActivity {
 
     private void setToolbar() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.title_add_address);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.title_add_address);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -270,16 +262,16 @@ public class AddAddressActivity extends AppCompatActivity {
                 tv_err_name_address_adr.setVisibility(View.VISIBLE);
                 edt_name_address_adr.requestFocus();
             }
-            return false;
+            return true;
         }
         if (editText == edt_fullname_adr) {
             tv_err_fullname_adr.setVisibility(View.GONE);
             edt_fullname_adr.clearFocus();
         } else if (editText == edt_numberphone_adr) {
-            if (!TOOLS.isValidPhoneNumber(editText.getText().toString().trim())) {
+            if (TOOLS.isValidPhoneNumber(editText.getText().toString().trim())) {
                 tv_err_numberphone_adr.setVisibility(View.VISIBLE);
                 edt_numberphone_adr.requestFocus();
-                return false;
+                return true;
             }
             tv_err_numberphone_adr.setVisibility(View.GONE);
             edt_numberphone_adr.clearFocus();
@@ -289,7 +281,7 @@ public class AddAddressActivity extends AppCompatActivity {
             tv_err_name_address_adr.setVisibility(View.GONE);
             edt_name_address_adr.clearFocus();
         }
-        return true;
+        return false;
     }
 
     @Override

@@ -56,7 +56,7 @@ public class BillActivity extends AppCompatActivity {
         dialog.show();
         ApiService.apiService.getBill(ACCOUNT.user.get_id()).enqueue(new Callback<List<Bill>>() {
             @Override
-            public void onResponse(Call<List<Bill>> call, Response<List<Bill>> response) {
+            public void onResponse(@NonNull Call<List<Bill>> call, @NonNull Response<List<Bill>> response) {
                 dialog.dismiss();
                 if (response.isSuccessful() && response.body() != null) {
                     Log.e(TAG, "onResume: response.isSuccessful()");
@@ -67,7 +67,7 @@ public class BillActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Bill>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Bill>> call, @NonNull Throwable t) {
                 dialog.dismiss();
                 Log.e(TAG, "onResume: onFailure");
                 Toast.makeText(BillActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();

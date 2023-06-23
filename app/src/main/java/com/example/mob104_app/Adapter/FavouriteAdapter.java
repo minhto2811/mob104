@@ -32,6 +32,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -41,17 +42,18 @@ import retrofit2.Response;
 
 public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.FavouriteHolder> implements Filterable {
 
-    private Context context;
+    private final Context context;
     private List<Product> list;
     private List<Product> listNew;
 
-    private boolean isFav;
+    private final boolean isFav;
 
     public FavouriteAdapter(Context context, boolean isFav) {
         this.context = context;
         this.isFav = isFav;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(List<Product> list) {
         this.list = list;
         this.listNew = list;
@@ -73,68 +75,62 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
             holder.tv_name_favourite.setText(product.getName());
             holder.tv_status_favourite.setText(product.getStatus());
             holder.tv_price_favourite.setText(TOOLS.convertPrice(product.getPrice() - product.getPrice() * product.getSale() / 100));
-            holder.ln_favourite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, ProductDetailActivity.class);
-                    intent.putExtra("product", product);
-                    context.startActivity(intent);
-                    ((Activity) context).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
-                }
+            holder.ln_favourite.setOnClickListener(v -> {
+                Intent intent = new Intent(context, ProductDetailActivity.class);
+                intent.putExtra("product", product);
+                context.startActivity(intent);
+                ((Activity) context).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
             });
-            holder.ln_delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Dialog dialog1 = TOOLS.createDialog(context);
-                    dialog1.show();
-                    JSONObject postData = new JSONObject();
-                    try {
-                        postData.put("id_product", product.getId());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    String jsonString = postData.toString();
-                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
-                    if (!isFav) {
+            holder.ln_delete.setOnClickListener(v -> {
+                Dialog dialog1 = TOOLS.createDialog(context);
+                dialog1.show();
+                JSONObject postData = new JSONObject();
+                try {
+                    postData.put("id_product", product.getId());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                String jsonString = postData.toString();
+                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString);
+                if (!isFav) {
 
-                        ApiService.apiService.deleteRecently(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Integer>() {
-                            @Override
-                            public void onResponse(Call<Integer> call, Response<Integer> response) {
-                                if (response.isSuccessful() && response.body() != null) {
-                                    if (response.body() == 1) {
-                                        list.remove(holder.getAdapterPosition());
-                                        notifyItemRemoved(holder.getAdapterPosition());
-                                    }
-                                }
-                                dialog1.dismiss();
-                            }
-
-                            @Override
-                            public void onFailure(Call<Integer> call, Throwable t) {
-                                dialog1.dismiss();
-                            }
-                        });
-
-                    } else {
-                        ApiService.apiService.delToFavourite(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Favourite>() {
-                            @Override
-                            public void onResponse(Call<Favourite> call, Response<Favourite> response) {
-                                if (response.isSuccessful() && response.body() != null) {
+                    ApiService.apiService.deleteRecently(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Integer>() {
+                        @Override
+                        public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                if (response.body() == 1) {
                                     list.remove(holder.getAdapterPosition());
                                     notifyItemRemoved(holder.getAdapterPosition());
                                 }
-                                dialog1.dismiss();
                             }
+                            dialog1.dismiss();
+                        }
 
+                        @Override
+                        public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
+                            dialog1.dismiss();
+                        }
+                    });
 
-                            @Override
-                            public void onFailure(Call<Favourite> call, Throwable t) {
-                                Toast.makeText(context, "Xóa thất bại!", Toast.LENGTH_SHORT).show();
-                                dialog1.dismiss();
+                } else {
+                    ApiService.apiService.delToFavourite(ACCOUNT.user.get_id(), requestBody).enqueue(new Callback<Favourite>() {
+                        @Override
+                        public void onResponse(@NonNull Call<Favourite> call, @NonNull Response<Favourite> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                list.remove(holder.getAdapterPosition());
+                                notifyItemRemoved(holder.getAdapterPosition());
                             }
-                        });
+                            dialog1.dismiss();
+                        }
 
-                    }
+
+                        @Override
+                        public void onFailure(@NonNull Call<Favourite> call, @NonNull Throwable t) {
+                            Toast.makeText(context, "Xóa thất bại!", Toast.LENGTH_SHORT).show();
+                            dialog1.dismiss();
+                        }
+                    });
+
                 }
             });
         }
@@ -156,7 +152,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
                 } else {
                     List<Product> list1 = new ArrayList<>();
                     for (Product product : listNew) {
-                        if (TOOLS.covertToString(product.getName().toLowerCase()).contains(TOOLS.covertToString(strSearch.toLowerCase().trim()))) {
+                        if (Objects.requireNonNull(TOOLS.covertToString(product.getName().toLowerCase())).contains(Objects.requireNonNull(TOOLS.covertToString(strSearch.toLowerCase().trim())))) {
                             list1.add(product);
                         }
                     }
@@ -176,11 +172,11 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
         };
     }
 
-    public class FavouriteHolder extends RecyclerView.ViewHolder {
+    public static class FavouriteHolder extends RecyclerView.ViewHolder {
 
-        private TextView tv_name_favourite, tv_status_favourite, tv_price_favourite;
-        private ImageView imv_image_favourite;
-        private LinearLayout ln_favourite, ln_delete;
+        private final TextView tv_name_favourite, tv_status_favourite, tv_price_favourite;
+        private final ImageView imv_image_favourite;
+        private final LinearLayout ln_favourite, ln_delete;
 
         public FavouriteHolder(@NonNull View itemView) {
             super(itemView);

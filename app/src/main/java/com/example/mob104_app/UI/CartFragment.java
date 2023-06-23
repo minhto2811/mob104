@@ -1,5 +1,6 @@
 package com.example.mob104_app.UI;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -55,10 +56,14 @@ public class CartFragment extends Fragment {
     private RecyclerView recyclerView;
     private CartAdapter adapter;
     private LinearLayout ln_speed, ln_check_cart;
+    @SuppressLint("StaticFieldLeak")
     public static LinearLayout ln_cart_emty;
+    @SuppressLint("StaticFieldLeak")
     private static TextView tv_check_all, tv_price_pay;
+    @SuppressLint("StaticFieldLeak")
     private static CheckBox cbox_check_all;
 
+    @SuppressLint("StaticFieldLeak")
     private static LinearLayout ln_pay;
     private Button btn_pay, btn_login_cart,btn_buy_cart;
     private static int price_pay;
@@ -124,21 +129,19 @@ public class CartFragment extends Fragment {
         tv_price_pay.setText(TOOLS.convertPrice(price_pay));
     }
 
+    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     private void checkAll() {
-        cbox_check_all.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TOOLS.checkAllCarts = cbox_check_all.isChecked();
-                if (TOOLS.checkAllCarts) {
-                    tv_check_all.setText("Bỏ chọn tất cả");
-                    showLayoutPay(cartList);
-                } else {
-                    LIST.listBuyCart.clear();
-                    tv_check_all.setText("Chọn tất cả");
-                    showLayoutPay(LIST.listBuyCart);
-                }
-                adapter.notifyDataSetChanged();
+        cbox_check_all.setOnClickListener(v -> {
+            TOOLS.checkAllCarts = cbox_check_all.isChecked();
+            if (TOOLS.checkAllCarts) {
+                tv_check_all.setText("Bỏ chọn tất cả");
+                showLayoutPay(cartList);
+            } else {
+                LIST.listBuyCart.clear();
+                tv_check_all.setText("Chọn tất cả");
+                showLayoutPay(LIST.listBuyCart);
             }
+            adapter.notifyDataSetChanged();
         });
     }
 
@@ -152,18 +155,21 @@ public class CartFragment extends Fragment {
         if (TOOLS.getUser(requireContext()) != null) {
             ApiService.apiService.getCarts(TOOLS.getUser(requireContext()).get_id()).enqueue(new Callback<List<Cart>>() {
                 @Override
-                public void onResponse(Call<List<Cart>> call, Response<List<Cart>> response) {
-                    if (response.isSuccessful() && response.body().size() > 0) {
-                        cartList = response.body();
-                        adapter.setData(response.body());
-                        ln_speed.setVisibility(View.VISIBLE);
-                        recyclerView.setPadding(0, 0, 0, 140);
-                        ln_cart_emty.setVisibility(View.GONE);
+                public void onResponse(@NonNull Call<List<Cart>> call, @NonNull Response<List<Cart>> response) {
+                    if (response.isSuccessful()) {
+                        assert response.body() != null;
+                        if (response.body().size() > 0) {
+                            cartList = response.body();
+                            adapter.setData(response.body());
+                            ln_speed.setVisibility(View.VISIBLE);
+                            recyclerView.setPadding(0, 0, 0, 140);
+                            ln_cart_emty.setVisibility(View.GONE);
+                        }
                     }
                 }
 
                 @Override
-                public void onFailure(Call<List<Cart>> call, Throwable t) {
+                public void onFailure(@NonNull Call<List<Cart>> call, @NonNull Throwable t) {
                     Toast.makeText(requireContext(), "Lỗi!", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -185,6 +191,7 @@ public class CartFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rcv_cart);
     }
 
+    @SuppressLint("SetTextI18n")
     public static void setCheckByItem(){
         if(TOOLS.checkAllCarts){
             if(!cbox_check_all.isChecked()){

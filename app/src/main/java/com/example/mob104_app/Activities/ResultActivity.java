@@ -1,6 +1,6 @@
 package com.example.mob104_app.Activities;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mob104_app.R;
-import com.example.mob104_app.UI.HomeFragment;
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -30,20 +29,11 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     private void back() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                btn_back.setVisibility(View.VISIBLE);
-            }
-        }, 2000);
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        new Handler().postDelayed(() -> btn_back.setVisibility(View.VISIBLE), 2000);
+        btn_back.setOnClickListener(v -> onBackPressed());
     }
 
+    @SuppressLint("SetTextI18n")
     private void show() {
         int choose = getIntent().getIntExtra("result", -1);
         switch (choose) {

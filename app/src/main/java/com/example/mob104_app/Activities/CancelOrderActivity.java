@@ -44,48 +44,45 @@ public class CancelOrderActivity extends AppCompatActivity {
     }
 
     private void cancelOderBill() {
-        btn_cob.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (edt_cob.getText().toString().isEmpty()) {
-                    ln_mess_cob.setVisibility(View.VISIBLE);
-                    return;
-                }
-                ln_mess_cob.setVisibility(View.GONE);
-                if (!cbox_cob.isChecked()) {
-                    Toast.makeText(CancelOrderActivity.this, "Vui lòng xác nhận hủy đơn", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                String id_bill = getIntent().getStringExtra("id_bill");
-                if (id_bill != null) {
-                    Dialog dialog = TOOLS.createDialog(CancelOrderActivity.this);
-                    dialog.show();
-                    ApiService.apiService.cancelBill(id_bill, ACCOUNT.user.getTokenNotify()).enqueue(new Callback<Integer>() {
-                        @Override
-                        public void onResponse(Call<Integer> call, Response<Integer> response) {
-                            dialog.dismiss();
-                            if (response.isSuccessful()) {
-                                int value = 0;
-                                if (response.body() == 1) {
-                                    value = 4;
-                                } else {
-                                   value = 5;
-                                }
-                                Intent intent = new Intent(CancelOrderActivity.this, ResultActivity.class);
-                                intent.putExtra("result", value);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
-                                finish();
+        btn_cob.setOnClickListener(v -> {
+            if (edt_cob.getText().toString().isEmpty()) {
+                ln_mess_cob.setVisibility(View.VISIBLE);
+                return;
+            }
+            ln_mess_cob.setVisibility(View.GONE);
+            if (!cbox_cob.isChecked()) {
+                Toast.makeText(CancelOrderActivity.this, "Vui lòng xác nhận hủy đơn", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String id_bill = getIntent().getStringExtra("id_bill");
+            if (id_bill != null) {
+                Dialog dialog = TOOLS.createDialog(CancelOrderActivity.this);
+                dialog.show();
+                ApiService.apiService.cancelBill(id_bill, ACCOUNT.user.getTokenNotify()).enqueue(new Callback<Integer>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()&&response.body()!=null) {
+                            int value;
+                            if (response.body() == 1) {
+                                value = 4;
+                            } else {
+                               value = 5;
                             }
+                            Intent intent = new Intent(CancelOrderActivity.this, ResultActivity.class);
+                            intent.putExtra("result", value);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+                            finish();
                         }
+                    }
 
-                        @Override
-                        public void onFailure(Call<Integer> call, Throwable t) {
-                            Toast.makeText(CancelOrderActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        }
-                    });
-                }
+                    @Override
+                    public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
+                        Toast.makeText(CancelOrderActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                });
             }
         });
     }

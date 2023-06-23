@@ -74,14 +74,11 @@ public class BillFragment extends Fragment {
     }
 
     private void login() {
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(requireContext(), LoginActivity.class);
-                startActivity(intent);
-                requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
-                requireActivity().finish();
-            }
+        btn_login.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), LoginActivity.class);
+            startActivity(intent);
+            requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+            requireActivity().finish();
         });
     }
 
@@ -90,7 +87,7 @@ public class BillFragment extends Fragment {
         dialog.show();
         ApiService.apiService.getBill(ACCOUNT.user.get_id()).enqueue(new Callback<List<Bill>>() {
             @Override
-            public void onResponse(Call<List<Bill>> call, Response<List<Bill>> response) {
+            public void onResponse(@NonNull Call<List<Bill>> call, @NonNull Response<List<Bill>> response) {
                 dialog.dismiss();
                 if (response.isSuccessful() && response.body() != null) {
                     LIST.listBill.clear();
@@ -100,7 +97,7 @@ public class BillFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<Bill>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Bill>> call, @NonNull Throwable t) {
                 dialog.dismiss();
                 Toast.makeText(requireContext(), "Lỗi!", Toast.LENGTH_SHORT).show();
             }
