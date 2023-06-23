@@ -144,8 +144,11 @@ public class SettingsFragment extends Fragment {
         TedPermission.create()
                 .setPermissionListener(permissionlistener)
                 .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .setPermissions(Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .check();
+
     }
 
 
@@ -220,8 +223,8 @@ public class SettingsFragment extends Fragment {
             builder.setTitle("Xác nhận đăng xuất");
             builder.setPositiveButton("Đăng xuất", (dialog, which) -> {
                 updateTokenUser("");
-                TOOLS.clearUser(getContext());
-                TOOLS.clearDefaulAddress(getContext());
+                TOOLS.clearUser(requireContext());
+                TOOLS.clearDefaulAddress(requireContext());
                 LIST.getListProductByFavourite.clear();
                 ACCOUNT.user = null;
                 ADDRESS.province = null;

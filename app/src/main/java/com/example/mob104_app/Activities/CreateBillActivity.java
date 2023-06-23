@@ -37,6 +37,7 @@ import com.example.mob104_app.Tools.ACCOUNT;
 import com.example.mob104_app.Tools.ADDRESS;
 import com.example.mob104_app.Tools.LIST;
 import com.example.mob104_app.Tools.TOOLS;
+import com.example.mob104_app.UI.CartFragment;
 
 import java.util.Objects;
 
@@ -97,6 +98,20 @@ public class CreateBillActivity extends AppCompatActivity {
                 public void onResponse(@NonNull Call<Bill> call, @NonNull Response<Bill> response) {
                     dialog.dismiss();
                     if (response.isSuccessful()) {
+                        if(LIST.listBuyCart.size() ==  CartFragment.cartList.size()){
+                            CartFragment.cartList.clear();
+                        }else {
+                            for (int i = 0; i < CartFragment.cartList.size(); i++) {
+                                for (int j = 0; j < LIST.listBuyCart.size(); j++) {
+                                    if(CartFragment.cartList.get(i).get_id().equals(LIST.listBuyCart.get(j))){
+                                        CartFragment.cartList.remove(i);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        LIST.listBuyCart.clear();
+                        TOOLS.checkAllCarts = false;
                         int rs = -1;
                         if (response.body() != null) {
                             rs = 0;
@@ -291,11 +306,7 @@ public class CreateBillActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        LIST.listBuyCart.clear();
-        TOOLS.checkAllCarts = false;
-        Intent intent = new Intent(CreateBillActivity.this, MainActivity.class);
-        intent.putExtra("cart", 1);
-        startActivity(intent);
+        finish();
         overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
     }
 

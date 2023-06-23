@@ -54,13 +54,26 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.Addressv
         if (address != null) {
             holder.tv_name.setText(address.getFullname());
             holder.tv_numberphone.setText(address.getNumberphone());
-            holder.tv_more.setText(address.getAddress()+'.');
+            holder.tv_more.setText(address.getAddress() + '.');
             holder.tv_address.setText(address.getWards() + ", " + address.getDistrict() + ", " + address.getProvince() + '.');
             holder.ln_address.setOnClickListener(v -> {
                 Intent intent = new Intent(context, AddAddressActivity.class);
                 intent.putExtra("address", address);
                 context.startActivity(intent);
                 ((Activity) context).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+            });
+
+            if (!choose) {
+                holder.btn_choose_address.setVisibility(View.GONE);
+            }
+
+            holder.btn_choose_address.setOnClickListener(v -> {
+                Toast.makeText(context, "Chọn địa chỉ thành công", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.putExtra("address", address);
+                ((Activity) context).setResult(Activity.RESULT_OK, intent);
+                ((Activity) context).finish();
+                ((Activity) context).overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
             });
 
             if (TOOLS.getDefaulAddress(context) == null) {
@@ -76,17 +89,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.Addressv
                 holder.tv_default.setVisibility(View.GONE);
             }
         }
-        if (!choose) {
-            holder.btn_choose_address.setVisibility(View.GONE);
-        }
-        holder.btn_choose_address.setOnClickListener(v -> {
-            Toast.makeText(context, "Chọn địa chỉ thành công", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent();
-            intent.putExtra("address", address);
-            ((Activity)context).setResult(Activity.RESULT_OK, intent);
-            ((Activity)context).finish();
-            ((Activity)context).overridePendingTransition(R.anim.prev_enter, R.anim.prev_exit);
-        });
+
     }
 
     @Override
