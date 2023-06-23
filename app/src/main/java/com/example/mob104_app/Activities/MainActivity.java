@@ -18,8 +18,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.mob104_app.R;
-import com.example.mob104_app.Tools.LIST;
-import com.example.mob104_app.Tools.TOOLS;
 import com.example.mob104_app.UI.BillFragment;
 import com.example.mob104_app.UI.CartFragment;
 import com.example.mob104_app.UI.HomeFragment;
@@ -84,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
     public static void replaceFragment(Fragment fragment, String name, int ID, Context context) {
         if (INDEX != ID) {
             FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+            if (fragmentManager.isStateSaved()) {
+                return;
+            }
+
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             if (INDEX < ID) {
                 fragmentTransaction.setCustomAnimations(R.anim.next_enter, R.anim.next_exit);
@@ -92,13 +94,17 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Fragment existingFragment = fragmentManager.findFragmentByTag(name);
-            if (existingFragment != null ) {
-                fragmentTransaction.replace(R.id.container_content, existingFragment,name);
+            if (existingFragment != null) {
+                fragmentTransaction.replace(R.id.container_content, existingFragment, name);
             } else {
-                fragmentTransaction.replace(R.id.container_content, fragment,name);
+                fragmentTransaction.replace(R.id.container_content, fragment, name);
             }
             fragmentTransaction.addToBackStack(name);
-            fragmentTransaction.commit();
+
+            if (!((AppCompatActivity)context).isFinishing()) {
+                fragmentTransaction.commit();
+            }
+
             INDEX = ID;
         }
     }
