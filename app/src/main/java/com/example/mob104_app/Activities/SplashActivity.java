@@ -59,6 +59,7 @@ public class SplashActivity extends AppCompatActivity {
         getRecently();
     }
 
+
     private void getRecently() {
         if (ACCOUNT.user!=null) {
             ApiService.apiService.getRecently(ACCOUNT.user.get_id()).enqueue(new Callback<List<Product>>() {

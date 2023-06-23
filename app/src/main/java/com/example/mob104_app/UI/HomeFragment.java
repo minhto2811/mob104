@@ -1,5 +1,6 @@
 package com.example.mob104_app.UI;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,7 +36,10 @@ import com.example.mob104_app.Adapter.CategoryAdapter;
 import com.example.mob104_app.Adapter.ProductAdapter;
 import com.example.mob104_app.R;
 import com.example.mob104_app.Tools.LIST;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.normal.TedPermission;
 
+import java.util.List;
 import java.util.Objects;
 
 import me.relex.circleindicator.CircleIndicator3;
@@ -78,9 +83,25 @@ public class HomeFragment extends Fragment {
         initRecyclerViewProduct(view);
         initRecyclerViewCategory(view);
         initRecyclerViewBanner(view);
+        checkPermissonApi34();
     }
 
+    private void checkPermissonApi34() {
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+            }
 
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+            }
+        };
+        TedPermission.create()
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setPermissions(Manifest.permission.POST_NOTIFICATIONS)
+                .check();
+    }
 
 
     private void initRecyclerViewProduct(View view) {
