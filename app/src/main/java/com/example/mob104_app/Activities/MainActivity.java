@@ -91,12 +91,10 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.setCustomAnimations(R.anim.prev_enter, R.anim.prev_exit);
             }
 
-            Fragment existingFragment = fragmentManager.findFragmentByTag((ID != CART && ID != BILL)?name:null);
+            Fragment existingFragment = fragmentManager.findFragmentByTag(name);
             if (existingFragment != null ) {
                 fragmentTransaction.replace(R.id.container_content, existingFragment,name);
             } else {
-                TOOLS.checkAllCarts = false;
-                LIST.listBuyCart.clear();
                 fragmentTransaction.replace(R.id.container_content, fragment,name);
             }
             fragmentTransaction.addToBackStack(name);

@@ -67,7 +67,7 @@ public class CartFragment extends Fragment {
     private static LinearLayout ln_pay;
     private Button btn_pay, btn_login_cart,btn_buy_cart;
     private static int price_pay;
-    private List<Cart> cartList;
+    public static List<Cart> cartList;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -110,7 +110,6 @@ public class CartFragment extends Fragment {
             Intent intent = new Intent(requireContext(), CreateBillActivity.class);
             intent.putExtra("bill", bill);
             startActivity(intent);
-            requireActivity().finish();
             requireActivity().overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
         });
     }
@@ -206,4 +205,15 @@ public class CartFragment extends Fragment {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onResume() {
+        super.onResume();
+        LIST.listBuyCart.clear();
+        TOOLS.checkAllCarts = false;
+        if(adapter!=null){
+            adapter.notifyDataSetChanged();
+        }
+        showLayoutPay(LIST.listBuyCart);
+    }
 }
