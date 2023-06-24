@@ -142,9 +142,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 if (response.isSuccessful()) {
-                    User user1 = response.body();
-                    assert user1 != null;
-                    if (user1.getUsername() != null) {
+                    if (response.body() != null&&response.body().getUsername() != null) {
+                        User user1 = response.body();
                         TOOLS.saveUser(LoginActivity.this, user1);
                         ACCOUNT.user = user1;
                         ApiService.apiService.getListProductByFavourite(user1.get_id()).enqueue(new Callback<List<Product>>() {
