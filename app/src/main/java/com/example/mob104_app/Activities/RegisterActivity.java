@@ -83,7 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean checkFielEmty(EditText editText, TextInputLayout textInputLayout) {
-        if (editText.getText().toString().length() < 8) {
+        if (editText.getText().toString().trim().length() < 8) {
             textInputLayout.setHintTextColor(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.red)));
             editText.requestFocus();
             if (editText == edt_email) {
